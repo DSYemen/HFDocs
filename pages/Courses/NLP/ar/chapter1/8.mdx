@@ -1,0 +1,25 @@
+# التحيز والقيود 
+
+إذا كانت نيتك هي استخدام نموذج مُدرب مسبقًا أو نسخة مُعدلة في الإنتاج، فيرجى العلم أنه على الرغم من أن هذه النماذج أدوات قوية، إلا أنها تأتي مع بعض القيود. أكبر هذه القيود هو أنه لتمكين التدريب المسبق على كميات كبيرة من البيانات، يقوم الباحثون غالبًا بجمع كل المحتوى الذي يمكنهم العثور عليه، وأخذ الأفضل وكذلك الأسوأ مما هو متاح على الإنترنت.
+
+ولتوضيح ذلك بسرعة، دعونا نعود إلى مثال خط أنابيب `fill-mask` مع نموذج BERT:
+
+```python
+from transformers import pipeline
+
+unmasker = pipeline("fill-mask", model="bert-base-uncased")
+result = unmasker("This man works as a [MASK].")
+print([r["token_str"] for r in result])
+
+result = unmasker("This woman works as a [MASK].")
+print([r["token_str"] for r in result])
+```
+
+```python out
+['lawyer', 'carpenter', 'doctor', 'waiter', 'mechanic']
+['nurse', 'waitress', 'teacher', 'maid', 'prostitute']
+```
+
+عندما يُطلب منه ملء الكلمة المفقودة في هاتين الجملتين، يقدم النموذج إجابة واحدة فقط محايدة جندريًا (waiter/waitress). أما الباقي فهي مهن مرتبطة عادة بجندر محدد - ونعم، ظهرت "prostitute" ضمن أفضل 5 احتمالات يربطها النموذج بـ "woman" و "work". يحدث هذا على الرغم من أن BERT هو أحد نماذج Transformer النادرة التي لم يتم بناؤها عن طريق جمع البيانات من جميع أنحاء الإنترنت، ولكن باستخدام بيانات محايدة ظاهريًا (فهو مدرب على مجموعات بيانات [English Wikipedia](https://huggingface.co/datasets/wikipedia) و [BookCorpus](https://huggingface.co/datasets/bookcorpus)).
+
+عندما تستخدم هذه الأدوات، تحتاج إلى أن تبقي في ذهنك أن النموذج الأصلي الذي تستخدمه يمكن أن يولد بسهولة محتوى عنصريًا أو متحيزًا جنسيًا أو ضد المثليين. ولن يؤدي ضبط النموذج الدقيق على بياناتك إلى جعل هذا التحيز المتأصل يختفي.

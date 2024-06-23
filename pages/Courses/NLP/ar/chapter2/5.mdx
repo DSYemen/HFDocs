@@ -1,0 +1,290 @@
+# التعامل مع تسلسلات متعددة
+
+في القسم السابق، استكشفنا أبسط حالات الاستخدام: إجراء الاستدلال على تسلسل واحد بطول صغير. ومع ذلك، تظهر بعض الأسئلة بالفعل:
+
+- كيف نتعامل مع تسلسلات متعددة؟
+- كيف نتعامل مع تسلسلات متعددة *بطول مختلف*؟
+- هل فهارس المفردات هي المدخلات الوحيدة التي تسمح للنموذج بالعمل بشكل جيد؟
+- هل هناك شيء مثل التسلسل الطويل جدًا؟
+
+دعونا نرى ما هي المشكلات التي تطرحها هذه الأسئلة، وكيف يمكننا حلها باستخدام واجهة برمجة تطبيقات Hugging Face.
+
+## تتوقع النماذج دفعة من المدخلات
+
+في التمرين السابق، رأيت كيف يتم تحويل التسلسلات إلى قوائم من الأرقام. دعونا نحول قائمة الأرقام هذه إلى Tensor وإرسالها إلى النموذج:
+
+```py
+import torch
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+
+checkpoint = "distilbert-base-uncased-finetuned-sst-2-english"
+tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+model = AutoModelForSequenceClassification.from_pretrained(checkpoint)
+
+sequence = "I've been waiting for a Hugging Face course my whole life."
+
+tokens = tokenizer.tokenize(sequence)
+ids = tokenizer.convert_tokens_to_ids(tokens)
+input_ids = torch.tensor(ids)
+# سيؤدي هذا السطر إلى فشل.
+model(input_ids)
+```
+
+```python out
+IndexError: Dimension out of range (expected to be in range of [-1, 0], but got 1)
+```
+
+```py
+import tensorflow as tf
+from transformers import AutoTokenizer, TFAutoModelForSequenceClassification
+
+checkpoint = "distilbert-base-uncased-finetuned-sst-2-english"
+tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+model = TFAutoModelForSequenceClassification.from_pretrained(checkpoint)
+
+sequence = "I've been waiting for a Hugging Face course my whole life."
+
+tokens = tokenizer.tokenize(sequence)
+ids = tokenizer.convert_tokens_to_ids(tokens)
+input_ids = tf.constant(ids)
+# سيؤدي هذا السطر إلى فشل.
+model(input_ids)
+```
+
+```py out
+InvalidArgumentError: Input to reshape is a tensor with 14 values, but the requested shape has 196 [Op:Reshape]
+```
+
+يا إلهي! لماذا فشل هذا؟ "لقد اتبعنا الخطوات من خط الأنابيب في القسم 2.
+
+المشكلة هي أننا أرسلنا تسلسلًا واحدًا إلى النموذج، في حين أن نماذج Hugging Face تتوقع عدة جمل بشكل افتراضي. لقد حاولنا هنا القيام بكل ما فعله المحلل اللغوي خلف الكواليس عندما طبقناه على `sequence`. ولكن إذا نظرت عن كثب، فستلاحظ أن المحلل اللغوي لم يقم فقط بتحويل قائمة معرفات الإدخال إلى Tensor، ولكنه أضاف بُعدًا فوقه:
+
+```py
+tokenized_inputs = tokenizer(sequence, return_tensors="pt")
+print(tokenized_inputs["input_ids"])
+```
+
+```python out
+tensor([[  101,  1045,  1005,  2310,  2042,  3403,  2005,  1037, 17662, 12172,
+2607,  2026,  2878,  2166,  1012,   102]])
+```
+
+```py
+tokenized_inputs = tokenizer(sequence, return_tensors="tf")
+print(tokenized_inputs["input_ids"])
+```
+
+```py out
+<tf.Tensor: shape=(1, 16), dtype=int32, numpy=
+array([[  101,  1045,  1005,  2310,  2042,  3403,  2005,  1037, 17662,
+12172,  2607,  2026,  2878,  2166,  1012,   102]], dtype=int32)>
+```
+
+دعونا نحاول مرة أخرى ونضيف بُعدًا جديدًا:
+
+```py
+import torch
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+
+checkpoint = "distilbert-base-uncased-finetuned-sst-2-english"
+tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+model = AutoModelForSequenceClassification.from_pretrained(checkpoint)
+
+sequence = "I've been waiting for a Hugging Face course my whole life."
+
+tokens = tokenizer.tokenize(sequence)
+ids = tokenizer.convert_tokens_to_ids(tokens)
+
+input_ids = torch.tensor([ids])
+print("Input IDs:", input_ids)
+
+output = model(input_ids)
+print("Logits:", output.logits)
+```
+
+```py
+import tensorflow as tf
+from transformers import AutoTokenizer, TFAutoModelForSequenceClassification
+
+checkpoint = "distilbert-base-uncased-finetuned-sst-2-english"
+tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+model = TFAutoModelForSequenceClassification.from_pretrained(checkpoint)
+
+sequence = "I've been waiting for a Hugging Face course my whole life."
+
+tokens = tokenizer.tokenize(sequence)
+ids = tokenizer.convert_tokens_to_ids(tokens)
+
+input_ids = tf.constant([ids])
+print("Input IDs:", input_ids)
+
+output = model(input_ids)
+print("Logits:", output.logits)
+```
+
+نقوم بطباعة معرفات الإدخال وكذلك اللوغاريتمات الناتجة - إليك الإخراج:
+
+```python out
+Input IDs: [[ 1045,  1005,  2310,  2042,  3403,  2005,  1037, 17662, 12172,  2607, 2026,  2878,  2166,  1012]]
+Logits: [[-2.7276,  2.8789]]
+```
+
+```py out
+Input IDs: tf.Tensor(
+[[ 1045  1005  2310  2042  3403  2005  1037 17662 12172  2607  2026  2878
+2166  1012]], shape=(1, 14), dtype=int32)
+Logits: tf.Tensor([[-2.7276208  2.8789377]], shape=(1, 2), dtype=float32)
+```
+
+إن "الدفعة" هي فعل إرسال جمل متعددة عبر النموذج، دفعة واحدة. إذا كان لديك جملة واحدة فقط، فيمكنك ببساطة إنشاء دفعة تتكون من تسلسل واحد:
+
+```
+batched_ids = [ids, ids]
+```
+
+هذه دفعة من تسلسلين متطابقين!
+
+✏️ **جربه!** قم بتحويل قائمة `batched_ids` هذه إلى Tensor ومررها عبر نموذجك. تحقق من حصولك على نفس اللوغاريتمات كما كان من قبل (ولكن ضعفها)!
+
+يتيح التجميع للنموذج العمل عند إطعامه جمل متعددة. إن استخدام تسلسلات متعددة أمر بسيط مثل إنشاء دفعة بتسلسل واحد. ومع ذلك، هناك مشكلة ثانية. عندما تحاول تجميع جملتين (أو أكثر) معًا، فقد تكون لهما أطوال مختلفة. إذا كنت قد عملت مع Tensor من قبل، فأنت تعلم أنه يجب أن يكون لها شكل مستطيل، لذا فلن تتمكن من تحويل قائمة معرفات الإدخال مباشرة إلى Tensor. للالتفاف حول هذه المشكلة، نقوم عادةً بـ *تعبئة* المدخلات.
+
+## تعبئة المدخلات
+
+لا يمكن تحويل قائمة القوائم التالية إلى Tensor:
+
+```py no-format
+batched_ids = [
+[200, 200, 200],
+[200, 200]
+]
+```
+
+للتغلب على هذا، سنستخدم *التعبئة* لجعل Tensor لدينا شكل مستطيل. تضمن التعبئة أن تكون جميع جملنا بنفس الطول عن طريق إضافة كلمة خاصة تسمى *رمز التعبئة* إلى الجمل ذات القيم الأقل. على سبيل المثال، إذا كان لديك 10 جمل مكونة من 10 كلمات وجملة واحدة مكونة من 20 كلمة، فستضمن التعبئة أن تحتوي جميع الجمل على 20 كلمة. في مثالنا، يبدو Tensor الناتج كما يلي:
+
+```py no-format
+padding_id = 100
+
+batched_ids = [
+[200, 200, 200],
+[200, 200, padding_id],
+]
+```
+
+يمكن العثور على معرف رمز التعبئة في `tokenizer.pad_token_id`. دعونا نستخدمه ونرسل جملتين من خلال النموذج بشكل فردي ومجمّع معًا:
+
+```py no-format
+model = AutoModelForSequenceClassification.from_pretrained(checkpoint)
+
+sequence1_ids = [[200, 200, 200]]
+sequence2_ids = [[200, 200]]
+batched_ids = [
+[200, 200, 200],
+[200, 200, tokenizer.pad_token_id],
+]
+
+print(model(torch.tensor(sequence1_ids)).logits)
+print(model(torch.tensor(sequence2_ids)).logits)
+print(model(torch.tensor(batched_ids)).logits)
+```
+
+```python out
+tensor([[ 1.5694, -1.3895]], grad_fn=<AddmmBackward>)
+tensor([[ 0.5803, -0.4125]], grad_fn=<AddmmBackward>)
+tensor([[ 1.5694, -1.3895],
+[ 1.3373, -1.2163]], grad_fn=<AddmmBackward>)
+```
+
+```py no-format
+model = TFAutoModelForSequenceClassification.from_pretrained(checkpoint)
+
+sequence1_ids = [[200, 200, 200]]
+sequence2_ids = [[200, 200]]
+batched_ids = [
+[200, 200, 200],
+[200, 200, tokenizer.pad_token_id],
+]
+
+print(model(tf.constant(sequence1_ids)).logits)
+print(model(tf.constant(sequence2_ids)).logits)
+print(model(tf.constant(batched_ids)).logits)
+```
+
+```py out
+tf.Tensor([[ 1.5693678 -1.3894581]], shape=(1, 2), dtype=float32)
+tf.Tensor([[ 0.5803005  -0.41252428]], shape=(1, 2), dtype=float32)
+tf.Tensor(
+[[ 1.5693681 -1.3894582]
+[ 1.3373486 -1.2163193]], shape=(2, 2), dtype=float32)
+```
+
+هناك خطأ ما في اللوغاريتمات في تنبؤاتنا المجمعة: يجب أن يكون الصف الثاني هو نفس اللوغاريتمات للجملة الثانية، ولكننا حصلنا على قيم مختلفة تمامًا!
+
+يرجع هذا إلى أن الميزة الرئيسية لنماذج المحول هي طبقات الاهتمام التي *توفر السياق* لكل رمز. ستراعي هذه جميع رموز التعبئة لأنها تهتم بجميع رموز التسلسل. للحصول على نفس النتيجة عند تمرير جمل فردية بأطوال مختلفة عبر النموذج أو عند تمرير دفعة بنفس الجمل والتعبئة المطبقة، يتعين علينا إخبار طبقات الاهتمام هذه بتجاهل رموز التعبئة. يتم ذلك باستخدام قناع اهتمام.
+
+## أقنعة الاهتمام
+
+أقنعة الاهتمام هي Tensor بنفس الشكل الدقيق مثل Tensor لمعرفات الإدخال، مليئة بـ 0s و 1s: تشير 1s إلى أن الرموز المقابلة يجب الاهتمام بها، وتشير 0s إلى أن الرموز المقابلة يجب عدم الاهتمام بها (أي يجب أن تتجاهلها طبقات الاهتمام للنموذج).
+
+دعونا نكمل المثال السابق بقناع اهتمام:
+
+```py no-format
+batched_ids = [
+[200, 200, 200],
+[200, 200, tokenizer.pad_token_id],
+]
+
+attention_mask = [
+[1, 1, 1],
+[1, 1, 0],
+]
+
+outputs = model(torch.tensor(batched_ids), attention_mask=torch.tensor(attention_mask))
+print(outputs.logits)
+```
+
+```python out
+tensor([[ 1.5694, -1.3895],
+[ 0.5803, -0.4125]], grad_fn=<AddmmBackward>)
+```
+
+```py no-format
+batched_ids = [
+[200, 200, 200],
+[200, 200, tokenizer.pad_token_id],
+]
+
+attention_mask = [
+[1, 1, 1],
+[1, 1, 0],
+]
+
+outputs = model(tf.constant(batched_ids), attention_mask=tf.constant(attention_mask))
+print(outputs.logits)
+```
+
+```py out
+tf.Tensor(
+[[ 1.5693681  -1.3894582 ]
+[ 0.5803021  -0.41252586]], shape=(2, 2), dtype=float32)
+```
+
+الآن نحصل على نفس اللوغاريتمات للجملة الثانية في الدفعة.
+
+لاحظ كيف أن القيمة الأخيرة للجملة الثانية هي معرف التعبئة، وهو ما يعادل 0 في قناع الاهتمام.
+
+✏️ **جربه!** قم بتطبيق التحليل اللغوي يدويًا على الجملتين المستخدمتين في القسم 2 ("انتظرت دورة Hugging Face طوال حياتي." و"أكره هذا كثيرًا!"). مررها عبر النموذج وتحقق من حصولك على نفس اللوغاريتمات كما في القسم 2. الآن قم بتجميعها معًا باستخدام رمز التعبئة، ثم قم بإنشاء قناع الاهتمام الصحيح. تحقق من حصولك على نفس النتائج عند المرور عبر النموذج!
+
+## تسلسلات أطول
+
+مع نماذج المحول، هناك حد لأطوال التسلسلات التي يمكننا تمريرها إلى النماذج. يمكن لمعظم النماذج التعامل مع تسلسلات يصل طولها إلى 512 أو 1024 رمزًا، وستتعطل عند طلب معالجة تسلسلات أطول. هناك حلان لهذه المشكلة:
+
+- استخدم نموذجًا بطول تسلسل مدعوم أطول.
+- اقطع تسلسلاتك.
+
+تتمتع النماذج بأطوال تسلسلات مدعومة مختلفة، ويتخصص بعضها في التعامل مع التسلسلات الطويلة جدًا. [Longformer](https://huggingface.co/docs/transformers/model_doc/longformer) هو أحد الأمثلة، ومثال آخر هو [LED](https://huggingface.co/docs/transformers/model_doc/led). إذا كنت تعمل على مهمة تتطلب تسلسلات طويلة جدًا، فنحن نوصي بإلقاء نظرة على تلك النماذج.
+
+وإلا، فنحن نوصي بتقطيع تسلسلاتك عن طريق تحديد `max_sequence_length` المعلمة:
+
+```py
+sequence = sequence[:max_sequence_length]
+```

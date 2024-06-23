@@ -1,0 +1,834 @@
+# الإجابة على الأسئلة
+
+حان الوقت للنظر في الإجابة على الأسئلة! تأتي هذه المهمة بأشكال مختلفة، ولكن ما سنركز عليه في هذا القسم يسمى الإجابة على الأسئلة الاستخراجية. يتضمن ذلك طرح أسئلة حول مستند وتحديد الإجابات كـ _نصوص_ في المستند نفسه.
+
+سنقوم بتعديل نموذج BERT على مجموعة بيانات SQuAD، والتي تتكون من أسئلة طرحها العاملون في مجال التعهيد الجماعي على مجموعة من مقالات ويكيبيديا. سيعطينا هذا نموذجًا قادرًا على إجراء تنبؤات مثل هذا:
+
+هذا في الواقع يعرض النموذج الذي تم تدريبه وتحميله إلى المحاور باستخدام التعليمات البرمجية الموضحة في هذا القسم. يمكنك العثور عليه والتحقق من التنبؤات [هنا](https://huggingface.co/huggingface-course/bert-finetuned-squad?context=🤗+Transformers+is+backed+by+the+three+most+popular+deep+learning+libraries+%E2%80%94+Jax%2C+PyTorch+and+TensorFlow+%E2%80%94+with+a+seamless+integration+between+them.+It%27s+straightforward+to+train+your+models+with+one+before+loading+them+for+inference+with+the+other.&question=Which+deep+learning+libraries+back+%F0%9F%A4%97+Transformers%3F).
+
+💡 تميل النماذج المشفرة فقط مثل BERT إلى أن تكون رائعة في استخراج الإجابات على أسئلة الحقائق مثل "من اخترع بنية المحول؟" ولكنها لا تؤدي أداءً جيدًا عند إعطائها أسئلة مفتوحة مثل "لماذا السماء زرقاء؟". في هذه الحالات الأكثر تحديًا، يتم استخدام نماذج المشفر/فك التشفير مثل T5 وBART عادةً لتركيب المعلومات بطريقة مشابهة جدًا [لتلخيص النص](/course/chapter7/5). إذا كنت مهتمًا بهذا النوع من الإجابة على الأسئلة *التوليدية*، فإننا نوصي بالاطلاع على [العرض التوضيحي](https://yjernite.github.io/lfqa.html) الخاص بنا بناءً على [مجموعة بيانات ELI5](https://huggingface.co/datasets/eli5).
+
+## إعداد البيانات
+
+تعد مجموعة بيانات [SQuAD](https://rajpurkar.github.io/SQuAD-explorer/) هي الأكثر استخدامًا كمعيار أكاديمي للإجابة على الأسئلة الاستخراجية، لذا فهذا ما سنستخدمه هنا. هناك أيضًا معيار أصعب [SQuAD v2](https://huggingface.co/datasets/squad_v2)، والذي يتضمن أسئلة ليس لها إجابة. طالما تحتوي مجموعة البيانات الخاصة بك على عمود للسياقات، وعمود للأسئلة، وعمود للإجابات، فيجب أن تتمكن من تكييف الخطوات أدناه.
+
+### مجموعة بيانات SQuAD
+
+كما هو معتاد، يمكننا تنزيل مجموعة البيانات وتخزينها مؤقتًا في خطوة واحدة بفضل `load_dataset()``:
+
+```py
+from datasets import load_dataset
+
+raw_datasets = load_dataset("squad")
+```
+
+بعد ذلك، يمكننا إلقاء نظرة على هذا الكائن لمعرفة المزيد حول مجموعة بيانات SQuAD:
+
+```py
+raw_datasets
+```
+
+```python out
+DatasetDict({
+train: Dataset({
+features: ['id', 'title', 'context', 'question', 'answers'],
+num_rows: 87599
+})
+validation: Dataset({
+features: ['id', 'title', 'context', 'question', 'answers'],
+num_rows: 10570
+})
+})
+```
+
+يبدو أن لدينا كل ما نحتاجه مع حقول `context` و`question` و`answers`، لذا دعنا نقوم بطباعة تلك الخاصة بأول عنصر في مجموعة التدريب الخاصة بنا:
+
+```py
+print("Context: ", raw_datasets["train"][0]["context"])
+print("Question: ", raw_datasets["train"][0]["question"])
+print("Answer: ", raw_datasets["train"][0]["answers"])
+```
+
+```python out
+Context: 'Architecturally, the school has a Catholic character. Atop the Main Building's gold dome is a golden statue of the Virgin Mary. Immediately in front of the Main Building and facing it, is a copper statue of Christ with arms upraised with the legend "Venite Ad Me Omnes". Next to the Main Building is the Basilica of the Sacred Heart. Immediately behind the basilica is the Grotto, a Marian place of prayer and reflection. It is a replica of the grotto at Lourdes, France where the Virgin Mary reputedly appeared to Saint Bernadette Soubirous in 1858. At the end of the main drive (and in a direct line that connects through 3 statues and the Gold Dome), is a simple, modern stone statue of Mary.'
+Question: 'To whom did the Virgin Mary allegedly appear in 1858 in Lourdes France?'
+Answer: {'text': ['Saint Bernadette Soubirous'], 'answer_start': [515]}
+```
+
+حقول `context` و`question` سهلة الاستخدام للغاية. حقل `answers` أكثر تعقيدًا بعض الشيء لأنه يحتوي على قاموس بحقلين هما قائمتان. هذا هو التنسيق الذي سيتم توقعه بواسطة المقياس `squad` أثناء التقييم؛ إذا كنت تستخدم بياناتك الخاصة، فلا يلزم بالضرورة القلق بشأن وضع الإجابات في نفس التنسيق. حقل `text` واضح تمامًا، ويحتوي حقل `answer_start` على فهرس الأحرف الأول لكل إجابة في السياق.
+
+أثناء التدريب، هناك إجابة واحدة فقط ممكنة. يمكننا التحقق المزدوج من ذلك باستخدام طريقة `Dataset.filter()``:
+
+```py
+raw_datasets["train"].filter(lambda x: len(x["answers"]["text"]) != 1)
+```
+
+```python out
+Dataset({
+features: ['id', 'title', 'context', 'question', 'answers'],
+num_rows: 0
+})
+```
+
+ومع ذلك، فهناك عدة إجابات محتملة لكل عينة أثناء التقييم، والتي قد تكون متطابقة أو مختلفة:
+
+```py
+print(raw_datasets["validation"][0]["answers"])
+print(raw_datasets["validation"][2]["answers"])
+```
+
+```python out
+{'text': ['Denver Broncos', 'Denver Broncos', 'Denver Broncos'], 'answer_start': [177, 177, 177]}
+{'text': ['Santa Clara, California', "Levi's Stadium", "Levi's Stadium in the San Francisco Bay Area at Santa Clara, California."], 'answer_start': [403, 355, 355]}
+```
+
+لن نخوض في تفاصيل نص التقييم حيث سيتم تغليفه بواسطة مقياس Datasets لـ 🤗، ولكن باختصار، فإن بعض الأسئلة لها عدة إجابات محتملة، ويقارن هذا النص إجابة متوقعة بجميع الإجابات المقبولة ويأخذ أفضل درجة. إذا ألقينا نظرة على العينة في الفهرس 2، على سبيل المثال:
+
+```py
+print(raw_datasets["validation"][2]["context"])
+print(raw_datasets["validation"][2]["question"])
+```
+
+```python out
+'Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi\'s Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.'
+'Where did Super Bowl 50 take place?'
+```
+
+يمكننا أن نرى أن الإجابة يمكن أن تكون بالفعل واحدة من الاحتمالات الثلاثة التي رأيناها سابقًا.
+### معالجة بيانات التدريب
+
+لنبدأ بمعالجة بيانات التدريب. سيكون الجزء الصعب هو توليد التصنيفات لإجابة السؤال، والتي ستكون المواضع الابتدائية والنهائية للرموز المقابلة للإجابة داخل السياق.
+
+ولكن دعونا لا نستبق الأمور. أولاً، نحتاج إلى تحويل النص في الإدخال إلى معرفات يمكن للنموذج فهمها، باستخدام محلل رموز:
+
+```py
+from transformers import AutoTokenizer
+
+model_checkpoint = "bert-base-cased"
+tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
+```
+
+كما ذكرنا سابقًا، سنقوم بضبط نموذج BERT، ولكن يمكنك استخدام أي نوع نموذج آخر طالما أنه يحتوي على محلل رموز سريع التنفيذ. يمكنك الاطلاع على جميع البنى التي تأتي مع إصدار سريع في [هذا الجدول الكبير](https://huggingface.co/transformers/#supported-frameworks)، وللتحقق من أن كائن `tokenizer` الذي تستخدمه مدعوم بالفعل من Tokenizers، يمكنك إلقاء نظرة على سمة `is_fast` الخاصة به:
+
+```py
+tokenizer.is_fast
+```
+
+```python out
+True
+```
+
+يمكننا تمرير السؤال والسياق معًا إلى محلل الرموز، وسيقوم بإدراج الرموز الخاصة بشكل صحيح لتشكيل جملة مثل هذه:
+
+```
+[CLS] السؤال [SEP] السياق [SEP]
+```
+
+دعونا نتأكد من ذلك:
+
+```py
+context = raw_datasets["train"][0]["context"]
+question = raw_datasets["train"][0]["question"]
+
+inputs = tokenizer(question, context)
+tokenizer.decode(inputs["input_ids"])
+```
+
+```python out
+'[CLS] To whom did the Virgin Mary allegedly appear in 1858 in Lourdes France? [SEP] Architecturally, '
+'the school has a Catholic character. Atop the Main Building\'s gold dome is a golden statue of the Virgin '
+'Mary. Immediately in front of the Main Building and facing it, is a copper statue of Christ with arms '
+'upraised with the legend " Venite Ad Me Omnes ". Next to the Main Building is the Basilica of the Sacred '
+'Heart. Immediately behind the Main Building is the Grotto, a Marian place of prayer and reflection. It is a '
+'replica of the grotto at Lourdes, France where the Virgin Mary reputedly appeared to Saint Bernadette '
+'Soubirous in 1858. At the end of the main drive ( and in a direct line that connects through 3 statues '
+'and the Gold Dome ), is a simple, modern stone statue of Mary. [SEP]'
+```
+
+بعد ذلك، ستكون التصنيفات فهرس الرموز التي تبدأ وتنهي الإجابة، وسيتم تكليف النموذج بالتنبؤ بمقدار بداية ونهاية واحد لكل رمز في الإدخال، مع التصنيفات النظرية كما يلي:
+
+<div class="flex justify-center">
+<img class="block dark:hidden" src="https://huggingface.co/datasets/huggingface-course/documentation-images/resolve/main/en/chapter7/qa_labels.svg" alt="تصنيفات الترميز one-hot للإجابة على الأسئلة."/>
+<img class="hidden dark:block" src="https://huggingface.co/datasets/huggingface-course/documentation-images/resolve/main/en/chapter7/qa_labels-dark.svg" alt="تصنيفات الترميز one-hot للإجابة على الأسئلة."/>
+</div>
+
+في هذه الحالة، السياق ليس طويلاً جدًا، ولكن بعض الأمثلة في مجموعة البيانات لها سياقات طويلة جدًا ستتجاوز الطول الأقصى الذي حددناه (384 في هذه الحالة). كما رأينا في [الفصل 6](/course/chapter6/4) عندما استكشفنا الداخل `خط أنابيب الإجابة على الأسئلة`، سنتعامل مع السياقات الطويلة من خلال إنشاء عدة ميزات تدريب من عينة واحدة من مجموعة البيانات الخاصة بنا، مع نافذة منزلقة بينها.
+
+ولرؤية كيف يعمل ذلك باستخدام المثال الحالي، يمكننا تحديد الطول الأقصى بـ 100 واستخدام نافذة منزلقة من 50 رمزًا. للتذكير، نستخدم:
+
+- `max_length` لتحديد الطول الأقصى (100 هنا)
+- `truncation="only_second"` لتقليص السياق (الموجود في الموضع الثاني) عندما يكون السؤال مع سياقه طويلاً جدًا
+- `stride` لتحديد عدد الرموز المتداخلة بين قطعتين متتاليتين (50 هنا)
+- `return_overflowing_tokens=True` لإعلام محلل الرموز بأننا نريد الرموز المتدفقة
+
+```py
+inputs = tokenizer(
+question,
+context,
+max_length=100,
+truncation="only_second"،
+stride=50,
+return_overflowing_tokens=True,
+)
+
+for ids in inputs["input_ids"]:
+print(tokenizer.decode(ids))
+```
+
+```python out
+'[CLS] To whom did the Virgin Mary allegedly appear in 1858 in Lourdes France? [SEP] Architecturally, the school has a Catholic character. Atop the Main Building\'s gold dome is a golden statue of the Virgin Mary. Immediately in front of the Main Building and facing it, is a copper statue of Christ with arms upraised with the legend " Venite Ad Me Omnes ". Next to the Main Building is the Basilica of the Sacred Heart. Immediately behind the basi [SEP]'
+'[CLS] To whom did the Virgin Mary allegedly appear in 1858 in Lourdes France? [SEP] the Main Building and facing it, is a copper statue of Christ with arms upraised with the legend " Venite Ad Me Omnes ". Next to the Main Building is the Basilica of the Sacred Heart. Immediately behind the basilica is the Grotto, a Marian place of prayer and reflection. It is a replica of the grotto at Lourdes, France where the Virgin [SEP]'
+'[CLS] To whom did the Virgin Mary allegedly appear in 1858 in Lourdes France? [SEP] Next to the Main Building is the Basilica of the Sacred Heart. Immediately behind the basilica is the Grotto, a Marian place of prayer and reflection. It is a replica of the grotto at Lourdes, France where the Virgin Mary reputedly appeared to Saint Bernadette Soubirous in 1858. At the end of the main drive ( and in a direct line that connects through 3 [SEP]'
+'[CLS] To whom did the Virgin Mary allegedly appear in 1858 in Lourdes France? [SEP]. It is a replica of the grotto at Lourdes, France where the Virgin Mary reputedly appeared to Saint Bernadette Soubirous in 1858. At the end of the main drive ( and in a direct line that connects through 3 statues and the Gold Dome ), is a simple, modern stone statue of Mary. [SEP]'
+```
+
+كما نرى، تم تقسيم مثالنا إلى أربعة مدخلات، يحتوي كل منها على السؤال وجزء من السياق. لاحظ أن الإجابة على السؤال ("Bernadette Soubirous") تظهر فقط في الإدخالين الثالث والأخير، لذا من خلال التعامل مع السياقات الطويلة بهذه الطريقة، سنقوم بإنشاء بعض أمثلة التدريب حيث لا تكون الإجابة مدرجة في السياق. بالنسبة لتلك الأمثلة، ستكون التصنيفات `start_position = end_position = 0` (لذلك نتوقع الرمز `[CLS]`). كما سنحدد هذه التصنيفات في الحالة المؤسفة التي تم فيها تقليم الإجابة بحيث نحصل فقط على البداية (أو النهاية). وبالنسبة للأمثلة التي تكون فيها الإجابة مدرجة بالكامل في السياق، ستكون التصنيفات فهرس الرمز الذي تبدأ فيه الإجابة وفهرس الرمز الذي تنتهي فيه الإجابة.
+
+توفر لنا مجموعة البيانات فهرس بداية الإجابة في السياق، ومن خلال إضافة طول الإجابة، يمكننا العثور على نهاية الإجابة في السياق. لرسم خريطة لهذه الفهارس إلى فهارس الرموز، سنحتاج إلى استخدام مخططات الإزاحة التي درسناها في [الفصل 6](/course/chapter6/4). يمكننا أن نجعل محلل الرموز يعيدها من خلال تمرير `return_offsets_mapping=True`:
+
+```py
+inputs = tokenizer(
+question,
+context,
+max_length=100,
+truncation="only_second"،
+stride=50,
+return_overflowing_tokens=True,
+return_offsets_mapping=True,
+)
+inputs.keys()
+```
+
+```python out
+dict_keys(['input_ids', 'token_type_ids', 'attention_mask', 'offset_mapping', 'overflow_to_sample_mapping'])
+```
+
+كما نرى، نحصل على فهارس الإدخال المعتادة، وأنواع رموز العلامات، وقناع الاهتمام، وكذلك مخطط الإزاحة الذي نطلبه ومفتاح إضافي، `overflow_to_sample_mapping`. ستكون القيمة المقابلة مفيدة لنا عندما نرسم رموزًا نصية متعددة في نفس الوقت (الذي يجب علينا فعله للاستفادة من حقيقة أن محلل الرموز الخاص بنا مدعوم من Rust). نظرًا لأن العينة الواحدة يمكن أن تعطي عدة ميزات، فإنها تقوم بتعيين كل ميزة إلى المثال الذي نشأت منه. نظرًا لأننا قمنا فقط برسم رمز واحد هنا، فإننا نحصل على قائمة من `0`s:
+
+```py
+inputs["overflow_to_sample_mapping"]
+```
+
+```python out
+[0, 0, 0, 0]
+```
+
+ولكن إذا قمنا برسم رموز نصية أكثر، فسيصبح هذا أكثر فائدة:
+
+```py
+inputs = tokenizer(
+raw_datasets["train"][2:6]["question"],
+raw_datasets["train"][2:6]["context"],
+max_length=100,
+truncation="only_second"،
+stride=50,
+return_overflowing_tokens=True,
+return_offsets_mapping=True,
+)
+
+print(f"The 4 examples gave {len(inputs['input_ids'])} features.")
+print(f"Here is where each comes from: {inputs['overflow_to_sample_mapping']}.")
+```
+
+```python out
+'The 4 examples gave 19 features.'
+'Here is where each comes from: [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3].'
+```
+
+كما نرى، أعطت الأمثلة الثلاثة الأولى (بالفهرس 2 و3 و4 في مجموعة التدريب) كل منها أربع ميزات وأعطى المثال الأخير (بالفهرس 5 في مجموعة التدريب) 7 ميزات.
+
+ستكون هذه المعلومات مفيدة لتعيين كل ميزة نحصل عليها إلى تصنيفها المقابل. كما ذكرنا سابقًا، هذه التصنيفات هي:
+
+- `(0، 0)` إذا كانت الإجابة غير موجودة في الجزء المقابل من السياق
+- `(start_position، end_position)` إذا كانت الإجابة موجودة في الجزء المقابل من السياق، مع `start_position` كونها فهرس الرمز (في فهارس الإدخال) في بداية الإجابة و`end_position` كونها فهرس الرمز (في فهارس الإدخال) حيث تنتهي الإجابة
+
+ولتحديد أي من هذه هي الحالة، وفي حالة الصلة، مواضع الرموز، نجد أولاً الفهارس التي تبدأ وتنهي السياق في فهارس الإدخال. يمكننا استخدام معرفات نوع الرمز للقيام بذلك، ولكن نظرًا لأن تلك المعرفات لا توجد بالضرورة لجميع النماذج (لا يتطلب DistilBERT ذلك، على سبيل المثال)، فسنستخدم بدلاً من ذلك طريقة `sequence_ids()` من `BatchEncoding` التي يعيدها محلل الرموز الخاص بنا.
+
+بمجرد حصولنا على فهارس الرموز، ننظر إلى الإزاحات المقابلة، والتي هي عبارة عن مجموعات من عددين صحيحين يمثلان نطاق الأحرف داخل السياق الأصلي. وبالتالي، يمكننا اكتشاف ما إذا كان جزء السياق في هذه الميزة يبدأ بعد الإجابة أو ينتهي قبل بدء الإجابة (في هذه الحالة يكون التصنيف `(0، 0)`). إذا لم يكن الأمر كذلك، فنحن ندور للعثور على أول وآخر رمز للإجابة:
+
+```py
+answers = raw_datasets["train"][2:6]["answers"]
+start_positions = []
+end_positions = []
+
+for i, offset in enumerate(inputs["offset_mapping"]):
+sample_idx = inputs["overflow_to_sample_mapping"][i]
+answer = answers[sample_idx]
+start_char = answer["answer_start"][0]
+end_char = answer["answer_start"][0] + len(answer["text"][0])
+sequence_ids = inputs.sequence_ids(i)
+
+# Find the start and end of the context
+idx = 0
+while sequence_ids[idx] != 1:
+idx += 1
+context_start = idx
+while sequence_ids[idx] == 1:
+idx += 1
+context_end = idx - 1
+
+# If the answer is not fully inside the context, label is (0, 0)
+if offset[context_start][0] > start_char or offset[context_end][1] < end_char:
+start_positions.append(0)
+end_positions.append(0)
+else:
+# Otherwise it's the start and end token positions
+idx = context_start
+while idx <= context_end and offset[idx][0] <= start_char:
+idx += 1
+start_positions.append(idx - 1)
+
+idx = context_end
+while idx >= context_start and offset[idx][1] >= end_char:
+idx -= 1
+end_positions.append(idx + 1)
+
+start_positions, end_positions
+```
+
+```python out
+([83, 51, 19, 0, 0, 64, 27, 0, 34, 0, 0, 0, 67, 34, 0, 0, 0, 0, 0],
+[85, 53, 21, 0, 0, 70, 33, 0, 40, 0, 0, 0, 68, 35, 0, 0, 0, 0, 0])
+```
+
+دعونا نلقي نظرة على بعض النتائج للتحقق من أن نهجنا صحيح. بالنسبة للميزة الأولى، نجد `(83، 85)` كتصنيفات، لذا دعونا نقارن الإجابة النظرية بالنطاق المشفر للرموز من 83 إلى 85 (شامل):
+
+```py
+idx = 0
+sample_idx = inputs["overflow_to_sample_mapping"][idx]
+answer = answers[sample_idx]["text"][0]
+
+start = start_positions[idx]
+end = end_positions[idx]
+labeled_answer = tokenizer.decode(inputs["input_ids"][idx][start : end + 1])
+
+print(f"Theoretical answer: {answer}, labels give: {labeled_answer}")
+```
+
+```python out
+'Theoretical answer: the Main Building, labels give: the Main Building'
+```
+
+لذلك هناك تطابق! الآن دعونا نتحقق من الفهرس 4، حيث قمنا بتعيين التصنيفات إلى `(0، 0)`، مما يعني أن الإجابة غير موجودة في جزء السياق من تلك الميزة:
+
+```py
+idx = 4
+sample_idx = inputs["overflow_to_sample_mapping"][idx]
+answer = answers[sample_idx]["text"][0]
+
+decoded_example = tokenizer.decode(inputs["input_ids"][idx])
+print(f"Theoretical answer: {answer}, decoded example: {decoded_example}")
+```
+
+```python out
+'Theoretical answer: a Marian place of prayer and reflection, decoded example: [CLS] What is the Grotto at Notre Dame? [SEP] Architecturally, the school has a Catholic character. Atop the Main Building\'s gold dome is a golden statue of the Virgin Mary. Immediately in front of the Main Building and facing it, is a copper statue of Christ with arms upraised with the legend " Venite Ad Me Omnes ". Next to the Main Building is the Basilica of the Sacred Heart. Immediately behind the basilica is the Grotto [SEP]'
+```
+
+بالفعل، لا نرى الإجابة داخل السياق.
+
+<Tip>
+✏️ **جرب بنفسك!** عند استخدام بنية XLNet، يتم تطبيق الحشو على اليسار ويتم تبديل السؤال والسياق. قم بتكييف كل التعليمات البرمجية التي رأيناها للتو مع بنية XLNet (وأضف `padding=True`). كن على علم
+لمتابعة الترجمة من هنا:
+
+### معالجة بيانات التحقق
+
+ستكون معالجة بيانات التحقق أسهل قليلاً حيث لا نحتاج إلى إنشاء تسميات (ما لم نرغب في حساب خسارة التحقق، ولكن هذا الرقم لن يساعدنا حقًا في فهم مدى جودة النموذج). ستكون المتعة الحقيقية في تفسير تنبؤات النموذج إلى مقاطع من السياق الأصلي. لهذا، سنحتاج فقط إلى تخزين كل من تعيينات الإزاحة وبعض الطرق لمطابقة كل ميزة تم إنشاؤها مع المثال الأصلي الذي تأتي منه. نظرًا لوجود عمود معرف في مجموعة البيانات الأصلية، فسنستخدم هذا المعرف.
+
+الشيء الوحيد الذي سنضيفه هنا هو القليل من التنظيف لتعيينات الإزاحة. سوف تحتوي على إزاحات للسؤال والسياق، ولكن بمجرد وصولنا إلى مرحلة ما بعد المعالجة، لن يكون لدينا أي طريقة لمعرفة الجزء من رموز الإدخال التي تتوافق مع السياق والجزء الذي كان السؤال (طريقة `sequence_ids()` التي استخدمناها متاحة لإخراج المحلل فقط). لذلك، سنقوم بتعيين الإزاحات المقابلة للسؤال إلى `None`:
+
+```py
+def preprocess_validation_examples(examples):
+    questions = [q.strip() for q in examples["question"]]
+    inputs = tokenizer(
+        questions,
+        examples["context"],
+        max_length=max_length,
+        truncation="only_second",
+        stride=stride,
+        return_overflowing_tokens=True,
+        return_offsets_mapping=True,
+        padding="max_length",
+    )
+
+    sample_map = inputs.pop("overflow_to_sample_mapping")
+    example_ids = []
+
+    for i in range(len(inputs["input_ids"])):
+        sample_idx = sample_map[i]
+        example_ids.append(examples["id"][sample_idx])
+
+        sequence_ids = inputs.sequence_ids(i)
+        offset = inputs["offset_mapping"][i]
+        inputs["offset_mapping"][i] = [
+            o if sequence_ids[k] == 1 else None for k, o in enumerate(offset)
+        ]
+
+    inputs["example_id"] = example_ids
+    return inputs
+```
+
+يمكننا تطبيق هذه الدالة على مجموعة بيانات التحقق بالكامل كما فعلنا من قبل:
+
+```py
+validation_dataset = raw_datasets["validation"].map(
+    preprocess_validation_examples,
+    batched=True,
+    remove_columns=raw_datasets["validation"].column_names,
+)
+len(raw_datasets["validation"]), len(validation_dataset)
+```
+
+```python out
+(10570, 10822)
+```
+
+في هذه الحالة، أضفنا بضع مئات من العينات فقط، لذا يبدو أن السياقات في مجموعة التحقق أقصر قليلاً.
+
+الآن بعد أن قمنا بمعالجة جميع البيانات، يمكننا الانتقال إلى التدريب.
+
+{#if fw === 'pt'}
+
+## ضبط دقيق للنموذج باستخدام واجهة برمجة تطبيقات المدرب
+
+سوف يشبه كود التدريب لهذا المثال الكثير من الكود في الأقسام السابقة - سيكون أصعب شيء هو كتابة دالة `compute_metrics()`. نظرًا لأننا قمنا بضبط جميع العينات على الطول الأقصى الذي حددناه، فلا توجد حاجة إلى تعريف جامع للبيانات، لذا فإن حساب المقياس هو الشيء الوحيد الذي يتعين علينا القلق بشأنه. سيكون الجزء الصعب هو معالجة تنبؤات النموذج بعد ذلك إلى مقاطع نصية في الأمثلة الأصلية؛ بمجرد القيام بذلك، سيقوم المقياس من مكتبة مجموعات البيانات 🤗 بمعظم العمل نيابة عنا.
+
+{:else}
+
+## ضبط دقيق للنموذج باستخدام Keras
+
+سوف يشبه كود التدريب لهذا المثال الكثير من الكود في الأقسام السابقة، ولكن سيكون حساب المقاييس صعبًا بشكل فريد. نظرًا لأننا قمنا بضبط جميع العينات على الطول الأقصى الذي حددناه، فلا توجد حاجة إلى تعريف جامع للبيانات، لذا فإن حساب المقياس هو الشيء الوحيد الذي يتعين علينا القلق بشأنه. سيكون الجزء الصعب هو معالجة تنبؤات النموذج بعد ذلك إلى مقاطع نصية في الأمثلة الأصلية؛ بمجرد القيام بذلك، سيقوم المقياس من مكتبة مجموعات البيانات 🤗 بمعظم العمل نيابة عنا.
+
+{/if}
+### معالجة ما بعد التنبؤ
+
+ستخرج النماذج احتمالات لوجيتية للمواضع الابتدائية والنهائية للإجابة في معرفات الإدخال، كما رأينا أثناء استكشافنا لأنبوب "الأسئلة والأجوبة" [`question-answering` pipeline](/course/chapter6/3b). ستكون خطوة ما بعد المعالجة مماثلة لما فعلناه هناك، لذا إليك تذكيرًا سريعًا بالإجراءات التي اتخذناها:
+
+- قمنا بقناع احتمالات لوجيتية الابتدائية والنهائية المقابلة للرموز المميزة خارج السياق.
+- ثم قمنا بتحويل احتمالات لوجيتية الابتدائية والنهائية إلى احتمالات باستخدام softmax.
+- قمنا بإسناد درجة لكل زوج `(start_token, end_token)` من خلال أخذ حاصل ضرب الاحتمالين المقابلين.
+- بحثنا عن الزوج الذي لديه أعلى درجة والذي يعطي إجابة صالحة (على سبيل المثال، `start_token` أقل من `end_token`).
+
+هنا سنغير هذه العملية قليلاً لأننا لا نحتاج إلى حساب الدرجات الفعلية (مجرد الإجابة المتوقعة). وهذا يعني أننا يمكن أن نتخطى خطوة softmax. ولتسريع العملية، لن نقوم أيضًا بتقييم جميع الأزواج المحتملة `(start_token, end_token)`، ولكن فقط تلك التي تقابل أعلى `n_best` احتمالات لوجيتية (مع `n_best=20`). وبما أننا سنتخطى softmax، ستكون هذه الدرجات هي درجات الاحتمالات اللوجستية، وسيتم الحصول عليها من خلال أخذ مجموع احتمالات لوجيتية الابتدائية والنهائية (بدلاً من حاصل الضرب، بسبب قاعدة \\(\log (ab) = \ log (a) + \ log (b) \\)).
+
+ولإثبات كل هذا، سنحتاج إلى نوع من التنبؤات. نظرًا لأننا لم نقم بتدريب نموذجنا بعد، فسنستخدم النموذج الافتراضي لأنبوب "الأسئلة والأجوبة" لتوليد بعض التنبؤات على جزء صغير من مجموعة التحقق من الصحة. يمكننا استخدام نفس دالة المعالجة كما فعلنا من قبل؛ لأنه يعتمد على ثابت `tokenizer` العالمي، كل ما علينا فعله هو تغيير هذا الكائن إلى محدد الرموز الخاص بالنموذج الذي نريد استخدامه مؤقتًا:
+
+```python
+small_eval_set = raw_datasets["validation"].select(range(100))
+trained_checkpoint = "distilbert-base-cased-distilled-squad"
+
+tokenizer = AutoTokenizer.from_pretrained(trained_checkpoint)
+eval_set = small_eval_set.map(
+preprocess_validation_examples,
+batched=True,
+remove_columns=raw_datasets["validation"].column_names,
+)
+```
+
+الآن بعد الانتهاء من المعالجة المسبقة، نقوم بتغيير محدد الرموز مرة أخرى إلى المحلل الأصلي الذي اخترناه:
+
+```python
+tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
+```
+
+ثم نقوم بإزالة أعمدة `eval_set` التي لا يتوقعها النموذج، وننشئ دفعة مع كل ذلك مجموعة التحقق من الصحة الصغيرة، ونمررها عبر النموذج. إذا كانت وحدة معالجة الرسوميات (GPU) متاحة، فنحن نستخدمها للتسريع:
+
+{#if fw === 'pt'}
+```python
+import torch
+from transformers import AutoModelForQuestionAnswering
+
+eval_set_for_model = eval_set.remove_columns(["example_id", "offset_mapping"])
+eval_set_for_model.set_format("torch")
+
+device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+batch = {k: eval_set_for_model[k].to(device) for k in eval_set_for_model.column_names}
+trained_model = AutoModelForQuestionAnswering.from_pretrained(trained_checkpoint).to(
+device
+)
+
+with torch.no_grad():
+outputs = trained_model(**batch)
+```
+
+نظرًا لأن `Trainer` سيعطينا تنبؤات كمصفوفات NumPy، فإننا نستخرج احتمالات لوجيتية الابتدائية والنهائية ونحولها إلى ذلك التنسيق:
+
+```python
+start_logits = outputs.start_logits.cpu().numpy()
+end_logits = outputs.end_logits.cpu().numpy()
+```
+{:else}
+```python
+import tensorflow as tf
+from transformers import TFAutoModelForQuestionAnswering
+
+eval_set_for_model = eval_set.remove_columns(["example_id", "offset_mapping"])
+eval_set_for
+```
+### ضبط نموذج الضبط الدقيق
+
+الآن نحن مستعدون لتدريب نموذجنا. دعونا نقوم بإنشائه أولاً، باستخدام فئة `AutoModelForQuestionAnswering` كما فعلنا من قبل:
+
+```python
+model = AutoModelForQuestionAnswering.from_pretrained(model_checkpoint)
+```
+
+كما هو معتاد، نحصل على تحذير بأن بعض الأوزان غير مستخدمة (تلك القادمة من رأس التدريب المسبق) والبعض الآخر يتم تهيئتها بشكل عشوائي (تلك الخاصة برأس الإجابة على الأسئلة). يجب أن تكون معتادًا على ذلك الآن، ولكن هذا يعني أن هذا النموذج ليس جاهزًا للاستخدام بعد ويحتاج إلى الضبط الدقيق - وهو أمر جيد سنقوم به على الفور!
+
+لكي نتمكن من دفع نموذجنا إلى Hub، سيتعين علينا تسجيل الدخول إلى Hugging Face. إذا كنت تشغل هذا الكود في دفتر ملاحظات، فيمكنك القيام بذلك باستخدام دالة المساعدة التالية، والتي تعرض مربع حوار يمكنك من خلاله إدخال بيانات اعتماد تسجيل الدخول الخاصة بك:
+
+```python
+from huggingface_hub import notebook_login
+
+notebook_login()
+```
+
+إذا كنت لا تعمل في دفتر ملاحظات، فما عليك سوى كتابة السطر التالي في المحطة الطرفية الخاصة بك:
+
+```bash
+huggingface-cli login
+```
+
+بمجرد الانتهاء من ذلك، يمكننا تحديد `TrainingArguments` الخاصة بنا. كما قلنا عندما حددنا دالتنا لحساب المقياس، فلن نتمكن من الحصول على حلقة تقييم منتظمة بسبب توقيع دالة `compute_metrics()`. يمكننا كتابة فئة فرعية خاصة بنا من `Trainer` للقيام بذلك (وهو نهج يمكنك العثور عليه في [سكريبت مثال الإجابة على الأسئلة](https://github.com/huggingface/transformers/blob/master/examples/pytorch/question-answering/trainer_qa.py))، ولكن هذا أطول قليلاً من هذا القسم. بدلاً من ذلك، سنقوم بتقييم النموذج فقط في نهاية التدريب هنا وسنوضح لك كيفية إجراء تقييم منتظم في "حلقة تدريب مخصصة" أدناه.
+
+هنا حقًا حيث تظهر حدود واجهة برمجة تطبيقات المدرب `Trainer API` وتألق مكتبة 🤗 Accelerate: يمكن أن يكون تخصيص الفئة لحالة استخدام معينة مؤلمًا، ولكن ضبط حلقة تدريب مكشوفة بالكامل أمر سهل.
+
+دعونا نلقي نظرة على `TrainingArguments` الخاصة بنا:
+
+```python
+from transformers import TrainingArguments
+
+args = TrainingArguments(
+"bert-finetuned-squad",
+evaluation_strategy="no",
+save_strategy="epoch",
+learning_rate=2e-5,
+num_train_epochs=3,
+weight_decay=0.01,
+fp16=True,
+push_to_hub=True,
+)
+```
+
+لقد رأينا معظم هذه الأشياء من قبل: نقوم بضبط بعض فرط المعلمات (مثل معدل التعلم، وعدد حقبات التدريب التي نتدرب من أجلها، وبعض انحلال الوزن) ونشير إلى أننا نريد حفظ النموذج في نهاية كل حقبة، وتخطي التقييم، وتحميل نتائجنا إلى Model Hub. كما نقوم بتمكين التدريب الدقيق المختلط مع `fp16=True`، لأنه يمكن أن يسرع التدريب بشكل لطيف على GPU حديث.
+
+الآن بعد أن انتهينا من ذلك، يمكننا إنشاء مجموعات بيانات TF الخاصة بنا. يمكننا استخدام جامع البيانات الافتراضي البسيط هذه المرة:
+
+```python
+from transformers import DefaultDataCollator
+
+data_collator = DefaultDataCollator(return_tensors="tf")
+```
+
+والآن نقوم بإنشاء مجموعات البيانات كالمعتاد.
+
+```python
+tf_train_dataset = model.prepare_tf_dataset(
+train_dataset,
+collate_fn=data_collator,
+shuffle=True,
+batch_size=16,
+)
+tf_eval_dataset = model.prepare_tf_dataset(
+validation_dataset,
+collate_fn=data_collator,
+shuffle=False,
+batch_size=16,
+)
+```
+
+بعد ذلك، نقوم بضبط فرط معلمات التدريب الخاصة بنا وتجميع نموذجنا:
+
+```python
+from transformers import create_optimizer
+from transformers.keras_callbacks import PushToHubCallback
+import tensorflow as tf
+
+# عدد خطوات التدريب هو عدد العينات في مجموعة البيانات، مقسومًا على حجم الدفعة ثم مضروبًا
+# بعدد الحقبات الإجمالية. لاحظ أن tf_train_dataset هنا عبارة عن مجموعة بيانات tf.data.Dataset مجمعة،
+# وليس مجموعة بيانات Hugging Face الأصلية، لذا فإن طولها هو بالفعل num_samples // batch_size.
+num_train_epochs = 3
+num_train_steps = len(tf_train_dataset) * num_train_epochs
+optimizer, schedule = create_optimizer(
+init_lr=2e-5,
+num_warmup_steps=0,
+num_train_steps=num_train_steps,
+weight_decay_rate=0.01,
+)
+model.compile(optimizer=optimizer)
+
+# تدريب في دقة عائمة مختلطة
+tf.keras.mixed_precision.set_global_policy("mixed_float16")
+```
+
+أخيرًا، نحن مستعدون للتدريب باستخدام `model.fit()`. نستخدم `PushToHubCallback` لتحميل النموذج إلى Hub بعد كل حقبة.
+
+افتراضيًا، سيتم استخدام المستودع الموجود في مساحة الاسم الخاصة بك ويتم تسميته باسم دليل الإخراج الذي قمت بتعيينه، لذا في حالتنا سيكون في `"sgugger/bert-finetuned-squad"`. يمكننا تجاوز هذا عن طريق تمرير `hub_model_id`؛ على سبيل المثال، لدفع النموذج إلى منظمة `huggingface_course` التي استخدمناها `hub_model_id="huggingface_course/bert-finetuned-squad"` (وهو النموذج الذي ارتبطنا به في بداية هذا القسم).
+
+💡 إذا كان دليل الإخراج الذي تستخدمه موجودًا، فيجب أن يكون مستنسخًا محليًا للمستودع الذي تريد دفعه إليه (لذا قم بتعيين اسم جديد إذا حصلت على خطأ عند تحديد مدربك).
+
+أخيرًا، نقوم ببساطة بتمرير كل شيء إلى فئة `Trainer` وإطلاق التدريب:
+
+```python
+from transformers import Trainer
+
+trainer = Trainer(
+model=model,
+args=args,
+train_dataset=train_dataset,
+eval_dataset=validation_dataset,
+tokenizer=tokenizer,
+)
+trainer.train()
+```
+
+```python
+from transformers.keras_callbacks import PushToHubCallback
+
+callback = PushToHubCallback(output_dir="bert-finetuned-squad", tokenizer=tokenizer)
+
+# سنقوم بالتقييم لاحقًا، لذا لا يوجد تقييم أثناء التدريب
+model.fit(tf_train_dataset, callbacks=[callback], epochs=num_train_epochs)
+```
+
+لاحظ أنه أثناء حدوث التدريب، في كل مرة يتم فيها حفظ النموذج (هنا، كل حقبة) يتم تحميله إلى Hub في الخلفية. بهذه الطريقة، ستتمكن من استئناف تدريبك على آلة أخرى إذا لزم الأمر. يستغرق التدريب بأكمله بعض الوقت (أكثر قليلاً من ساعة على Titan RTX)، لذا يمكنك احتساء القهوة أو إعادة قراءة بعض أجزاء الدورة التدريبية التي وجدتها أكثر تحديًا أثناء استمرارها. لاحظ أيضًا أنه بمجرد الانتهاء من الحقبة الأولى، سترى بعض الأوزان التي تم تحميلها إلى Hub ويمكنك البدء في اللعب بنموذجك على صفحته.
+
+بمجرد اكتمال التدريب، يمكننا أخيرًا تقييم نموذجنا (والصلاة من أجل أننا لم نقضي كل هذا الوقت في حساب لا شيء). ستعيد طريقة `predict()` للمدرب زوجًا يكون فيه العنصر الأول تنبؤات النموذج (هنا زوج مع logits البداية والنهاية). نرسل هذا إلى دالتنا `compute_metrics()`
+
+```python
+predictions, _, _ = trainer.predict(validation_dataset)
+start_logits, end_logits = predictions
+compute_metrics(start_logits, end_logits, validation_dataset, raw_datasets["validation"])
+```
+
+بمجرد اكتمال التدريب، يمكننا أخيرًا تقييم نموذجنا (والصلاة من أجل أننا لم نقضي كل هذا الوقت في حساب لا شيء). ستتولى طريقة `predict()` الخاصة بنموذجنا مهمة الحصول على التنبؤات، وبما أننا قمنا بكل العمل الشاق لتحديد دالة `compute_metrics()` في وقت سابق، فيمكننا الحصول على نتائجنا في سطر واحد:
+
+```python
+predictions = model.predict(tf_eval_dataset)
+compute_metrics(
+predictions["start_logits"],
+predictions["end_logits"],
+validation_dataset,
+raw_datasets["validation"],
+)
+```
+
+```python out
+{'exact_match': 81.18259224219489, 'f1': 88.67381321905516}
+```
+
+رائع! للمقارنة، فإن الدرجات الأساسية المبلغ عنها في مقال BERT لهذا النموذج هي 80.8 و88.5، لذا نحن في المكان الذي يجب أن نكون فيه.
+
+أخيرًا، نستخدم طريقة `push_to_hub()` للتأكد من تحميل أحدث إصدار من النموذج:
+
+```py
+trainer.push_to_hub(commit_message="Training complete")
+```
+
+يعيد هذا عنوان URL للالتزام الذي قام به للتو، إذا كنت تريد فحصه:
+
+```python out
+'https://huggingface.co/sgugger/bert-finetuned-squad/commit/9dcee1fbc25946a6ed4bb32efb1bd71d5fa90b68'
+```
+
+كما يقوم المدرب بصياغة بطاقة نموذج بمزيد من نتائج التقييم ويحملها.
+
+في هذه المرحلة، يمكنك استخدام أداة الاستدلال على Model Hub لاختبار النموذج ومشاركته مع أصدقائك وعائلتك وحيواناتك الأليفة المفضلة. لقد قمت بضبط دقيق لنموذج بنجاح على مهمة الإجابة على الأسئلة - تهانينا!
+
+✏️ **جرب دورك!** جرّب بنية نموذج أخرى لمعرفة ما إذا كان أداؤها أفضل في هذه المهمة!
+
+إذا كنت تريد الغوص بشكل أعمق قليلاً في حلقة التدريب، فسنقوم الآن بإظهار كيفية القيام بنفس الشيء باستخدام 🤗 Accelerate.
+
+## حلقة تدريب مخصصة
+
+دعونا الآن نلقي نظرة على حلقة التدريب الكاملة، حتى تتمكن من تخصيص الأجزاء التي تحتاجها بسهولة. سيشبه حلقة التدريب في [الفصل 3](/course/chapter3/4)، باستثناء حلقة التقييم. سنتمكن من تقييم النموذج بانتظام لأننا لم نعد مقيدين بفئة `Trainer`.
+
+### إعداد كل شيء للتدريب
+
+أولاً، نحتاج إلى بناء `DataLoader`s من مجموعات البيانات الخاصة بنا. نقوم بتعيين تنسيق هذه المجموعات إلى `"torch"`، وإزالة الأعمدة في مجموعة التحقق من الصحة التي لا يستخدمها النموذج. ثم يمكننا استخدام `default_data_collator` التي توفرها Transformers كـ `collate_fn` وخلط مجموعة التدريب، ولكن ليس مجموعة التحقق من الصحة:
+
+```py
+from torch.utils.data import DataLoader
+from transformers import default_data_collator
+
+train_dataset.set_format("torch")
+validation_set = validation_dataset.remove_columns(["example_id", "offset_mapping"])
+validation_set.set_format("torch")
+
+train_dataloader = DataLoader(
+train_dataset,
+shuffle=True,
+collate_fn=default_data_collator,
+batch_size=8,
+)
+eval_dataloader = DataLoader(
+validation_set, collate_fn=default_data_collator, batch_size=8
+)
+```
+
+بعد ذلك، نقوم بإعادة إنشاء نموذجنا، للتأكد من أننا لا نواصل الضبط الدقيق من قبل، ولكننا نبدأ من جديد من نموذج BERT المدرب مسبقًا:
+
+```py
+model = AutoModelForQuestionAnswering.from_pretrained(model_checkpoint)
+```
+
+بعد ذلك، سنحتاج إلى محسن. كما هو معتاد، نستخدم `AdamW` الكلاسيكي، والذي يشبه Adam، ولكنه مزود بإصلاح في طريقة تطبيق انحلال الوزن:
+
+```py
+from torch.optim import AdamW
+
+optimizer = AdamW(model.parameters(), lr=2e-5)
+```
+
+بمجرد حصولنا على كل هذه الأشياء، يمكننا إرسالها إلى طريقة `accelerator.prepare()`. تذكر أنه إذا كنت تريد التدريب على وحدات معالجة الرسوميات في Colab notebook، فسوف تحتاج إلى نقل كل هذا الكود إلى دالة تدريب، ولا يجب أن تنفذ أي خلية تقوم بإنشاء مثيل لـ `Accelerator`. يمكننا فرض التدريب الدقيق المختلط عن طريق تمرير `fp16=True` إلى `Accelerator` (أو، إذا كنت تقوم بتنفيذ الكود كسكريبت، فتأكد فقط من ملء تكوين 🤗 Accelerate بشكل مناسب).
+
+```py
+from accelerate import Accelerator
+
+accelerator = Accelerator(fp16=True)
+model, optimizer, train_dataloader, eval_dataloader = accelerator.prepare(
+model, optimizer, train_dataloader, eval_dataloader
+)
+```
+
+كما يجب أن تعرف من الأقسام السابقة، يمكننا فقط استخدام طول `train_dataloader` لحساب عدد خطوات التدريب بعد مروره عبر طريقة `accelerator.prepare()`. نستخدم الجدول الزمني الخطي نفسه كما في الأقسام السابقة:
+
+```py
+from transformers import get_scheduler
+
+num_train_epochs = 3
+num_update_steps_per_epoch = len(train_dataloader)
+num_training_steps = num_train_epochs * num_update_steps_per_epoch
+
+lr_scheduler = get_scheduler(
+"linear",
+optimizer=optimizer,
+num_warmup_steps=0,
+num_training_steps=num_training_steps,
+)
+```
+
+لدفع نموذجنا إلى Hub، سيتعين علينا إنشاء كائن `Repository` في مجلد عمل. أولاً، سجل الدخول إلى Hugging Face Hub، إذا لم تكن قد قمت بتسجيل الدخول بالفعل. سنحدد اسم المستودع من معرف النموذج الذي نريد منحه لنموذجنا (لا تتردد في استبدال `repo_name` بخيارك الخاص؛ كل ما عليك هو أن يحتوي على اسم المستخدم الخاص بك، وهو ما تفعله دالة `get_full_repo_name()`):
+
+```py
+from huggingface_hub import Repository, get_full_repo_name
+
+model_name = "bert-finetuned-squad-accelerate"
+repo_name = get_full_repo_name(model_name)
+repo_name
+```
+
+```python out
+'sgugger/bert-finetuned-squad-accelerate'
+```
+
+بعد ذلك، يمكننا استنساخ هذا المستودع في مجلد محلي. إذا كان موجودًا بالفعل، فيجب أن يكون هذا المجلد المحلي مستنسخًا من المستودع الذي نعمل عليه:
+
+```py
+output_dir = "bert-finetuned-squad-accelerate"
+repo = Repository(output_dir, clone_from=repo_name)
+```
+
+الآن يمكننا تحميل أي شيء نقوم بحفظه في `output_dir` عن طريق استدعاء طريقة `repo.push_to_hub()`. سيساعدنا هذا في تحميل النماذج المتوسطة في نهاية كل حقبة.
+## حلقة التدريب
+
+الآن نحن مستعدون لكتابة حلقة التدريب الكاملة. بعد تحديد شريط التقدم لمتابعة كيفية سير التدريب، تنقسم الحلقة إلى ثلاثة أجزاء:
+
+- التدريب في حد ذاته، وهو التكرار الكلاسيكي على `train_dataloader`، والمرور الأمامي من خلال النموذج، ثم المرور الخلفي وخطوة المحسن.
+
+- التقييم، الذي نجمع فيه جميع القيم لـ `start_logits` و`end_logits` قبل تحويلها إلى مصفوفات NumPy. بمجرد الانتهاء من حلقة التقييم، نقوم بدمج جميع النتائج. لاحظ أننا بحاجة إلى الاقتصاص لأن `Accelerator` قد أضاف بعض العينات في النهاية لضمان وجود نفس عدد الأمثلة في كل عملية.
+
+- الحفظ والتحميل، حيث نقوم أولاً بحفظ النموذج والمحلل اللغوي، ثم استدعاء `repo.push_to_hub()`. كما فعلنا من قبل، نستخدم الحجة `blocking=False` لإخبار مكتبة 🤗 Hub بالدفع في عملية غير متزامنة. بهذه الطريقة، يستمر التدريب بشكل طبيعي ويتم تنفيذ هذا الأمر (الطويل) في الخلفية.
+
+فيما يلي الكود الكامل لحلقة التدريب:
+
+```py
+from tqdm.auto import tqdm
+import torch
+
+progress_bar = tqdm(range(num_training_steps))
+
+for epoch in range(num_train_epochs):
+    # Training
+    model.train()
+    for step, batch in enumerate(train_dataloader):
+        outputs = model(**batch)
+        loss = outputs.loss
+        accelerator.backward(loss)
+
+        optimizer.step()
+        lr_scheduler.step()
+        optimizer.zero_grad()
+        progress_bar.update(1)
+
+    # Evaluation
+    model.eval()
+    start_logits = []
+    end_logits = []
+    accelerator.print("Evaluation!")
+    for batch in tqdm(eval_dataloader):
+        with torch.no_grad():
+            outputs = model(**batch)
+
+        start_logits.append(accelerator.gather(outputs.start_logits).cpu().numpy())
+        end_logits.append(accelerator.gather(outputs.end_logits).cpu().numpy())
+
+    start_logits = np.concatenate(start_logits)
+    end_logits = np.concatenate(end_logits)
+    start_logits = start_logits[: len(validation_dataset)]
+    end_logits = end_logits[: len(validation_dataset)]
+
+    metrics = compute_metrics(
+        start_logits, end_logits, validation_dataset, raw_datasets["validation"]
+    )
+    print(f"epoch {epoch}:", metrics)
+
+    # Save and upload
+    accelerator.wait_for_everyone()
+    unwrapped_model = accelerator.unwrap_model(model)
+    unwrapped_model.save_pretrained(output_dir, save_function=accelerator.save)
+    if accelerator.is_main_process:
+        tokenizer.save_pretrained(output_dir)
+        repo.push_to_hub(
+            commit_message=f"Training in progress epoch {epoch}", blocking=False
+        )
+```
+
+في حالة كانت هذه هي المرة الأولى التي تشاهد فيها نموذجًا محفوظًا باستخدام 🤗 Accelerate، دعنا نأخذ لحظة لفحص أسطر الكود الثلاثة التي تأتي معها:
+
+```py
+accelerator.wait_for_everyone()
+unwrapped_model = accelerator.unwrap_model(model)
+unwrapped_model.save_pretrained(output_dir, save_function=accelerator.save)
+```
+
+الخط الأول واضح: فهو يخبر جميع العمليات بالانتظار حتى يصل الجميع إلى تلك المرحلة قبل المتابعة. هذا للتأكد من أن لدينا نفس النموذج في كل عملية قبل الحفظ. ثم نقوم بالاستيلاء على `unwrapped_model`، وهو النموذج الأساسي الذي حددناه. طريقة `accelerator.prepare()` تغير النموذج للعمل في التدريب الموزع، لذلك لن يكون لديه طريقة `save_pretrained()` بعد الآن؛ طريقة `accelerator.unwrap_model()` تفعل عكس ذلك. أخيرًا، نستدعي `save_pretrained()` ولكن نخبر هذه الطريقة باستخدام `accelerator.save()` بدلاً من `torch.save()`.
+
+بمجرد الانتهاء من ذلك، يجب أن يكون لديك نموذج ينتج نتائج مشابهة جدًا لتلك التي تم تدريبها باستخدام `Trainer`. يمكنك التحقق من النموذج الذي تدربنا عليه باستخدام هذا الكود في [*huggingface-course/bert-finetuned-squad-accelerate*](https://huggingface.co/huggingface-course/bert-finetuned-squad-accelerate). وإذا كنت ترغب في تجربة أي تعديلات على حلقة التدريب، فيمكنك تنفيذها مباشرة عن طريق تحرير الكود الموضح أعلاه!
+
+## استخدام النموذج الدقيق الضبط
+
+لقد أظهرنا لك بالفعل كيف يمكنك استخدام النموذج الذي قمنا بضبطه بدقة على Model Hub باستخدام أداة التكامل مع واجهة المستخدم. لاستخدامه محليًا في `pipeline`، ما عليك سوى تحديد معرف النموذج:
+
+```py
+from transformers import pipeline
+
+# استبدل هذا بمعرف نقطة التفتيش الخاصة بك
+model_checkpoint = "huggingface-course/bert-finetuned-squad"
+question_answerer = pipeline("question-answering", model=model_checkpoint)
+
+context = """
+🤗 Transformers is backed by the three most popular deep learning libraries — Jax, PyTorch and TensorFlow — with a seamless integration
+between them. It's straightforward to train your models with one before loading them for inference with the other.
+"""
+question = "Which deep learning libraries back 🤗 Transformers?"
+question_answerer(question=question, context=context)
+```
+
+```python out
+{'score': 0.9979003071784973،
+'start': 78،
+'end': 105،
+'answer': 'Jax، PyTorch وTensorFlow'}
+```
+
+رائع! يعمل نموذجنا جيدًا مثل الافتراضي لهذا الأنبوب!

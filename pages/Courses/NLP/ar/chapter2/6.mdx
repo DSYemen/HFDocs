@@ -1,0 +1,125 @@
+لم نقم في الفروع القليلة الماضية سوى بمحاولة بذل قصارى جهدنا للقيام بمعظم العمل يدويًا. لقد استكشفنا كيفية عمل المحللات اللغوية ونظرنا في التحليل اللغوي، والتحويل إلى معرفات الإدخال، والحشو، والتقليم، وأقنعة الاهتمام.
+
+ومع ذلك، كما رأينا في القسم 2، يمكن لواجهة برمجة تطبيقات المحولات التعامل مع كل هذا نيابة عنا بوظيفة عالية المستوى سنغوص فيها هنا. عندما تستدعي `tokenizer` مباشرة على الجملة، تحصل على إدخالات جاهزة للمرور عبر نموذجك:
+
+```python
+from transformers import AutoTokenizer
+
+checkpoint = "distilbert-base-uncased-finetuned-sst-2-english"
+tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+
+sequence = "I've been waiting for a HuggingFace course my whole life."
+
+model_inputs = tokenizer(sequence)
+```
+
+هنا، تحتوي متغير `model_inputs` على كل ما هو ضروري لتشغيل النموذج بشكل جيد. بالنسبة لـ DistilBERT، يشمل ذلك معرفات الإدخال بالإضافة إلى قناع الاهتمام. وستقوم النماذج التي تقبل إدخالات إضافية أيضًا بإخراجها بواسطة كائن `tokenizer`.
+
+كما سنرى في بعض الأمثلة أدناه، هذه الطريقة قوية جدًا. أولاً، يمكنه تحليل تسلسل واحد:
+
+```python
+sequence = "I've been waiting for a HuggingFace course my whole life."
+
+model_inputs = tokenizer(sequence)
+```
+
+كما أنه يتعامل مع تسلسلات متعددة في نفس الوقت، دون أي تغيير في واجهة برمجة التطبيقات:
+
+```python
+sequences = ["I've been waiting for a HuggingFace course my whole life.", "So have I!"]
+
+model_inputs = tokenizer(sequences)
+```
+
+يمكنه الحشو وفقًا لعدة أهداف:
+
+```python
+# سيتم حشو التسلسلات حتى طول التسلسل الأقصى
+model_inputs = tokenizer(sequences, padding="longest")
+
+# سيتم حشو التسلسلات حتى الطول الأقصى للنموذج
+# (512 لـ BERT أو DistilBERT)
+model_inputs = tokenizer(sequences, padding="max_length")
+
+# سيتم حشو التسلسلات حتى الطول الأقصى المحدد
+model_inputs = tokenizer(sequences, padding="max_length", max_length=8)
+```
+
+يمكنه أيضًا تقليم التسلسلات:
+
+```python
+sequences = ["I've been waiting for a HuggingFace course my whole life.", "So have I!"]
+
+# سيتم تقليم التسلسلات التي يزيد طولها عن الطول الأقصى للنموذج
+# (512 لـ BERT أو DistilBERT)
+model_inputs = tokenizer(sequences, truncation=True)
+
+# سيتم تقليم التسلسلات التي يزيد طولها عن الطول الأقصى المحدد
+model_inputs = tokenizer(sequences, max_length=8, truncation=True)
+```
+
+يمكن لكائن `tokenizer` التعامل مع التحويل إلى تنسورات إطار عمل محدد، والتي يمكن إرسالها بعد ذلك مباشرة إلى النموذج. على سبيل المثال، في عينة التعليمات البرمجية التالية، نطلب من المحلل اللغوي إرجاع تنسورات من أطر العمل المختلفة - يعيد `"pt"` تنسورات PyTorch، ويعيد `"tf"` تنسورات TensorFlow، ويعيد `"np"` مصفوفات NumPy:
+
+```python
+sequences = ["I've been waiting for a HuggingFace course my whole life.", "So have I!"]
+
+# Returns PyTorch tensors
+model_inputs = tokenizer(sequences, padding=True, return_tensors="pt")
+
+# Returns TensorFlow tensors
+model_inputs = tokenizer(sequences, padding=True, return_tensors="tf")
+
+# Returns NumPy arrays
+model_inputs = tokenizer(sequences, padding=True, return_tensors="np")
+```
+
+## الرموز الخاصة
+
+إذا ألقينا نظرة على معرفات الإدخال التي يعيدها المحلل اللغوي، فسنرى أنها مختلفة قليلاً عما كان لدينا سابقًا:
+
+```python
+sequence = "I've been waiting for a HuggingFace course my whole life."
+
+model_inputs = tokenizer(sequence)
+print(model_inputs["input_ids"])
+
+tokens = tokenizer.tokenize(sequence)
+ids = tokenizer.convert_tokens_to_ids(tokens)
+print(ids)
+```
+
+```python
+[101, 1045, 1005, 2310, 2042, 3403, 2005, 1037, 17662, 12172, 2607, 2026, 2878, 2166, 1012, 102]
+[1045, 1005, 2310, 2042, 3403, 2005, 1037, 17662, 12172, 2607, 2026, 2878, 2166, 1012]
+```
+
+تمت إضافة معرف رمز واحد في البداية وواحد في النهاية. دعنا نقوم بفك تشفير متواليات معرفات الإدخال أعلاه لمعرفة ما يتعلق الأمر به:
+
+```python
+print(tokenizer.decode(model_inputs["input_ids"]))
+print(tokenizer.decode(ids))
+```
+
+```python
+"[CLS] i've been waiting for a huggingface course my whole life. [SEP]"
+"i've been waiting for a huggingface course my whole life."
+```
+
+أضاف المحلل اللغوي الكلمة الخاصة `[CLS]` في البداية والكلمة الخاصة `[SEP]` في النهاية. ويرجع ذلك إلى أن النموذج تم تدريبه مسبقًا باستخدام هذه الكلمات، لذا للحصول على نفس النتائج للاستدلال، نحتاج إلى إضافتها أيضًا. لاحظ أن بعض النماذج لا تضيف كلمات خاصة، أو تضيف كلمات مختلفة؛ قد تقوم النماذج أيضًا بإضافة هذه الكلمات الخاصة في البداية فقط، أو في النهاية فقط. في أي حال، يعرف المحلل اللغوي تلك المتوقعة وسيتعامل معها نيابة عنك.
+
+## تلخيص: من المحلل اللغوي إلى النموذج
+
+الآن بعد أن رأينا جميع الخطوات الفردية التي يستخدمها كائن `tokenizer` عند تطبيقه على النصوص، دعنا نرى مرة أخرى كيف يمكنه التعامل مع تسلسلات متعددة (الحشو!)، والتسلسلات الطويلة جدًا (التشذيب!)، وأنواع متعددة من التنسورات مع واجهة برمجة التطبيقات الرئيسية الخاصة به:
+
+```python
+import torch
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+
+checkpoint = "distilbert-base-uncased-finetuned-sst-2-english"
+tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+model = AutoModelForSequenceClassification.from_pretrained(checkpoint)
+sequences = ["I've been waiting for a HuggingFace course my whole life.", "So have I!"]
+
+tokens = tokenizer(sequences, padding=True, truncation=True, return_tensors="pt")
+output = model(**tokens)
+```

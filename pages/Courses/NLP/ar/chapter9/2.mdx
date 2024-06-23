@@ -1,0 +1,117 @@
+# بناء أول تطبيق تجريبي لك
+
+دعونا نبدأ بتثبيت Gradio! بما أنه حزمة Python، فما عليك سوى تشغيل:
+
+`$ pip install gradio`
+
+يمكنك تشغيل Gradio في أي مكان، سواء من بيئة تطوير Python المفضلة لديك، أو دفاتر Jupyter، أو حتى في Google Colab 🤯!
+
+لذا قم بتثبيت Gradio في أي مكان تقوم فيه بتشغيل Python!
+
+دعونا نبدأ بمثال "Hello World" بسيط للتعرف على بناء جملة Gradio:
+
+```py
+import gradio as gr
+
+
+def greet(name):
+    return "Hello " + name
+
+
+demo = gr.Interface(fn=greet, inputs="text", outputs="text")
+
+demo.launch()
+```
+
+دعونا نتعرف على الكود أعلاه:
+
+- أولاً، نحدد دالة تسمى `greet()`. في هذه الحالة، هي دالة بسيطة تضيف "Hello" قبل اسمك، ولكن يمكن أن تكون *أي* دالة Python بشكل عام. على سبيل المثال، في تطبيقات التعلم الآلي، ستعمل هذه الدالة على *استدعاء نموذج لإجراء تنبؤ* على إدخال وإرجاع الإخراج.
+
+- ثم نقوم بإنشاء واجهة Gradio باستخدام ثلاثة حجج، `fn` و`inputs` و`outputs`. تحدد هذه الحجج دالة التنبؤ، بالإضافة إلى _نوع_ مكونات الإدخال والإخراج التي نريدها. في حالتنا، كلا المكونين عبارة عن صناديق نص بسيطة.
+
+- بعد ذلك، نقوم باستدعاء طريقة `launch()` على الواجهة التي أنشأناها.
+
+إذا قمت بتشغيل هذا الكود، فستظهر الواجهة أدناه تلقائيًا داخل دفتر Jupyter/Colab، أو ستظهر في متصفح على **[http://localhost:7860](http://localhost:7860/)** إذا كنت تقوم بالتشغيل من برنامج نصي.
+
+<iframe src="https://course-demos-hello-world.hf.space" frameBorder="0" height="250" title="Gradio app" class="container p-0 flex-grow space-iframe" allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; document-domain; encrypted-media; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; vr ; wake-lock; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe>
+
+جرب استخدام هذا الواجهة الرسومية الآن مع اسمك أو أي إدخال آخر!
+
+ستلاحظ أنه في هذه الواجهة الرسومية، استنتج Gradio تلقائيًا اسم معلمة الإدخال (`name`)
+
+وطبقها كعنوان أعلى مربع النص. ماذا لو أردت تغيير ذلك؟
+
+أو إذا كنت تريد تخصيص مربع النص بطريقة أخرى؟ في هذه الحالة، يمكنك
+
+إنشاء مثيل لكائن فئة يمثل مكون الإدخال.
+
+الق نظرة على المثال أدناه:
+
+```py
+import gradio as gr
+
+
+def greet(name):
+    return "Hello " + name
+
+
+# We instantiate the Textbox class
+textbox = gr.Textbox(label="أدخل اسمك هنا:", placeholder="اسم المستخدم", lines=2)
+
+gr.Interface(fn=greet, inputs=textbox, outputs="text").launch()
+```
+
+<iframe src="https://course-demos-hello-world-custom.hf.space" frameBorder="0" height="300" title="Gradio app" class="container p-0 flex-grow space-iframe" allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; document-domain; encrypted-media; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; vr ; wake-lock; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe>
+
+هنا، أنشأنا مربع نص إدخال مع عنوان، ونص بديل، وعدد محدد من الأسطر.
+
+يمكنك القيام بالشيء نفسه لمربع نص الإخراج، ولكننا سنتركه الآن.
+
+لقد رأينا أنه ببضع سطور من الكود، يسمح لك Gradio بإنشاء واجهة بسيطة حول أي دالة
+
+مع أي نوع من أنواع الإدخال أو الإخراج. في هذا القسم، بدأنا بمربع نص بسيط، ولكن في الأقسام التالية، سنغطي أنواعًا أخرى من الإدخال والإخراج. دعونا الآن نلقي نظرة على تضمين بعض NLP في تطبيق Gradio.
+
+## 🤖 تضمين تنبؤات النموذج
+
+دعونا الآن نقوم ببناء واجهة بسيطة تتيح لك تجربة نموذج **توليد النص** مثل GPT-2.
+
+سنقوم بتحميل نموذجنا باستخدام دالة `pipeline()` من 🤗 Transformers.
+
+إذا كنت بحاجة إلى تذكير سريع، يمكنك العودة إلى [هذا القسم في الفصل 1](/course/chapter1/3#text-generation).
+
+أولاً، نقوم بتعريف دالة التنبؤ التي تأخذ موجه نص وتعيد إكمال النص:
+
+```py
+from transformers import pipeline
+
+model = pipeline("text-generation")
+
+
+def predict(prompt):
+    completion = model(prompt)[0]["generated_text"]
+    return completion
+```
+
+تكمل هذه الدالة موجهات النص التي تقدمها، ويمكنك تشغيلها باستخدام موجهات الإدخال الخاصة بك لمعرفة كيفية عملها. إليك مثال (قد تحصل على إكمال مختلف):
+
+```
+predict("My favorite programming language is")
+```
+
+```
+>> My favorite programming language is Haskell. I really enjoyed the Haskell language, but it doesn't have all the features that can be applied to any other language. For example, all it does is compile to a byte array.
+```
+
+الآن بعد أن أصبح لدينا دالة لتوليد التنبؤات، يمكننا إنشاء وتشغيل واجهة `Interface` بنفس الطريقة التي فعلناها سابقًا:
+
+```py
+import gradio as gr
+
+gr.Interface(fn=predict, inputs="text", outputs="text").launch()
+```
+
+هذا كل شيء! يمكنك الآن استخدام هذه الواجهة لتوليد النص باستخدام نموذج GPT-2 كما هو موضح أدناه 🤯.
+
+<iframe src="https://course-demos-gpt-2.hf.space" frameBorder="0" height="300" title="Gradio app" class="container p-0 flex-grow space-iframe" allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; document-domain; encrypted-media; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; vr ; wake-lock; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe>
+
+استمر في القراءة لمعرفة كيفية بناء أنواع أخرى من التطبيقات التجريبية باستخدام Gradio!

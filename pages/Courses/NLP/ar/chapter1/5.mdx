@@ -1,0 +1,15 @@
+# نماذج الترميز
+
+تستخدم نماذج الترميز فقط الترميز من نموذج محول. في كل مرحلة، يمكن لطبقات الاهتمام الوصول إلى جميع الكلمات في الجملة الأولية. وغالبا ما توصف هذه النماذج بأنها ذات "اهتمام ثنائي الاتجاه"، وغالبا ما يطلق عليها اسم *نماذج الترميز الذاتي*.
+
+عادة ما تتمحور عملية التدريب المسبق لهذه النماذج حول تشويه جملة معينة بطريقة ما (على سبيل المثال، عن طريق قناع كلمات عشوائية فيها) وتكليف النموذج بالعثور على الجملة الأولية أو إعادة بنائها.
+
+نماذج الترميز مناسبة بشكل أفضل للمهام التي تتطلب فهم الجملة الكاملة، مثل تصنيف الجمل، وتعريف الكيانات المسماة (وبشكل أكثر عمومية تصنيف الكلمات)، والإجابة على الأسئلة الاستخراجية.
+
+ومن ممثلي عائلة النماذج هذه:
+
+- [ALBERT](https://huggingface.co/docs/transformers/model_doc/albert)
+- [BERT](https://huggingface.co/docs/transformers/model_doc/bert)
+- [DistilBERT](https://huggingface.co/docs/transformers/model_doc/distilbert)
+- [ELECTRA](https://huggingface.co/docs/transformers/model_doc/electra)
+- [RoBERTa](https://huggingface.co/docs/transformers/model_doc/roberta)
