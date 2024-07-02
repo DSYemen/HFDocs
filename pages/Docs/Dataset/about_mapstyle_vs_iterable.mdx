@@ -22,8 +22,8 @@ from datasets import load_dataset
 
 imagenet = load_dataset("imagenet-1k", split="train", streaming=True)  # سيبدأ تحميل البيانات عند التنقل خلال مجموعة البيانات
 for example in imagenet:
-print(example)
-break
+  print(example)
+  break
 ```
 
 يمكن للبث قراءة البيانات عبر الإنترنت دون كتابة أي ملف على القرص. على سبيل المثال، يمكنك بث مجموعات البيانات المصنوعة من شظايا متعددة، يبلغ حجم كل منها مئات الغيغابايت مثل [C4](https://huggingface.co/datasets/c4) أو [OSCAR](https://huggingface.co/datasets/oscar) أو [LAION-2B](https://huggingface.co/datasets/laion/laion2B-en). تعرف على المزيد حول كيفية بث مجموعة بيانات في [دليل بث مجموعة البيانات](./stream).
@@ -43,13 +43,13 @@ print(my_dataset[0])
 
 ```python
 def my_generator(n):
-for i in range(n):
-yield {"col_1": i}
+    for i in range(n):
+        yield {"col_1": i}
 
 my_iterable_dataset = IterableDataset.from_generator(my_generator, gen_kwargs={"n": 10})
 for example in my_iterable_dataset:
-print(example)
-break
+    print(example)
+    break
 ```
 
 ## تحميل الملفات المحلية بالكامل والتدريجي
@@ -68,8 +68,8 @@ print(my_dataset[0])
 data_files = {"train": ["path/to/data.csv"]}
 my_iterable_dataset = load_dataset("csv", data_files=data_files, split="train", streaming=True)
 for example in my_iterable_dataset:  # يقرأ هذا الملف CSV تدريجيًا أثناء التنقل خلال مجموعة البيانات
-print(example)
-break
+    print(example)
+    break  
 ```
 
 يتم دعم العديد من تنسيقات الملفات، مثل CSV وJSONL وParquet، بالإضافة إلى ملفات الصور والصوت. يمكنك العثور على مزيد من المعلومات في الأدلة المقابلة لتحميل مجموعات البيانات [الجدولية](./tabular_load) و [النصية](./nlp_load) و [الرؤية](./image_load)، و [الصوتية](./audio_load]).
@@ -92,8 +92,8 @@ my_iterable_dataset = my_iterable_dataset.map(process_fn_2)
 
 # يتم تطبيق `process_fn_1` و `filter_fn` و `process_fn_2` أثناء التنقل خلال مجموعة البيانات
 for example in my_iterable_dataset:
-print(example)
-break
+    print(example)
+    break
 ```
 
 ## الخلط الدقيق والتقريبي السريع
@@ -110,27 +110,27 @@ print(my_dataset[0])
 ```python
 my_iterable_dataset = my_iterable_dataset.shuffle(seed=42, buffer_size=100)
 for example in my_iterable_dataset:
-print(example)
-break
+    print(example)
+    break
 ```
 
 ولكن استخدام مخزن مؤقت للخلط ليس كافيًا لتوفير خلط مرضٍ لتدريب نموذج التعلم الآلي. لذلك، فإن [`IterableDataset.shuffle`] يقوم أيضًا بخلط شظايا مجموعة البيانات إذا كانت مجموعة البيانات الخاصة بك تتكون من ملفات أو مصادر متعددة:
 
 ```python
-# البث من الإنترنت
+# Stream from the internet
 my_iterable_dataset = load_dataset("deepmind/code_contests", split="train", streaming=True)
 my_iterable_dataset.n_shards  # 39
 
-# البث من الملفات المحلية
+# Stream from local files
 data_files = {"train": [f"path/to/data_{i}.csv" for i in range(1024)]}
 my_iterable_dataset = load_dataset("csv", data_files=data_files, split="train", streaming=True)
 my_iterable_dataset.n_shards  # 1024
 
-# من دالة المولد
+# From a generator function
 def my_generator(n, sources):
-for source in sources:
-for example_id_for_current_source in range(n):
-yield {"example_id": f"{source}_{example_id_for_current_source}"}
+    for source in sources:
+        for example_id_for_current_source in range(n):
+            yield {"example_id": f"{source}_{example_id_for_current_source}"}
 
 gen_kwargs = {"n": 10, "sources": [f"path/to/data_{i}" for i in range(1024)]}
 my_iterable_dataset = IterableDataset.from_generator(my_generator, gen_kwargs=gen_kwargs)
@@ -155,26 +155,26 @@ my_dataset[0]  # سريع مرة أخرى
 
 ```python
 for example in enumerate(my_iterable_dataset):  # سريع
-pass
+    pass
 
 shuffled_iterable_dataset = my_iterable_dataset.shuffle(seed=42, buffer_size=100)
 
 for example in enumerate(shuffled_iterable_dataset):  # سريع مثل السابق
-pass
+    pass
 
 shuffled_iterable_dataset = my_iterable_dataset.shuffle(seed=1337, buffer_size=100)  # إعادة الخلط باستخدام بذرة أخرى فوري
 
 for example in enumerate(shuffled_iterable_dataset):  # لا يزال سريعًا مثل السابق
-pass
+    pass
 ```
 
 إذا كنت تستخدم مجموعة البيانات الخاصة بك على عدة عصور، فإن البذرة الفعالة لخلط ترتيب الشظايا في مخزن الخلط هي `seed + epoch`. يجعل هذا من السهل إعادة خلط مجموعة البيانات بين العصور:
 
 ```python
 for epoch in range(n_epochs):
-my_iterable_dataset.set_epoch(epoch)
-for example in my_iterable_dataset:  # سريع + إعادة الخلط في كل عصر باستخدام `effective_seed = seed + epoch`
-pass
+    my_iterable_dataset.set_epoch(epoch)
+    for example in my_iterable_dataset:  # سريع + إعادة الخلط في كل عصر باستخدام `effective_seed = seed + epoch`
+        pass
 ```
 
 ## الاختلافات بين نقاط التفتيش والاستئناف
