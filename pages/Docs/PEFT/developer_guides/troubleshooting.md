@@ -30,12 +30,12 @@ python -m pip install git+https://github.com/huggingface/peft
 ```python
 peft_model = get_peft_model(...)
 
-# أضف هذا:
+# add this:
 for param in model.parameters():
-if param.requires_grad:
-param.data = param.data.float()
+    if param.requires_grad:
+        param.data = param.data.float()
 
-# تابع كالمعتاد
+# proceed as usual
 trainer = Trainer(model=peft_model, fp16=True, ...)
 trainer.train()
 ```
@@ -136,42 +136,42 @@ model.save_pretrained("my_adapter"، save_embedding_layers=True)
 
 ```python
 >>> from transformers import AutoModel
->>> from peft import get_peft_model، LoraConfig
+>>> from peft import get_peft_model, LoraConfig
 
 >>> model_id = "google/flan-t5-small"
 >>> model = AutoModel.from_pretrained(model_id)
->>> model = get_peft_model(model، LoraConfig())
+>>> model = get_peft_model(model, LoraConfig())
 
 >>> model.get_layer_status()
-[TunerLayerStatus(name='model.encoder.block.0.layer.0.SelfAttention.q'،
-module_type='lora.Linear'،
-enabled=True،
-active_adapters=['default']،
-merged_adapters=[]،
-requires_grad={'default': True}،
-available_adapters=['default'])]،
-TunerLayerStatus(name='model.encoder.block.0.layer.0.SelfAttention.v'،
-module_type='lora.Linear'،
-enabled=True،
-active_adapters=['default']،
-merged_adapters=[]،
-requires_grad={'default': True}،
-available_adapters=['default'])]،
+[TunerLayerStatus(name='model.encoder.block.0.layer.0.SelfAttention.q',
+                  module_type='lora.Linear',
+                  enabled=True,
+                  active_adapters=['default'],
+                  merged_adapters=[],
+                  requires_grad={'default': True},
+                  available_adapters=['default']),
+ TunerLayerStatus(name='model.encoder.block.0.layer.0.SelfAttention.v',
+                  module_type='lora.Linear',
+                  enabled=True,
+                  active_adapters=['default'],
+                  merged_adapters=[],
+                  requires_grad={'default': True},
+                  available_adapters=['default']),
 ...]
 
 >>> model.get_model_status()
 TunerModelStatus(
-base_model_type='T5Model'،
-adapter_model_type='LoraModel'،
-peft_types={'default': 'LORA'}،
-trainable_params=344064،
-total_params=60855680،
-num_adapter_layers=48،
-enabled=True،
-active_adapters=['default']،
-merged_adapters=[]،
-requires_grad={'default': True}،
-available_adapters=['default']،
+    base_model_type='T5Model',
+    adapter_model_type='LoraModel',
+    peft_types={'default': 'LORA'},
+    trainable_params=344064,
+    total_params=60855680,
+    num_adapter_layers=48,
+    enabled=True,
+    active_adapters=['default'],
+    merged_adapters=[],
+    requires_grad={'default': True},
+    available_adapters=['default'],
 )
 ```
 
@@ -193,46 +193,46 @@ df = pd.DataFrame(asdict(layer) for layer in model.get_layer_status())
 ```python
 >>> import torch
 >>> from diffusers import StableDiffusionPipeline
->>> from peft import get_model_status، get_layer_status
+>>> from peft import get_model_status, get_layer_status
 
 >>> path = "runwayml/stable-diffusion-v1-5"
 >>> lora_id = "takuma104/lora-test-text-encoder-lora-target"
->>> pipe = StableDiffusionPipeline.from_pretrained(path، torch_dtype=torch.float16)
->>> pipe.load_lora_weights(lora_id، adapter_name="adapter-1")
->>> pipe.load_lora_weights(lora_id، adapter_name="adapter-2")
->>> pipe.set_lora_device(["adapter-2"]، "cuda")
+>>> pipe = StableDiffusionPipeline.from_pretrained(path, torch_dtype=torch.float16)
+>>> pipe.load_lora_weights(lora_id, adapter_name="adapter-1")
+>>> pipe.load_lora_weights(lora_id, adapter_name="adapter-2")
+>>> pipe.set_lora_device(["adapter-2"], "cuda")
 >>> get_layer_status(pipe.text_encoder)
-[TunerLayerStatus(name='text_model.encoder.layers.0.self_attn.k_proj'،
-module_type='lora.Linear'،
-enabled=True،
-active_adapters=['adapter-2']،
-merged_adapters=[]،
-requires_grad={'adapter-1': False، 'adapter-2': True}،
-available_adapters=['adapter-1'، 'adapter-2']،
-devices={'adapter-1': ['cpu']، 'adapter-2': ['cuda']})،
-TunerLayerStatus(name='text_model.encoder.layers.0.self_attn.v_proj'،
-module_type='lora.Linear'،
-enabled=True،
-active_adapters=['adapter-2']،
-merged_adapters=[]،
-requires_grad={'adapter-1': False، 'adapter-2': True}،
-devices={'adapter-1': ['cpu']، 'adapter-2': ['cuda']})،
+[TunerLayerStatus(name='text_model.encoder.layers.0.self_attn.k_proj',
+                  module_type='lora.Linear',
+                  enabled=True,
+                  active_adapters=['adapter-2'],
+                  merged_adapters=[],
+                  requires_grad={'adapter-1': False, 'adapter-2': True},
+                  available_adapters=['adapter-1', 'adapter-2'],
+                  devices={'adapter-1': ['cpu'], 'adapter-2': ['cuda']}),
+ TunerLayerStatus(name='text_model.encoder.layers.0.self_attn.v_proj',
+                  module_type='lora.Linear',
+                  enabled=True,
+                  active_adapters=['adapter-2'],
+                  merged_adapters=[],
+                  requires_grad={'adapter-1': False, 'adapter-2': True},
+                  devices={'adapter-1': ['cpu'], 'adapter-2': ['cuda']}),
 ...]
 
 >>> get_model_status(pipe.unet)
 TunerModelStatus(
-base_model_type='other'،
-adapter_model_type='None'،
-peft_types={},
-trainable_params=797184،
-total_params=861115332،
-num_adapter_layers=128،
-enabled=True،
-active_adapters=['adapter-2']،
-merged_adapters=[]،
-requires_grad={'adapter-1': False، 'adapter-2': True}،
-available_adapters=['adapter-1'، 'adapter-2']،
-devices={'adapter-1': ['cpu']، 'adapter-2': ['cuda']})،
+    base_model_type='other',
+    adapter_model_type='None',
+    peft_types={},
+    trainable_params=797184,
+    total_params=861115332,
+    num_adapter_layers=128,
+    enabled=True,
+    active_adapters=['adapter-2'],
+    merged_adapters=[],
+    requires_grad={'adapter-1': False, 'adapter-2': True},
+    available_adapters=['adapter-1', 'adapter-2'],
+    devices={'adapter-1': ['cpu'], 'adapter-2': ['cuda']},
 )
 ```
 ## إمكانية إعادة الإنتاج
@@ -250,8 +250,8 @@ from peft import LoraConfig, get_peft_model
 model_id = "microsoft/resnet-18"
 base_model = AutoModelForImageClassification.from_pretrained(self.model_id)
 config = LoraConfig(
-target_modules=["convolution"],
-modules_to_save=["classifier", "normalization"],
+    target_modules=["convolution"],
+    modules_to_save=["classifier", "normalization"],
 ),
 ```
 

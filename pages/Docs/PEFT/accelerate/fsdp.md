@@ -34,15 +34,15 @@ debug: false
 distributed_type: FSDP
 downcast_bf16: 'no'
 fsdp_config:
-fsdp_auto_wrap_policy: TRANSFORMER_BASED_WRAP
-fsdp_backward_prefetch: BACKWARD_PRE
-fsdp_cpu_ram_efficient_loading: true
-fsdp_forward_prefetch: false
-fsdp_offload_params: false
-fsdp_sharding_strategy: FULL_SHARD
-fsdp_state_dict_type: SHARDED_STATE_DICT
-fsdp_sync_module_states: true
-fsdp_use_orig_params: false
+    fsdp_auto_wrap_policy: TRANSFORMER_BASED_WRAP
+    fsdp_backward_prefetch: BACKWARD_PRE
+    fsdp_cpu_ram_efficient_loading: true
+    fsdp_forward_prefetch: false
+    fsdp_offload_params: false
+    fsdp_sharding_strategy: FULL_SHARD
+    fsdp_state_dict_type: SHARDED_STATE_DICT
+    fsdp_sync_module_states: true
+    fsdp_use_orig_params: false
 machine_rank: 0
 main_training_function: main
 mixed_precision: bf16
@@ -113,50 +113,50 @@ accelerate launch --config_file "configs/fsdp_config.yaml"  train.py \
 ```python
 # trainer
 trainer = SFTTrainer(
-model=model,
-tokenizer=tokenizer,
-args=training_args,
-train_dataset=train_dataset,
-eval_dataset=eval_dataset,
-peft_config=peft_config,
-packing=data_args.packing,
-dataset_kwargs={
-"append_concat_token": data_args.append_concat_token,
-"add_special_tokens": data_args.add_special_tokens,
-},
-dataset_text_field=data_args.dataset_text_field,
-max_seq_length=data_args.max_seq_length,
+    model=model,
+    tokenizer=tokenizer,
+    args=training_args,
+    train_dataset=train_dataset,
+    eval_dataset=eval_dataset,
+    peft_config=peft_config,
+    packing=data_args.packing,
+    dataset_kwargs={
+        "append_concat_token": data_args.append_concat_token,
+        "add_special_tokens": data_args.add_special_tokens,
+    },
+    dataset_text_field=data_args.dataset_text_field,
+    max_seq_length=data_args.max_seq_length,
 )
 trainer.accelerator.print(f"{trainer.model}")
 if model_args.use_peft_lora:
-# handle PEFT+FSDP case
-trainer.model.print_trainable_parameters()
-if getattr(trainer.accelerator.state, "fsdp_plugin", None):
-from peft.utils.other import fsdp_auto_wrap_policy
+    # handle PEFT+FSDP case
+    trainer.model.print_trainable_parameters()
+    if getattr(trainer.accelerator.state, "fsdp_plugin", None):
+        from peft.utils.other import fsdp_auto_wrap_policy
 
-fsdp_plugin = trainer.accelerator.state.fsdp_plugin
-fsdp_plugin.auto_wrap_policy = fsdp_auto_wrap_policy(trainer.model)
+        fsdp_plugin = trainer.accelerator.state.fsdp_plugin
+        fsdp_plugin.auto_wrap_policy = fsdp_auto_wrap_policy(trainer.model)
 
 # train
 checkpoint = None
 if training_args.resume_from_checkpoint is not None:
-checkpoint = training_args.resume_from_checkpoint
+    checkpoint = training_args.resume_from_checkpoint
 trainer.train(resume_from_checkpoint=checkpoint)
 
 # saving final model
 if trainer.is_fsdp_enabled:
-trainer.accelerator.state.fsdp_plugin.set_state_dict_type("FULL_STATE_DICT")
+    trainer.accelerator.state.fsdp_plugin.set_state_dict_type("FULL_STATE_DICT")
 trainer.save_model()
 ```
 
 هناك شيء رئيسي يجب ملاحظته هنا هو أنه عند استخدام FSDP مع PEFT، يجب أن يكون `use_orig_params` `False` لتحقيق وفورات في ذاكرة GPU. وبسبب `use_orig_params=False`، يجب تغيير سياسة التغليف التلقائي لـ FSDP بحيث يتم تغليف المعلمات القابلة للتدريب وغير القابلة للتدريب بشكل منفصل. يتم ذلك بواسطة مقتطف الكود أدناه والذي يستخدم دالة المساعدة `fsdp_auto_wrap_policy` من PEFT:
 
-```
+```py
 if getattr(trainer.accelerator.state, "fsdp_plugin", None):
-from peft.utils.other import fsdp_auto_wrap_policy
+    from peft.utils.other import fsdp_auto_wrap_policy
 
-fsdp_plugin = trainer.accelerator.state.fsdp_plugin
-fsdp_plugin.auto_wrap_policy = fsdp_auto_wrap_policy(trainer.model)
+    fsdp_plugin = trainer.accelerator.state.fsdp_plugin
+    fsdp_plugin.auto_wrap_policy = fsdp_auto_wrap_policy(trainer.model)
 ```
 
 ## استخدام الذاكرة
@@ -181,15 +181,15 @@ debug: false
 distributed_type: FSDP
 downcast_bf16: 'no'
 fsdp_config:
-fsdp_auto_wrap_policy: TRANSFORMER_BASED_WRAP
-fsdp_backward_prefetch: BACKWARD_PRE
-fsdp_cpu_ram_efficient_loading: true
-fsdp_forward_prefetch: false
-fsdp_offload_params: true
-fsdp_sharding_strategy: FULL_SHARD
-fsdp_state_dict_type: SHARDED_STATE_DICT
-fsdp_sync_module_states: true
-fsdp_use_orig_params: false
+    fsdp_auto_wrap_policy: TRANSFORMER_BASED_WRAP
+    fsdp_backward_prefetch: BACKWARD_PRE
+    fsdp_cpu_ram_efficient_loading: true
+    fsdp_forward_prefetch: false
+    fsdp_offload_params: true
+    fsdp_sharding_strategy: FULL_SHARD
+    fsdp_state_dict_type: SHARDED_STATE_DICT
+    fsdp_sync_module_states: true
+    fsdp_use_orig_params: false
 machine_rank: 0
 main_training_function: main
 mixed_precision: 'no'
@@ -254,8 +254,39 @@ accelerate launch --config_file "configs/fsdp_config_qlora.yaml"  train.py \
 
 من حيث تغييرات كود التدريب، تتمثل التغييرات المهمة في ما يلي:
 
+
 ```diff
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=args.use_4bit_quantization,
+    bnb_4bit_quant_type=args.bnb_4bit_quant_type,
+    bnb_4bit_compute_dtype=compute_dtype,
+    bnb_4bit_use_double_quant=args.use_nested_quant,
++   bnb_4bit_quant_storage=quant_storage_dtype,
+)
+
 ...
 
-bnb_config = BitsAndBytesConfig(
-load
+model = AutoModelForCausalLM.from_pretrained(
+    args.model_name_or_path,
+    quantization_config=bnb_config,
+    trust_remote_code=True,
+    attn_implementation="flash_attention_2" if args.use_flash_attn else "eager",
++   torch_dtype=quant_storage_dtype or torch.float32,
+)
+```
+
+Notice that `torch_dtype` for `AutoModelForCausalLM` is same as the `bnb_4bit_quant_storage` data type. That's it. Everything else is handled by Trainer and TRL.
+
+## Memory usage
+
+In the above example, the memory consumed per GPU is **19.6 GB** while CPU RAM usage is around **107 GB**. When disabling CPU offloading, the GPU memory usage is  **35.6 GB/ GPU**. Therefore, what took 16X80GB GPUs for full finetuning, 8X80GB GPUs with FSDP+LoRA, and a couple of 80GB GPUs with DDP+QLoRA, now requires 2X24GB GPUs. This makes finetuning of large models more accessible.
+
+## More resources
+You can also refer the [llama-recipes](https://github.com/facebookresearch/llama-recipes/?tab=readme-ov-file#fine-tuning) repo and [Getting started with Llama](https://llama.meta.com/get-started/#fine-tuning) guide on how to finetune using FSDP and PEFT.
+
+## Caveats
+1. Merging when using PEFT and FSDP is currently unsupported and will raise error.
+2. Passing `modules_to_save` config parameter to is untested at present.
+3. GPU Memory saving when using CPU Offloading is untested at present.
+4. When using FSDP+QLoRA, `paged_adamw_8bit` currently results in an error when saving a checkpoint.
+5. DoRA training with FSDP should work (albeit at lower speed than LoRA). If combined with bitsandbytes (QDoRA), 4-bit quantization should also work, but 8-bit quantization has known issues and is not recommended.

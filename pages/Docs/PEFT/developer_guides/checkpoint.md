@@ -20,26 +20,26 @@
 
 ```json
 {
-"auto_mapping": {
-"base_model_class": "BertModel",
-"parent_library": "transformers.models.bert.modeling_bert"
-},
-"base_model_name_or_path": "bert-base-uncased",
-"fan_in_fan_out": false,
-"feedforward_modules": [
-"output.dense"
-],
-"inference_mode": true,
-"init_ia3_weights": true,
-"modules_to_save": null,
-"peft_type": "IA3",
-"revision": null,
-"target_modules": [
-"key",
-"value",
-"output.dense"
-],
-"task_type": null
+  "auto_mapping": {
+    "base_model_class": "BertModel",
+    "parent_library": "transformers.models.bert.modeling_bert"
+  },
+  "base_model_name_or_path": "bert-base-uncased",
+  "fan_in_fan_out": false,
+  "feedforward_modules": [
+    "output.dense"
+  ],
+  "inference_mode": true,
+  "init_ia3_weights": true,
+  "modules_to_save": null,
+  "peft_type": "IA3",
+  "revision": null,
+  "target_modules": [
+    "key",
+    "value",
+    "output.dense"
+  ],
+  "task_type": null
 }
 ```
 
@@ -66,32 +66,32 @@
 لحسن الحظ، فإن معرفة هذه الخريطة ليست معقدة للغاية للحالات الأساسية الشائعة. دعنا نلقي نظرة على مثال ملموس، وهو [`LoraLayer`](https://github.com/huggingface/peft/blob/main/src/peft/tuners/lora/layer.py):
 
 ```python
-# إظهار جزء فقط من الكود
+# showing only part of the code
 
 class LoraLayer(BaseTunerLayer):
-# جميع أسماء الطبقات التي قد تحتوي على أوزان محول (قابلة للتدريب)
-adapter_layer_names = ("lora_A", "lora_B", "lora_embedding_A"، "lora_embedding_B")
-# جميع أسماء المعلمات الأخرى التي قد تحتوي على معلمات ذات صلة بالمحول
-other_param_names = ("r"، "lora_alpha"، "scaling"، "lora_dropout")
+    # All names of layers that may contain (trainable) adapter weights
+    adapter_layer_names = ("lora_A", "lora_B", "lora_embedding_A", "lora_embedding_B")
+    # All names of other parameters that may contain adapter-related parameters
+    other_param_names = ("r", "lora_alpha", "scaling", "lora_dropout")
 
-def __init__(self، base_layer: nn.Module، ** kwargs) -> None:
-self.base_layer = base_layer
-self.r = {}
-self.lora_alpha = {}
-self.scaling = {}
-self.lora_dropout = nn.ModuleDict({})
-self.lora_A = nn.ModuleDict({})
-self.lora_B = nn.ModuleDict({})
-# لطبقة التضمين
-self.lora_embedding_A = nn.ParameterDict({})
-self.lora_embedding_B = nn.ParameterDict({})
-# قم بتعطيل علامة الوزن المندمج
-self._disable_adapters = False
-self.merged_adapters = []
-self.use_dora: dict[str، bool] = {}
-self.lora_magnitude_vector: Optional[torch.nn.ParameterDict] = None # لـ DoRA
-self._caches: dict[str، أي] = {}
-self.kwargs = kwargs
+    def __init__(self, base_layer: nn.Module, **kwargs) -> None:
+        self.base_layer = base_layer
+        self.r = {}
+        self.lora_alpha = {}
+        self.scaling = {}
+        self.lora_dropout = nn.ModuleDict({})
+        self.lora_A = nn.ModuleDict({})
+        self.lora_B = nn.ModuleDict({})
+        # For Embedding layer
+        self.lora_embedding_A = nn.ParameterDict({})
+        self.lora_embedding_B = nn.ParameterDict({})
+        # Mark the weight as unmerged
+        self._disable_adapters = False
+        self.merged_adapters = []
+        self.use_dora: dict[str, bool] = {}
+        self.lora_magnitude_vector: Optional[torch.nn.ParameterDict] = None  # for DoRA
+        self._caches: dict[str, Any] = {}
+        self.kwargs = kwargs
 ```
 
 في كود `__init__` المستخدم من قبل جميع فئات `LoraLayer` في PEFT، هناك مجموعة من المعلمات المستخدمة لتهيئة النموذج، ولكن القليل منها فقط له صلة بملف نقطة التفتيش: `lora_A`، `lora_B`، `lora_embedding_A`، و`lora_embedding_B`. يتم سرد هذه المعلمات في سمة فئة `adapter_layer_names` وتحتوي على المعلمات القابلة للتعلم، لذلك يجب تضمينها في ملف نقطة التفتيش. جميع المعلمات الأخرى، مثل الرتبة `r`، مشتقة من `adapter_config.json` ويجب تضمينها هناك (ما لم يتم استخدام القيمة الافتراضية).
@@ -139,36 +139,36 @@ self.lora_magnitude_vector: Optional[torch.nn.ParameterDict] = None # لـ DoRA
 
 ```json
 {
-"alpha_pattern": {},
-"auto_mapping": {
-"base_model_class": "BertModel"،
-"parent_library": "transformers.models.bert.modeling_bert"
-}،
-"base_model_name_or_path": "bert-base-uncased"،
-"bias": "none"،
-"fan_in_fan_out": false،
-"inference_mode": true،
-"init_lora_weights": true،
-"layer_replication": null،
-"layers_pattern": null،
-"layers_to_transform": null،
-"loftq_config": {}،
-"lora_alpha": 8،
-"lora_dropout": 0.0،
-"megatron_config": null،
-"megatron_core": "megatron.core"،
-"modules_to_save": null،
-"peft_type": "LORA"،
-"r": 8،
-"rank_pattern": {}،
-"revision": null،
-"target_modules": [
-"query"،
-"value"
-]،
-"task_type": null،
-"use_dora": false،
-"use_rslora": false
+  "alpha_pattern": {},
+  "auto_mapping": {
+    "base_model_class": "BertModel",
+    "parent_library": "transformers.models.bert.modeling_bert"
+  },
+  "base_model_name_or_path": "bert-base-uncased",
+  "bias": "none",
+  "fan_in_fan_out": false,
+  "inference_mode": true,
+  "init_lora_weights": true,
+  "layer_replication": null,
+  "layers_pattern": null,
+  "layers_to_transform": null,
+  "loftq_config": {},
+  "lora_alpha": 8,
+  "lora_dropout": 0.0,
+  "megatron_config": null,
+  "megatron_core": "megatron.core",
+  "modules_to_save": null,
+  "peft_type": "LORA",
+  "r": 8,
+  "rank_pattern": {},
+  "revision": null,
+  "target_modules": [
+    "query",
+    "value"
+  ],
+  "task_type": null,
+  "use_dora": false,
+  "use_rslora": false
 }
 ```
 
@@ -178,8 +178,8 @@ self.lora_magnitude_vector: Optional[torch.nn.ParameterDict] = None # لـ DoRA
 
 ```json
 {
-"target_modules": ["query"، "value"]،
-"peft_type": "LORA"
+  "target_modules": ["query", "value"],
+  "peft_type": "LORA"
 }
 ```
 

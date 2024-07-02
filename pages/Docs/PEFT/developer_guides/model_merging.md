@@ -53,7 +53,7 @@ adapters = ["norobots", "adcopy", "sql"]
 weights = [2.0, 1.0, 1.0]
 adapter_name = "merge"
 density = 0.2
-model.add_weighted_adapter(adapters، الأوزان، adapter_name، combination_type="ties"، density=density)
+model.add_weighted_adapter(adapters, weights, adapter_name, combination_type="ties", density=density)
 ```
 
 </hfoption>
@@ -65,7 +65,7 @@ adapters = ["norobots", "adcopy", "sql"]
 weights = [2.0, 0.3, 0.7]
 adapter_name = "merge"
 density = 0.2
-model.add_weighted_adapter(adapters، الأوزان، adapter_name، combination_type="dare_ties"، density=density)
+model.add_weighted_adapter(adapters, weights, adapter_name, combination_type="dare_ties", density=density)
 ```
 
 </hfoption>
@@ -86,7 +86,7 @@ model.set_adapter("merge")
 
 ```py
 messages = [
-{"role": "user", "content": "Write an essay about Generative AI."},
+    {"role": "user", "content": "Write an essay about Generative AI."},
 ]
 text = tokenizer.apply_chat_template(messages, add_generation_prompt=True, tokenize=False)
 inputs = tokenizer(text, return_tensors="pt")
@@ -101,8 +101,8 @@ print(tokenizer.decode(outputs[0]))
 
 ```py
 messages = [
-{"role": "system", "content": "Create a text ad given the following product and description."},
-{"role": "user", "content": "Product: Sony PS5 PlayStation Console\nDescription: The PS5 console unleashes new gaming possibilities that you never anticipated."},
+    {"role": "system", "content": "Create a text ad given the following product and description."},
+    {"role": "user", "content": "Product: Sony PS5 PlayStation Console\nDescription: The PS5 console unleashes new gaming possibilities that you never anticipated."},
 ]
 text = tokenizer.apply_chat_template(messages, add_generation_prompt=True, tokenize=False)
 inputs = tokenizer(text, return_tensors="pt")

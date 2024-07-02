@@ -185,7 +185,7 @@ from peft import PeftModel
 import torch
 
 base_model = AutoModelForCausalLM.from_pretrained(
-"mistralai/Mistral-7B-v0.1", torch_dtype=torch.float16, device_map="auto"
+    "mistralai/Mistral-7B-v0.1", torch_dtype=torch.float16, device_map="auto"
 )
 ```
 
@@ -202,10 +202,10 @@ model = PeftModel.from_pretrained(base_model, peft_model_id, adapter_name="sft")
 weighted_adapter_name = "sft-dpo"
 model.load_adapter("alignment-handbook/zephyr-7b-dpo-lora", adapter_name="dpo")
 model.add_weighted_adapter(
-adapters=["sft", "dpo"],
-weights=[0.7, 0.3],
-adapter_name=weighted_adapter_name,
-combination_type="linear"
+    adapters=["sft", "dpo"],
+    weights=[0.7, 0.3],
+    adapter_name=weighted_adapter_name,
+    combination_type="linear"
 )
 model.set_adapter(weighted_adapter_name)
 ```
@@ -226,7 +226,7 @@ inputs = tokenizer(prompt, return_tensors="pt")
 inputs = {k: v.to("cuda") for k, v in inputs.items()}
 
 with torch.no_grad():
-generate_ids = model.generate(**inputs, max_length=30)
+    generate_ids = model.generate(**inputs, max_length=30)
 outputs = tokenizer.batch_decode(generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
 print(outputs)
 ```
@@ -284,25 +284,25 @@ peft_model.load_adapter(<path>, adapter_name="adapter_de")
 
 ```python
 inputs = tokenizer(
-[
-"Hello, my dog is cute",
-"Hello, my cat is awesome",
-"Hello, my fish is great",
-"Salut, mon chien est mignon",
-"Salut, mon chat est génial",
-"Salut, mon poisson est super",
-"Hallo, mein Hund ist süß",
-"Hallo, meine Katze ist toll",
-"Hallo, mein Fisch ist großartig",
-],
-return_tensors="pt",
-padding=True,
+    [
+        "Hello, my dog is cute",
+        "Hello, my cat is awesome",
+        "Hello, my fish is great",
+        "Salut, mon chien est mignon",
+        "Salut, mon chat est génial",
+        "Salut, mon poisson est super",
+        "Hallo, mein Hund ist süß",
+        "Hallo, meine Katze ist toll",
+        "Hallo, mein Fisch ist großartig",
+    ],
+    return_tensors="pt",
+    padding=True,
 )
 
 adapter_names = [
-"__base__", "__base__", "__base__",
-"adapter_fr", "adapter_fr", "adapter_fr",
-"adapter_de", "adapter_de", "adapter_de",
+    "__base__", "__base__", "__base__",
+    "adapter_fr", "adapter_fr", "adapter_fr",
+    "adapter_de", "adapter_de", "adapter_de",
 ]
 output = peft_model.generate(**inputs, adapter_names=adapter_names, max_new_tokens=20)
 ```

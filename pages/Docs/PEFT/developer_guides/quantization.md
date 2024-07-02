@@ -25,10 +25,10 @@ import torch
 from transformers import BitsAndBytesConfig
 
 config = BitsAndBytesConfig(
-load_in_4bit=True,
-bnb_4bit_quant_type="nf4",
-bnb_4bit_use_double_quant=True,
-bnb_4bit_compute_dtype=torch.bfloat16,
+    load_in_4bit=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_use_double_quant=True,
+    bnb_4bit_compute_dtype=torch.bfloat16,
 )
 ```
 
@@ -58,12 +58,12 @@ model = prepare_model_for_kbit_training(model)
 from peft import LoraConfig
 
 config = LoraConfig(
-r=16,
-lora_alpha=8,
-target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
-lora_dropout=0.05,
-bias="none",
-task_type="CAUSAL_LM"
+    r=16,
+    lora_alpha=8,
+    target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
+    lora_dropout=0.05,
+    bias="none",
+    task_type="CAUSAL_LM"
 )
 ```
 
@@ -101,8 +101,8 @@ Additive Quantization of Language Models (AQLM) هي طريقة لضغط الن�
 
 ```py
 quantized_model = AutoModelForCausalLM.from_pretrained(
-"BlackSamorez/Mixtral-8x7b-AQLM-2Bit-1x16-hf-test-dispatch",
-torch_dtype="auto", device_map="auto", low_cpu_mem_usage=True,
+    "BlackSamorez/Mixtral-8x7b-AQLM-2Bit-1x16-hf-test-dispatch",
+    torch_dtype="auto", device_map="auto", low_cpu_mem_usage=True,
 )
 
 peft_config = LoraConfig(...)
@@ -137,12 +137,12 @@ model = AutoModelForCausalLM.from_pretrained("mistralai/Mistral-7B-v0.1", quanti
 from peft import LoraConfig, get_peft_model
 
 config = LoraConfig(
-r=16,
-lora_alpha=8,
-target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
-lora_dropout=0.05,
-bias="none",
-task_type="CAUSAL_LM"
+    r=16,
+    lora_alpha=8,
+    target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
+    lora_dropout=0.05,
+    bias="none",
+    task_type="CAUSAL_LM"
 )
 
 model = get_peft_model(model, config)

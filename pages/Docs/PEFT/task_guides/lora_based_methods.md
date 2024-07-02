@@ -1,5 +1,3 @@
-لم يتم ترجمة الأجزاء التي تحتوي على أكواد برمجية أو روابط أو رموز خاصة، كما هو مطلوب:
-
 # أساليب LoRA
 
 طريقة شائعة لتدريب النماذج الكبيرة بكفاءة هي إدراج مصفوفات قابلة للتدريب أصغر (عادةً في كتل الاهتمام) والتي تكون عبارة عن تفكيك للوزن التفاضلي للمصفوفة التي سيتم تعلمها أثناء الضبط الدقيق. يتم تجميد مصفوفة الأوزان الأصلية للنموذج المُدرب مسبقًا، ويتم تحديث المصفوفات الأصغر فقط أثناء التدريب. يقلل هذا من عدد المعلمات القابلة للتدريب، مما يقلل من استخدام الذاكرة ووقت التدريب الذي يمكن أن يكون مكلفًا للغاية بالنسبة للنماذج الكبيرة.
@@ -249,19 +247,19 @@ peft_model_id = f"{account}/google/vit-base-patch16-224-in21k-lora"
 batch_size = 128
 
 args = TrainingArguments(
-peft_model_id,
-remove_unused_columns=False,
-evaluation_strategy="epoch",
-save_strategy="epoch",
-learning_rate=5e-3,
-per_device_train_batch_Multiplier size=batch_size,
-gradient_accumulation_steps=4,
-per_device_eval_batch_size=batch_size,
-fp16=True,
-num_train_epochs=5,
-logging_steps=10,
-load_best_model_at_end=True,
-label_names=["labels"],
+    peft_model_id,
+    remove_unused_columns=False,
+    evaluation_strategy="epoch",
+    save_strategy="epoch",
+    learning_rate=5e-3,
+    per_device_train_batch_size=batch_size,
+    gradient_accumulation_steps=4,
+    per_device_eval_batch_size=batch_size,
+    fp16=True,
+    num_train_epochs=5,
+    logging_steps=10,
+    load_best_model_at_end=True,
+    label_names=["labels"],
 )
 ```
 
@@ -269,12 +267,12 @@ label_names=["labels"],
 
 ```py
 trainer = Trainer(
-model,
-args,
-train_dataset=train_ds,
-eval_dataset=val_ds,
-tokenizer=image_processor,
-data_collator=collate_fn,
+    model,
+    args,
+    train_dataset=train_ds,
+    eval_dataset=val_ds,
+    tokenizer=image_processor,
+    data_collator=collate_fn,
 )
 trainer.train()
 ```
@@ -307,10 +305,10 @@ import requests
 
 config = PeftConfig.from_pretrained("stevhliu/vit-base-patch16-224-in21k-lora")
 model = AutoModelForImageClassification.from_pretrained(
-config.base_model_name_or_path,
-label2id=label2id,
-id2label=id2label,
-ignore_mismatched_sizes=True,
+    config.base_model_name_or_path,
+    label2id=label2id,
+    id2label=id2label,
+    ignore_mismatched_sizes=True,
 )
 model = PeftModel.from_pretrained(model, "stevhliu/vit-base-patch16-224-in21k-lora")
 
@@ -333,8 +331,8 @@ encoding = image_processor(image.convert("RGB"), return_tensors="pt")
 
 ```py
 with torch.no_grad():
-outputs = model(**encoding)
-logits = outputs.logits
+    outputs = model(**encoding)
+    logits = outputs.logits
 
 predicted_class_idx = logits.argmax(-1).item()
 print("Predicted class:", model.config.id2label[predicted_class_idx])

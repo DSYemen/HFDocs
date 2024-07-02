@@ -30,6 +30,7 @@ class DummyModel(torch.nn.Module):
         x = self.lm_head(x)
         return x
 
+
 lora_config = LoraConfig(
     lora_alpha=16,
     lora_dropout=0.1,

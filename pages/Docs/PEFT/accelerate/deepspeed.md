@@ -51,13 +51,13 @@ accelerate config --config_file deepspeed_config.yaml
 compute_environment: LOCAL_MACHINE
 debug: false
 deepspeed_config:
-deepspeed_multinode_launcher: standard
-gradient_accumulation_steps: 4
-offload_optimizer_device: none
-offload_param_device: none
-zero3_init_flag: true
-zero3_save_16bit_model: true
-zero_stage: 3
+    deepspeed_multinode_launcher: standard
+    gradient_accumulation_steps: 4
+    offload_optimizer_device: none
+    offload_param_device: none
+    zero3_init_flag: true
+    zero3_save_16bit_model: true
+    zero_stage: 3
 distributed_type: DEEPSPEED
 downcast_bf16: 'no'
 machine_rank: 0
@@ -150,7 +150,7 @@ trainer.accelerator.print(f"{trainer.model}")
 checkpoint = None
 if training_args.resume_from_checkpoint is not None:
     checkpoint = training_args.resume_from_checkpoint
-    trainer.train(resume_from_checkpoint=checkpoint)
+trainer.train(resume_from_checkpoint=checkpoint)
 
 # saving final model
 trainer.save_model()
@@ -179,12 +179,12 @@ trainer.save_model()
 compute_environment: LOCAL_MACHINE
 debug: false
 deepspeed_config:
-deepspeed_multinode_launcher: standard
-offload_optimizer_device: none
-offload_param_device: none
-zero3_init_flag: true
-zero3_save_16bit_model: true
-zero_stage: 3
+    deepspeed_multinode_launcher: standard
+    offload_optimizer_device: none
+    offload_param_device: none
+    zero3_init_flag: true
+    zero3_save_16bit_model: true
+    zero_stage: 3
 distributed_type: DEEPSPEED
 downcast_bf16: 'no'
 machine_rank: 0
@@ -252,20 +252,34 @@ accelerate launch --config_file "configs/deepspeed_config_z3_qlora.yaml"  train.
 من حيث تعليمات البرمجية للتدريب، تتمثل تغييرات التعليمات البرمجية المهمة في ما يلي:
 
 ```diff
-...
+....
 
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=args.use_4bit_quantization,
     bnb_4bit_quant_type=args.bnb_4bit_quant_type,
     bnb_4bit_compute_dtype=compute_dtype,
     bnb_4bit_use_double_quant=args.use_nested_quant,
-    +   bnb_4bit_quant_storage=quant_storage_dtype,
++   bnb_4bit_quant_storage=quant_storage_dtype,
 )
 
 ...
 
 model = AutoModelForCausalLM.from_pretrained(
-args.model_name_or_path,
+    args.model_name_or_path,
+    quantization_config=bnb_config,
+    trust_remote_code=True,
+    attn_implementation="flash_attention_2" if args.use_flash_attn else "eager",
++   torch_dtype=quant_storage_dtype or torch.float32,
+)
+
+```
+
+Notice that `torch_dtype` for `AutoModelForCausalLM` is same as the `bnb_4bit_quant_storage` data type. That's it. Everything else is handled by Trainer and TRL.
+
+## Memory usage
+
+In the above example, the memory consumed per GPU is **36.6 GB**. Therefore, what took 8X80GB GPUs with DeepSpeed Stage 3+LoRA and a couple of 80GB GPUs with DDP+QLoRA now requires 2X40GB GPUs. This makes finetuning of large models more accessible.
+
 # استخدام PEFT و DeepSpeed مع ZeRO3 و CPU Offloading لضبط دقيق للنماذج الكبيرة على وحدة معالجة رسومية واحدة
 
 سيساعدك هذا القسم من الدليل على معرفة كيفية استخدام نصنا البرمجي للتدريب DeepSpeed. ستقوم بضبط النص البرمجي لتدريب نموذج كبير للتنبؤ الشرطي باستخدام ZeRO-3 و CPU Offload.
@@ -304,13 +318,13 @@ accelerate config --config_file ds_zero3_cpu.yaml
 ```yml
 compute_environment: LOCAL_MACHINE
 deepspeed_config:
-gradient_accumulation_steps: 1
-gradient_clipping: 1.0
-offload_optimizer_device: cpu
-offload_param_device: cpu
-zero3_init_flag: true
-zero3_save_16bit_model: true
-zero_stage: 3
+    gradient_accumulation_steps: 1
+    gradient_clipping: 1.0
+    offload_optimizer_device: cpu
+    offload_param_device: cpu
+    zero3_init_flag: true
+    zero3_save_16bit_model: true
+    zero_stage: 3
 distributed_type: DEEPSPEED
 downcast_bf16: 'no'
 dynamo_backend: 'NO'
@@ -341,13 +355,13 @@ use_cpu: false
 يقوم النص البرمجي أيضًا بإنشاء تهيئة لطريقة 🤗 PEFT التي تستخدمها، والتي في هذه الحالة، هي LoRA. تحدد [`LoraConfig`] نوع المهمة والمعلمات المهمة مثل بُعد المصفوفات ذات الرتبة المنخفضة، وعامل قياس المصفوفات، واحتمال إسقاط الطبقات LoRA. إذا كنت تريد استخدام طريقة 🤗 PEFT مختلفة، فتأكد من استبدال `LoraConfig` بالفصل المناسب [class](../package_reference/tuners).
 
 ```diff
-def main():
+ def main():
 +    accelerator = Accelerator()
-model_name_or_path = "facebook/bart-large"
-dataset_name = "twitter_complaints"
+     model_name_or_path = "facebook/bart-large"
+     dataset_name = "twitter_complaints"
 +    peft_config = LoraConfig(
-task_type=TaskType.SEQ_2_SEQ_LM, inference_mode=False, r=8, lora_alpha=32, lora_dropout=0.1
-)
+         task_type=TaskType.SEQ_2_SEQ_LM, inference_mode=False, r=8, lora_alpha=32, lora_dropout=0.1
+     )
 ```
 
 في جميع أنحاء النص البرمجي، سترى وظائف [`~accelerate.Accelerator.main_process_first`] و [`~accelerate.Accelerator.wait_for_everyone`] التي تساعد في التحكم في عمليات المزامنة وتنفيذها.
@@ -363,7 +377,7 @@ model = AutoModelForSeq2SeqLM.from_pretrained(model_name_or_path)
 
 ```py
 model, train_dataloader, eval_dataloader, test_dataloader, optimizer, lr_scheduler = accelerator.prepare(
-model, train_dataloader, eval_dataloader, test_dataloader, optimizer, lr_scheduler
+    model, train_dataloader, eval_dataloader, test_dataloader, optimizer, lr_scheduler
 )
 ```
 
@@ -372,24 +386,24 @@ model, train_dataloader, eval_dataloader, test_dataloader, optimizer, lr_schedul
 ```py
 is_ds_zero_3 = False
 if getattr(accelerator.state, "deepspeed_plugin", None):
-is_ds_zero_3 = accelerator.state.deepspeed_plugin.zero_stage == 3
+    is_ds_zero_3 = accelerator.state.deepspeed_plugin.zero_stage == 3
 ```
 
 داخل حلقة التدريب، يتم استبدال `loss.backward()` المعتادة بـ [`~accelerate.Accelerator.backward`] من 🤗 Accelerate، والتي تستخدم طريقة `backward()` الصحيحة بناءً على تهيئتك:
 
 ```diff
-for epoch in range(num_epochs):
-with TorchTracemalloc() as tracemalloc:
-model.train()
-total_loss = 0
-for step, batch in enumerate(tqdm(train_dataloader)):
-outputs = model(**batch)
-loss = outputs.loss
-total_loss += loss.detach().float()
+  for epoch in range(num_epochs):
+      with TorchTracemalloc() as tracemalloc:
+          model.train()
+          total_loss = 0
+          for step, batch in enumerate(tqdm(train_dataloader)):
+              outputs = model(**batch)
+              loss = outputs.loss
+              total_loss += loss.detach().float()
 +             accelerator.backward(loss)
-optimizer.step()
-lr_scheduler.step()
-optimizer.zero_grad()
+              optimizer.step()
+              lr_scheduler.step()
+              optimizer.zero_grad()
 ```
 
 هذا كل شيء! تتعامل بقية التعليمات البرمجية مع حلقة التدريب والتقييم، بل وتدفعها إلى Hub من أجلك.

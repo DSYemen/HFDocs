@@ -4,26 +4,26 @@
 
 سيوضح هذا البرنامج التعليمي كيف يمكن لـ PEFT مساعدتك في إدارة المحولات في Diffusers و Transformers.
 
-## الناشرون
+## Diffusers
 
-Diffusers هي مكتبة الذكاء الاصطناعي للصور ومقاطع الفيديو النصية أو الصور باستخدام نماذج الانتشار. LoRA هي طريقة تدريب شائعة بشكل خاص لنماذج الانتشار لأنك يمكن أن تدرب بسرعة ومشاركة نماذج الانتشار لتوليد الصور بأنماط جديدة. لتسهيل استخدام ومحاولة استخدام عدة نماذج LoRA، يستخدم الناشرون مكتبة PEFT للمساعدة في إدارة محولات مختلفة للاستنتاج.
+Diffusers هي مكتبة الذكاء الاصطناعي للصور ومقاطع الفيديو النصية أو الصور باستخدام نماذج الانتشار. LoRA هي طريقة تدريب شائعة بشكل خاص لنماذج الانتشار لأنك يمكن أن تدرب بسرعة ومشاركة نماذج الانتشار لتوليد الصور بأنماط جديدة. لتسهيل استخدام ومحاولة استخدام عدة نماذج LoRA، يستخدم Diffusers مكتبة PEFT للمساعدة في إدارة محولات مختلفة للاستنتاج.
 
 على سبيل المثال، قم بتحميل نموذج أساسي ثم قم بتحميل محول [artificialguybr/3DRedmond-V1](https://huggingface.co/artificialguybr/3DRedmond-V1) للاستدلال باستخدام طريقة [`load_lora_weights`](https://huggingface.co/docs/diffusers/v0.24.0/en/api/loaders/lora#diffusers.loaders.LoraLoaderMixin.load_lora_weights). تم تمكين وسيط `adapter_name` في طريقة التحميل بواسطة PEFT ويسمح لك بتعيين اسم للمحول بحيث يكون من السهل الإشارة إليه.
 
 ```py
-استيراد الشعلة
-من الناشرين استيراد DiffusionPipeline
+import torch
+from diffusers import DiffusionPipeline
 
-خط الأنابيب = DiffusionPipeline.from_pretrained (
-"stabilityai/stable-diffusion-xl-base-1.0"، torch_dtype=torch.float16
+pipeline = DiffusionPipeline.from_pretrained(
+    "stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16
 ).to("cuda")
-خط الأنابيب. تحميل_لورا_الأوزان (
-"peft-internal-testing/artificialguybr__3DRedmond-V1"،
-اسم_الوزن="3DRedmond-3DRenderStyle-3DRenderAF.safetensors"،
-محول_الاسم="3d"
+pipeline.load_lora_weights(
+    "peft-internal-testing/artificialguybr__3DRedmond-V1", 
+    weight_name="3DRedmond-3DRenderStyle-3DRenderAF.safetensors", 
+    adapter_name="3d"
 )
-الصورة = خط الأنابيب ("لفات السوشي على شكل وجوه قطط لطيف"). الصور [0]
-الصورة
+image = pipeline("sushi rolls shaped like kawaii cat faces").images[0]
+image
 ```
 
 <div class="flex justify-center">
@@ -33,14 +33,14 @@ Diffusers هي مكتبة الذكاء الاصطناعي للصور ومقاط�
 الآن دعونا نجرب نموذج LoRA رائع آخر، [ostris/super-cereal-sdxl-lora](https://huggingface.co/ostris/super-cereal-sdxl-lora). كل ما عليك فعله هو تحميل هذا المحول الجديد وتسميته باستخدام `adapter_name`، واستخدام طريقة [`set_adapters`](https://huggingface.co/docs/diffusers/api/loaders/unet#diffusers.loaders.UNet2DConditionLoadersMixin.set_adapters) لتعيينه كمحول نشط حالي.
 
 ```py
-خط الأنابيب. تحميل_لورا_الأوزان (
-"ostris/super-cereal-sdxl-lora"،
-اسم_الوزن="cereal_box_sdxl_v1.safetensors"،
-محول_الاسم="حبوب الإفطار"
+pipeline.load_lora_weights(
+    "ostris/super-cereal-sdxl-lora", 
+    weight_name="cereal_box_sdxl_v1.safetensors", 
+    adapter_name="cereal"
 )
-خط الأنابيب. set_adapters ("حبوب الإفطار")
-الصورة = خط الأنابيب ("لفات السوشي على شكل وجوه قطط لطيف"). الصور [0]
-الصورة
+pipeline.set_adapters("cereal")
+image = pipeline("sushi rolls shaped like kawaii cat faces").images[0]
+image
 ```
 
 <div class="flex justify-center">
@@ -50,7 +50,7 @@ Diffusers هي مكتبة الذكاء الاصطناعي للصور ومقاط�
 أخيرًا، يمكنك استدعاء طريقة [`disable_lora`](https://huggingface.co/docs/diffusers/api/loaders/unet#diffusers.loaders.UNet2DConditionLoadersMixin.disable_lora) لاستعادة النموذج الأساسي.
 
 ```py
-خط الأنابيب. تعطيل_لورا ()
+pipeline.disable_lora()
 ```
 
 تعرف على المزيد حول كيفية دعم PEFT لـ Diffusers في البرنامج التعليمي [الاستدلال باستخدام PEFT](https://huggingface.co/docs/diffusers/tutorials/using_peft_for_inference).
@@ -62,24 +62,24 @@ Diffusers هي مكتبة الذكاء الاصطناعي للصور ومقاط�
 قم بتحميل نموذج أساسي مُدرب مسبقًا للتدريب.
 
 ```py
-من المحولات استيراد AutoModelForCausalLM
+from transformers import AutoModelForCausalLM
 
-النموذج = AutoModelForCausalLM.from_pretrained ("facebook/opt-350m")
+model = AutoModelForCausalLM.from_pretrained("facebook/opt-350m")
 ```
 
 بعد ذلك، أضف تكوين المحول لتحديد كيفية تكييف معلمات النموذج. استدعاء طريقة [`~PeftModel.add_adapter`] لإضافة التكوين إلى النموذج الأساسي.
 
 ```py
-من peft استيراد LoraConfig
+from peft import LoraConfig
 
-peft_config = LoraConfig (
-لورا_ألفا = 16،
-لورا_التخلي = 0.1،
-ص = 64،
-التحيز = "لا شيء"،
-نوع_المهمة = "CAUSAL_LM"
+peft_config = LoraConfig(
+    lora_alpha=16,
+    lora_dropout=0.1,
+    r=64,
+    bias="none",
+    task_type="CAUSAL_LM"
 )
-النموذج. add_adapter (peft_config)
+model.add_adapter(peft_config)
 ```
 
 الآن يمكنك تدريب النموذج باستخدام فئة [`~transformers.Trainer`] من المحول أو أي إطار تدريب تفضله.
@@ -87,48 +87,48 @@ peft_config = LoraConfig (
 لاستخدام النموذج المدرب حديثًا للاستدلال، تستخدم فئة [`~transformers.AutoModel`] PEFT في الخلفية لتحميل أوزان المحول وملف التكوين في نموذج أساسي مُدرب مسبقًا.
 
 ```py
-من المحولات استيراد AutoModelForCausalLM
+from transformers import AutoModelForCausalLM
 
-النموذج = AutoModelForCausalLM.from_pretrained ("peft-internal-testing/opt-350m-lora")
+model = AutoModelForCausalLM.from_pretrained("peft-internal-testing/opt-350m-lora")
 ```
 
 بدلاً من ذلك، يمكنك استخدام أنابيب المحول [Pipelines](https://huggingface.co/docs/transformers/en/main_classes/pipelines) لتحميل النموذج لتشغيل الاستدلال بشكل مناسب:
 
 ```py
-من المحولات استيراد الأنابيب
+from transformers import pipeline
 
-النموذج = الأنابيب ("توليد النص"، "peft-internal-testing/opt-350m-lora")
-طباعة (النموذج ("مرحبا بالعالم"))
+model = pipeline("text-generation", "peft-internal-testing/opt-350m-lora")
+print(model("Hello World"))
 ```
 
 إذا كنت مهتمًا بمقارنة أو استخدام أكثر من محول واحد، فيمكنك استدعاء طريقة [`~PeftModel.add_adapter`] لإضافة تكوين المحول إلى النموذج الأساسي. الشرط الوحيد هو أن نوع المحول يجب أن يكون هو نفسه (لا يمكنك خلط محول LoRA و LoHa).
 
 ```py
-من المحولات استيراد AutoModelForCausalLM
-من peft استيراد LoraConfig
+from transformers import AutoModelForCausalLM
+from peft import LoraConfig
 
-النموذج = AutoModelForCausalLM.from_pretrained ("facebook/opt-350m")
-النموذج. add_adapter (lora_config_1، محول_الاسم="المحول_1")
+model = AutoModelForCausalLM.from_pretrained("facebook/opt-350m")
+model.add_adapter(lora_config_1, adapter_name="adapter_1")
 ```
 
 استدعاء [`~PeftModel.add_adapter`] مرة أخرى لربط محول جديد بالنموذج الأساسي.
 
 ```py
-النموذج. add_adapter (lora_config_2، محول_الاسم="المحول_2")
+model.add_adapter(lora_config_2, adapter_name="adapter_2")
 ```
 
 بعد ذلك، يمكنك استخدام [`~PeftModel.set_adapter`] لتعيين المحول النشط حاليًا.
 
 ```py
-النموذج. set_adapter ("المحول_1")
-الإخراج = النموذج. توليد (** المدخلات)
-طباعة (فك تشفير المحلل اللغوي (الإخراج_معطل [0]، تخطي_الرموز الخاصة=صحيح))
+model.set_adapter("adapter_1")
+output = model.generate(**inputs)
+print(tokenizer.decode(output_disabled[0], skip_special_tokens=True))
 ```
 
 لإلغاء تنشيط المحول، اتصل بطريقة [disable_adapters](https://github.com/huggingface/transformers/blob/4e3490f79b40248c53ee54365a9662611e880892/src/transformers/integrations/peft.py#L313).
 
 ```py
-النموذج. تعطيل_المحولات ()
+model.disable_adapters()
 ```
 
 يمكن استخدام [enable_adapters](https://github.com/huggingface/transformers/blob/4e3490f79b40248c53ee54365a9662611e880892/src/transformers/integrations/peft.py#L336) لتمكين المحولات مرة أخرى.
