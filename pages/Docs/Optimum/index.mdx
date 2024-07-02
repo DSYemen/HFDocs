@@ -1,0 +1,73 @@
+# 🤗 Optimum
+
+🤗 Optimum هو امتداد لـ [Transformers](https://huggingface.co/docs/transformers) يوفر مجموعة من أدوات تحسين الأداء لتدريب وتشغيل النماذج على الأجهزة المستهدفة بكفاءة قصوى.
+
+يتطور نظام الذكاء الاصطناعي بسرعة، وتظهر يوميًا أجهزة متخصصة جديدة مع تحسيناتها الخاصة.
+وبالتالي، يمكّن Optimum المطورين من استخدام أي من هذه المنصات بكفاءة وبنفس السهولة المتأصلة في Transformers.
+
+يتم توزيع 🤗 Optimum كمجموعة من الحزم - راجع الروابط أدناه للحصول على نظرة متعمقة على كل منها.
+
+## شركاء الأجهزة
+
+تمكّنك الحزم أدناه من الاستفادة القصوى من نظام Hugging Face على أنواع مختلفة من الأجهزة.
+
+<div class="mt-10">
+<div class="w-full flex flex-col space-y-4 md:space-y-0 md:grid md:grid-cols-4 md:gap-y-4 md:gap-x-5">
+<a class="!no-underline border dark:border-gray-700 p-5 rounded-lg shadow hover:shadow-lg" href="https://github.com/huggingface/optimum-nvidia">
+<div class="w-full text-center bg-gradient-to-br from-green-600 to-green-600 rounded-lg py-1.5 font-semibold mb-5 text-white text-lg leading-relaxed">NVIDIA</div>
+<p class="text-gray-700">تسريع الاستدلال مع NVIDIA TensorRT-LLM على <span class="underline" onclick="event.preventDefault(); window.open('https://developer.nvidia.com/blog/nvidia-tensorrt-llm-supercharges-large-language-model-inference-on-nvidia-h100-gpus/', '_blank');">منصة NVIDIA</span></p>
+</a>
+<a class="!no-underline border dark:border-gray-700 p-5 rounded-lg shadow hover:shadow-lg" href="./amd/index">
+<div class="w-full text-center bg-gradient-to-br from-red-600 to-red-600 rounded-lg py-1.5 font-semibold mb-5 text-white text-lg leading-relaxed">AMD</div>
+<p class="text-gray-700">تمكين التحسينات للأداء <span class="underline" onclick="event.preventDefault(); window.open('https://www.amd.com/en/graphics/instinct-server-accelerators', '_blank');">AMD Instinct GPUs</span> و <span class="underline" onclick="event.preventDefault(); window.open('https://ryzenai.docs.amd.com/en/latest/index.html', '_blank');">AMD Ryzen AI NPUs</span></p>
+</a>
+<a class="!no-underline border dark:border-gray-700 p-5 rounded-lg shadow hover:shadow-lg" href="./intel/index">
+<div class="w-full text-center bg-gradient-to-br from-blue-400 to-blue-500 rounded-lg py-1.5 font-semibold mb-5 text-white text-lg leading-relaxed">Intel</div>
+<p class="text-gray-700">قم بتحسين نموذجك لتسريع الاستدلال مع <span class="underline" onclick="event.preventDefault(); window.open('https://docs.openvino.ai/latest/index.html', '_blank');">OpenVINO</span> و <span class="underline" onclick="event.preventDefault(); window.open('https://www.intel.com/content/www/us/en/developer/tools/oneapi/neural-compressor.html', '_blank');">Neural Compressor</span></p>
+</a>
+<a class="!no-underline border dark:border-gray-700 p-5 rounded-lg shadow hover:shadow-lg" href="https://huggingface.co/docs/optimum-neuron/index">
+<div class="w-full text-center bg-gradient-to-br from-orange-400 to-orange-500 rounded-lg py-1.5 font-semibold mb-5 text-white text-lg leading-relaxed">AWS Trainium/Inferentia</div>
+<p class="text-gray-700">تسريع سير عمل التدريب والاستدلال باستخدام <span class="underline" onclick="event.preventDefault(); window.open('https://aws.amazon.com/machine-learning/trainium/', '_blank');">AWS Trainium</span> و <span class="underline" onclick="event.preventDefault(); window.open('https://aws.amazon.com/machine-learning/inferentia/', '_blank');">AWS Inferentia</span></p>
+</a>
+<a class="!no-underline border dark:border-gray-700 p-5 rounded-lg shadow hover:shadow-lg" href="https://huggingface.co/docs/optimum-tpu/index">
+<div class="w-full text-center bg-gradient-to-tr from-blue-200 to-blue-600 rounded-lg py-1.5 font-semibold mb-5 text-white text-lg leading-relaxed">Google TPUs</div>
+<p class="text-gray-700">تسريع سير عمل التدريب والاستدلال باستخدام <span class="underline" onclick="event.preventDefault(); window.open('https://cloud.google.com/tpu', '_blank');">Google TPUs</span></p>
+</a>
+<a class="!no-underline border dark:border-gray-700 p-5 rounded-lg shadow hover:shadow-lg" href="./habana/index">
+<div class="w-full text-center bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-lg py-1.5 font-semibold mb-5 text-white text-lg leading-relaxed">Habana</div>
+<p class="text-gray-700">تعظيم الإنتاجية والكفاءة التدريبية مع <span class="underline" onclick="event.preventDefault(); window.open('https://docs.habana.ai/en/latest/Gaudi_Overview/Gaudi_Architecture.html', '_blank');">معالج Habana's Gaudi</span></p>
+</a>
+<a class="!no-underline border dark:border-gray-700 p-5 rounded-lg shadow hover:shadow-lg" href="./furiosa/index">
+<div class="w-full text-center bg-gradient-to-br from-green-400 to-green-500 rounded-lg py-1.5 font-semibold mb-5 text-white text-lg leading-relaxed">FuriosaAI</div>
+<p class="text-gray-700">الاستدلال السريع والكفء على <span class="underline" onclick="event.preventDefault(); window.open('https://www.furiosa.ai/', '_blank');">FuriosaAI WARBOY</span></p>
+</a>
+</div>
+</div>
+
+> [!TIP]
+> توفر بعض الحزم ميزات مستقلة عن الأجهزة (مثل واجهة INC في Optimum Intel).
+
+## التكاملات مفتوحة المصدر
+
+يدعم 🤗 Optimum أيضًا مجموعة متنوعة من الأطر مفتوحة المصدر لجعل تحسين النماذج سهلًا للغاية.
+
+<div class="mt-10">
+<div class="w-full flex flex-col space-y-4 md:space-y-0 md:grid md:grid-cols-3 md:gap-y-4 md:gap-x-5">
+<a class="!no-underline border dark:border-gray-700 p-5 rounded-lg shadow hover:shadow-lg" href="./onnxruntime/overview">
+<div class="w-full text-center bg-gradient-to-br from-pink-400 to-pink-500 rounded-lg py-1.5 font-semibold mb-5 text-white text-lg leading-relaxed">ONNX Runtime</div>
+<p class="text-gray-700">تطبيق التكميم وتحسين الرسم البياني لتسريع تدريب نماذج Transformers والاستدلال مع <span class="underline" onclick="event.preventDefault(); window.open('https://onnxruntime.ai/', '_blank');">ONNX Runtime</span></p>
+</a>
+<a class="!no-underline border dark:border-gray-700 p-5 rounded-lg shadow hover:shadow-lg" href="./exporters/overview">
+<div class="w-full text-center bg-gradient-to-br from-purple-400 to-purple-500 rounded-lg py-1.5 font-semibold mb-5 text-white text-lg leading-relaxed">Exporters</div>
+<p class="text-gray-700">تصدير نموذج PyTorch أو TensorFlow إلى تنسيقات مختلفة مثل ONNX و TFLite</p>
+</a>
+<a class="!no-underline border dark:border-gray-700 p-5 rounded-lg shadow hover:shadow-lg" href="./bettertransformer/overview">
+<div class="w-full text-center bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg py-1.5 font-semibold mb-5 text-white text-lg leading-relaxed">BetterTransformer</div>
+<p class="text-gray-700">تكامل سطر واحد لاستخدام <span class="underline" onclick="event.preventDefault(); window.open('https://pytorch.org/blog/a-better-transformer-for-fast-transformer-encoder-inference/', '_blank');">BetterTransformer من PyTorch</span> مع نماذج Transformers</p>
+</a>
+<a class="!no-underline border dark:border-gray-700 p-5 rounded-lg shadow hover:shadow-lg" href="./torch_fx/overview">
+<div class="w-full text-center bg-gradient-to-br from-green-400 to-green-500 rounded-lg py-1.5 font-semibold mb-5 text-white text-lg leading-relaxed">Torch FX</div>
+<p class="text-gray-700">إنشاء وتكوين تحويلات رسومية مخصصة لتحسين نماذج PyTorch Transformers مع <span class="underline" onclick="event.preventDefault(); window.open('https://pytorch.org/docs/stable/fx.html#', '_blank');">Torch FX</span></p>
+</a>
+</div>
+</div>

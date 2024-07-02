@@ -1,0 +1,45 @@
+لم يتم ترجمة الأجزاء التي لا يجب ترجمتها كما هو مطلوب:
+
+<!--Copyright 2022 The HuggingFace Team. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+the License. You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+-->
+
+# التثبيت
+
+يمكن تثبيت 🤗 Optimum باستخدام `pip` كما يلي:
+
+```bash
+python -m pip install optimum
+```
+
+إذا كنت ترغب في استخدام الميزات الخاصة بالمعجلات في 🤗 Optimum، فيمكنك تثبيت التبعيات المطلوبة وفقا للجدول أدناه:
+
+| المعجل | التثبيت |
+|:----------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------|
+| [ONNX Runtime](https://huggingface.co/docs/optimum/onnxruntime/overview) | `pip install --upgrade --upgrade-strategy eager optimum[onnxruntime]` |
+| [Intel Neural Compressor](https://huggingface.co/docs/optimum/intel/index) | `pip install --upgrade --upgrade-strategy eager optimum[neural-compressor]` |
+| [OpenVINO](https://huggingface.co/docs/optimum/intel/index) | `pip install --upgrade --upgrade-strategy eager optimum[openvino]` |
+| [NVIDIA TensorRT-LLM](https://huggingface.co/docs/optimum/main/en/nvidia_overview) | `docker run -it --gpus all --ipc host huggingface/optimum-nvidia` |
+| [AMD Instinct GPUs and Ryzen AI NPU](https://huggingface.co/docs/optimum/amd/index) | `pip install --upgrade --upgrade-strategy eager optimum[amd]` |
+| [AWS Trainium & Inferentia](https://huggingface.co/docs/optimum-neuron/index) | `pip install --upgrade --upgrade-strategy eager optimum[neuron]` |
+| [Habana Gaudi Processor (HPU)](https://huggingface.co/docs/optimum/habana/index) | `pip install --upgrade --upgrade-strategy eager optimum[habana]` |
+| [FuriosaAI](https://huggingface.co/docs/optimum/furiosa/index) | `pip install --upgrade --upgrade-strategy eager optimum[furiosa]` |
+
+خيار `--upgrade --upgrade-strategy eager` مطلوب للتأكد من ترقية الحزم المختلفة إلى أحدث إصدار ممكن.
+
+إذا كنت ترغب في تجربة الأمثلة أو تحتاج إلى أحدث إصدار من الكود ولا تستطيع الانتظار حتى الإصدار الجديد، فيمكنك تثبيت المكتبة الأساسية من المصدر كما يلي:
+
+```bash
+python -m pip install git+https://github.com/huggingface/optimum.git
+```
+
+بالنسبة للميزات الخاصة بالمعجلات، يمكنك تثبيتها عن طريق إضافة `optimum[accelerator_type]` إلى أمر `pip`، على سبيل المثال:
+
+```bash
+python -m pip install optimum[onnxruntime]@git+https://github.com/huggingface/optimum.git
+```
