@@ -33,17 +33,17 @@ pip install intel_extension_for_pytorch==<version_name> -f https://developer.int
 ```bash
 $ accelerate config
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
-في أي بيئة حوسبة تعمل؟
-هذه الآلة
+In which compute environment are you running?
+This machine
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
-ما نوع الجهاز الذي تستخدمه؟
-لا يوجد تدريب موزع
-هل تريد تشغيل التدريب الخاص بك على CPU فقط (حتى إذا كان GPU / جهاز Apple Silicon متاحًا)؟ [yes/NO]:yes
-هل تريد استخدام Intel PyTorch Extension (IPEX) لتسريع التدريب على CPU؟ [yes/NO]:yes
-هل تريد تحسين نصك البرمجي باستخدام torch dynamo؟ [yes/NO]:NO
-هل تريد استخدام DeepSpeed؟ [yes/NO]: NO
+Which type of machine are you using?
+No distributed training
+Do you want to run your training on CPU only (even if a GPU / Apple Silicon device is available)? [yes/NO]:yes
+Do you want to use Intel PyTorch Extension (IPEX) to speed up training on CPU? [yes/NO]:yes
+Do you wish to optimize your script with torch dynamo?[yes/NO]:NO
+Do you want to use DeepSpeed? [yes/NO]: NO
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
-هل تريد استخدام FP16 أو BF16 (الدقة المختلطة)؟
+Do you wish to use FP16 or BF16 (mixed precision)?
 bf16
 ```
 
@@ -62,7 +62,7 @@ compute_environment: LOCAL_MACHINE
 distributed_type: 'NO'
 downcast_bf16: 'no'
 ipex_config:
-ipex: true
+  ipex: true
 machine_rank: 0
 main_training_function: main
 mixed_precision: bf16
@@ -89,26 +89,26 @@ accelerate launch examples/nlp_example.py
 ```bash
 $ accelerate config
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
-في أي بيئة حوسبة تعمل؟
-هذه الآلة
+In which compute environment are you running?
+This machine
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
-ما نوع الجهاز الذي تستخدمه؟
-متعدد المعالجات
-كم عدد الآلات المختلفة التي ستستخدمها (استخدم أكثر من 1 للتدريب متعدد العقد)؟ [1]: 4
+Which type of machine are you using?
+multi-CPU
+How many different machines will you use (use more than 1 for multi-node training)? [1]: 4
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
-ما هو ترتيب هذه الآلة؟
+What is the rank of this machine?
 0
-ما هو عنوان IP للآلة التي ستستضيف العملية الرئيسية؟ 36.112.23.24
-ما هو المنفذ الذي ستستخدمه للتواصل مع العملية الرئيسية؟ 29500
-هل جميع الآلات على نفس الشبكة المحلية؟ أجب بـ "no" إذا كانت العقد موجودة في السحابة و/أو على مضيفي الشبكة المختلفة [YES/no]: yes
-هل تريد استخدام Intel PyTorch Extension (IPEX) لتسريع التدريب على CPU؟ [yes/NO]:yes
-هل تريد أن يقوم Accelerate بتشغيل mpirun؟ [yes/NO]: yes
-يرجى إدخال مسار ملف المضيف الذي سيتم استخدامه مع mpirun [~/hostfile]: ~/hostfile
-أدخل عدد مؤشرات ترابط عامل oneCCL [1]: 1
-هل تريد تحسين نصك البرمجي باستخدام torch dynamo؟ [yes/NO]:NO
-كم عدد العمليات التي يجب استخدامها للتدريب الموزع؟ [1]:16
+What is the IP address of the machine that will host the main process? 36.112.23.24
+What is the port you will use to communicate with the main process? 29500
+Are all the machines on the same local network? Answer `no` if nodes are on the cloud and/or on different network hosts [YES/no]: yes
+Do you want to use Intel PyTorch Extension (IPEX) to speed up training on CPU? [yes/NO]:yes
+Do you want accelerate to launch mpirun? [yes/NO]: yes
+Please enter the path to the hostfile to use with mpirun [~/hostfile]: ~/hostfile
+Enter the number of oneCCL worker threads [1]: 1
+Do you wish to optimize your script with torch dynamo?[yes/NO]:NO
+How many processes should be used for distributed training? [1]:16
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
-هل تريد استخدام FP16 أو BF16 (الدقة المختلطة)؟
+Do you wish to use FP16 or BF16 (mixed precision)?
 bf16
 ```
 
@@ -121,15 +121,15 @@ compute_environment: LOCAL_MACHINE
 distributed_type: MULTI_CPU
 downcast_bf16: 'no'
 ipex_config:
-ipex: true
+  ipex: true
 machine_rank: 0
 main_process_ip: 36.112.23.24
 main_process_port: 29500
 main_training_function: main
 mixed_precision: bf16
 mpirun_config:
-mpirun_ccl: '1'
-mpirun_hostfile: /home/user/hostfile
+  mpirun_ccl: '1'
+  mpirun_hostfile: /home/user/hostfile
 num_machines: 4
 num_processes: 16
 rdzv_backend: static

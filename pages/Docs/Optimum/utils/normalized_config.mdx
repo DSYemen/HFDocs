@@ -1,0 +1,24 @@
+# تكوين التكوينات المعيارية
+
+فئات تكوين النموذج في 🤗 Transformers ليست موحدة. على الرغم من أن Transformers تنفذ `attribute_map` الذي يخفف من المشكلة إلى حد ما، إلا أنه لا يسهل تبرير سمات التكوين الشائعة في الكود.
+تحاول فئات [`~optimum.utils.normalized_config.NormalizedConfig`] إصلاح ذلك عن طريق السماح بالوصول إلى سمة التكوين التي تقوم بتغليفها بطريقة موحدة.
+
+## فئة القاعدة
+
+<Tip>
+في حين أنه من الممكن إنشاء فئات فرعية لـ `NormalizedConfig` لحالات الاستخدام الشائعة، فمن الممكن أيضًا الكتابة فوق
+التخطيط المباشر لـ "اسم السمة الأصلية -> اسم السمة المعيارية" باستخدام
+أسلوب فئة [`~optimum.utils.normalized_config.NormalizedConfig.with_args`].
+</Tip>
+
+[[autodoc]] optimum.utils.normalized_config.NormalizedConfig
+
+## التكوينات المعيارية الحالية
+
+[[autodoc]] optimum.utils.normalized_config.NormalizedTextConfig
+
+[[autodoc]] optimum.utils.normalized_config.NormalizedSeq2SeqConfig
+
+[[autodoc]] optimum.utils.normalized_config.NormalizedVisionConfig
+
+[[autodoc]] optimum.utils.normalized_config.NormalizedTextAndVisionConfig

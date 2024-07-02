@@ -1,0 +1,191 @@
+# الضبط الكمي
+
+يوفر HuggingFace Optimum حزمة `optimum.onnxruntime` تتيح لك تطبيق الضبط الكمي على العديد من النماذج المستضافة على Hugging Face Hub باستخدام أداة الضبط الكمي [ONNX Runtime](https://github.com/microsoft/onnxruntime/blob/master/onnxruntime/python/tools/quantization/README.md).
+
+تتم عملية الضبط الكمي من خلال الفئتين [`~optimum.onnxruntime.ORTConfig`] و [`~optimum.onnxruntime.ORTQuantizer`]. تسمح الفئة الأولى بتحديد كيفية إجراء الضبط الكمي، بينما تتعامل الفئة الثانية مع الضبط الكمي بشكل فعال.
+
+<Tip>
+يمكنك قراءة [الدليل المفاهيمي حول الضبط الكمي(../../concept_guides/quantization) لمعرفة المزيد عن الضبط الكمي. فهو يشرح المفاهيم الرئيسية التي ستستخدمها عند إجراء الضبط الكمي باستخدام الفئة [`~optimum.onnxruntime.ORTQuantizer`].
+</Tip>
+
+## ضبط نموذج كميًا لاستخدامه مع واجهة سطر الأوامر لـ Optimum
+
+يمكن استخدام أداة الضبط الكمي لـ ONNX Runtime من خلال واجهة سطر الأوامر لـ Optimum:
+
+```bash
+optimum-cli onnxruntime quantize --help
+usage: optimum-cli <command> [<args>] onnxruntime quantize [-h] --onnx_model ONNX_MODEL -o OUTPUT [--per_channel] (--arm64 | --avx2 | --avx512 | --avx512_vnni | --tensorrt | -c CONFIG)
+
+options:
+-h, --help            show this help message and exit
+--arm64               Quantization for the ARM64 architecture.
+--avx2                Quantization with AVX-2 instructions.
+--avx512              Quantization with AVX-512 instructions.
+--avx512_vnni         Quantization with AVX-512 and VNNI instructions.
+--tensorrt            Quantization for NVIDIA TensorRT optimizer.
+-c CONFIG, --config CONFIG
+`ORTConfig` file to use to optimize the model.
+
+Required arguments:
+--onnx_model ONNX_MODEL
+Path to the repository where the ONNX models to quantize are located.
+-o OUTPUT, --output OUTPUT
+Path to the directory where to store generated ONNX model.
+
+Optional arguments:
+--per_channel         Compute the quantization parameters on a per-channel basis.
+```
+
+يمكن إجراء الضبط الكمي لنموذج ONNX على النحو التالي:
+
+```bash
+optimum-cli onnxruntime quantize --onnx_model onnx_model_location/ --avx512 -o quantized_model/
+```
+
+هذا يضبط جميع ملفات ONNX في `onnx_model_location` باستخدام تعليمات AVX-512.
+
+## إنشاء `ORTQuantizer`
+
+تستخدم الفئة [`~optimum.onnxruntime.ORTQuantizer`] لضبط نموذج ONNX الخاص بك. يمكن تهيئة الفئة باستخدام طريقة `from_pretrained()`، والتي تدعم تنسيقات نقاط تفتيش مختلفة.
+
+1. استخدام فئة `ORTModelForXXX` التي تم تهيئتها بالفعل.
+
+```python
+>>> from optimum.onnxruntime import ORTQuantizer, ORTModelForSequenceClassification
+
+# تحميل نموذج ONNX من Hub
+>>> ort_model = ORTModelForSequenceClassification.from_pretrained(
+...     "optimum/distilbert-base-uncased-finetuned-sst-2-english"
+... )
+
+# إنشاء أداة ضبط كمي من ORTModelForXXX
+>>> quantizer = ORTQuantizer.from_pretrained(ort_model)
+```
+
+2. استخدام نموذج ONNX محلي من دليل.
+
+```python
+>>> from optimum.onnxruntime import ORTQuantizer
+
+# يفترض هذا وجود نموذج model.onnx في path/to/model
+>>> quantizer = ORTQuantizer.from_pretrained("path/to/model")  # doctest: +SKIP
+```
+
+## تطبيق الضبط الكمي الديناميكي
+
+يمكن استخدام فئة [`~optimum.onnxruntime.ORTQuantizer`] لضبط نموذج ONNX الخاص بك ديناميكيًا. فيما يلي مثال بسيط من البداية إلى النهاية حول كيفية ضبط نموذج [distilbert-base-uncased-finetuned-sst-2-english](https://huggingface.co/distilbert-base-uncased-finetuned-sst-2-english) ديناميكيًا.
+
+```python
+>>> from optimum.onnxruntime import ORTQuantizer, ORTModelForSequenceClassification
+>>> from optimum.onnxruntime.configuration import AutoQuantizationConfig
+
+# تحميل نموذج PyTorch وتحويله إلى ONNX
+>>> onnx_model = ORTModelForSequenceClassification.from_pretrained("distilbert-base-uncased-finetuned-sst-2-english", export=True)
+
+# إنشاء أداة الضبط الكمي
+>>> quantizer = ORTQuantizer.from_pretrained(onnx_model)
+
+# تحديد استراتيجية الضبط الكمي من خلال إنشاء التكوين المناسب
+>>> dqconfig = AutoQuantizationConfig.avx512_vnni(is_static=False, per_channel=False)
+
+# ضبط النموذج
+>>> model_quantized_path = quantizer.quantize(
+...     save_dir="path/to/output/model",
+...     quantization_config=dqconfig,
+... )
+```
+
+## مثال على الضبط الكمي الثابت
+
+يمكن استخدام فئة [`~optimum.onnxruntime.ORTQuantizer`] لضبط نموذج ONNX الخاص بك بشكل ثابت. فيما يلي مثال بسيط من البداية إلى النهاية حول كيفية ضبط نموذج [distilbert-base-uncased-finetuned-sst-2-english](https://huggingface.co/distilbert-base-uncased-finetuned-sst-2-english) بشكل ثابت.
+
+```python
+>>> from functools import partial
+>>> from transformers import AutoTokenizer
+>>> from optimum.onnxruntime import ORTQuantizer, ORTModelForSequenceClassification
+>>> from optimum.onnxruntime.configuration import AutoQuantizationConfig, AutoCalibrationConfig
+
+>>> model_id = "distilbert-base-uncased-finetuned-sst-2-english"
+
+# تحميل نموذج PyTorch وتحويله إلى ONNX وإنشاء أداة الضبط الكمي وإعداد التكوين
+>>> onnx_model = ORTModelForSequenceClassification.from_pretrained(model_id, export=True)
+>>> tokenizer = AutoTokenizer.from_pretrained(model_id)
+>>> quantizer = ORTQuantizer.from_pretrained(onnx_model)
+>>> qconfig = AutoQuantizationConfig.arm64(is_static=True, per_channel=False)
+
+# إنشاء مجموعة بيانات المعايرة
+>>> def preprocess_fn(ex, tokenizer):
+...     return tokenizer(ex["sentence"])
+
+>>> calibration_dataset = quantizer.get_calibration_dataset(
+...     "glue",
+...     dataset_config_name="sst2",
+...     preprocess_function=partial(preprocess_fn, tokenizer=tokenizer),
+...     num_samples=50,
+...     dataset_split="train",
+... )
+
+# إنشاء تكوين المعايرة الذي يحتوي على المعلمات المتعلقة بالمعايرة.
+>>> calibration_config = AutoCalibrationConfig.minmax(calibration_dataset)
+
+# تنفيذ خطوة المعايرة: حساب نطاقات الضبط الكمي للتنشيط
+>>> ranges = quantizer.fit(
+...     dataset=calibration_dataset,
+...     calibration_config=calibration_config,
+...     operators_to_quantize=qconfig.operators_to_quantize,
+... )
+
+# تطبيق الضبط الكمي الثابت على النموذج
+>>> model_quantized_path = quantizer.quantize(
+...     save_dir="path/to/output/model",
+...     calibration_tensors_range=ranges,
+...     quantization_config=qconfig,
+... )
+```
+
+## ضبط نماذج Seq2Seq كميًا
+
+لا تدعم فئة [`~optimum.onnxruntime.ORTQuantizer`] حاليًا النماذج متعددة الملفات، مثل [`~optimum.onnxruntime.ORTModelForSeq2SeqLM`]. إذا كنت تريد ضبط نموذج Seq2Seq كميًا، فيجب عليك ضبط كل مكون من مكونات النموذج بشكل فردي.
+
+<Tip warning={true}>
+يتم دعم الضبط الكمي الديناميكي فقط حاليًا لنماذج Seq2Seq.
+</Tip>
+
+1. تحميل نموذج seq2seq كـ `ORTModelForSeq2SeqLM`.
+
+```python
+>>> from optimum.onnxruntime import ORTQuantizer, ORTModelForSeq2SeqLM
+>>> from optimum.onnxruntime.configuration import AutoQuantizationConfig
+
+# تحميل نموذج Seq2Seq وتعيين دليل ملف النموذج
+>>> model_id = "optimum/t5-small"
+>>> onnx_model = ORTModelForSeq2SeqLM.from_pretrained(model_id)
+>>> model_dir = onnx_model.model_save_dir
+```
+
+2. تحديد أداة الضبط الكمي للترميز وفك الترميز وفك الترميز مع قيم المفاتيح السابقة.
+
+```python
+# إنشاء أداة ضبط الترميز الكمي
+>>> encoder_quantizer = ORTQuantizer.from_pretrained(model_dir, file_name="encoder_model.onnx")
+
+# إنشاء أداة ضبط فك الترميز الكمي
+>>> decoder_quantizer = ORTQuantizer.from_pretrained(model_dir, file_name="decoder_model.onnx")
+
+# إنشاء أداة ضبط فك الترميز مع قيم المفاتيح السابقة
+>>> decoder_wp_quantizer = ORTQuantizer.from_pretrained(model_dir, file_name="decoder_with_past_model.onnx")
+
+# إنشاء قائمة أدوات الضبط الكمي
+>>> quantizer = [encoder_quantizer, decoder_quantizer, decoder_wp_quantizer]
+```
+
+3. ضبط جميع النماذج.
+
+```python
+# تحديد استراتيجية الضبط الكمي من خلال إنشاء التكوين المناسب
+>>> dqconfig = AutoQuantizationConfig.avx512_vnni(is_static=False, per_channel=False)
+
+# ضبط النماذج بشكل فردي
+>>> for q in quantizer:
+...     q.quantize(save_dir=".", quantization_config=dqconfig)  # doctest: +IGNORE_RESULT
+```

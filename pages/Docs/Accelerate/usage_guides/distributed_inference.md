@@ -53,17 +53,17 @@ def run_inference(rank, world_size):
 دعنا نعيد كتابة المثال أعلاه باستخدام مدير السياق هذا:
 
 ```python
-from accelerate import PartialState # يمكن أن يكون أيضًا مسرعًا أو حالة المسرع
+from accelerate import PartialState  # Can also be Accelerator or AcceleratorState
 from diffusers import DiffusionPipeline
 
 pipe = DiffusionPipeline.from_pretrained("runwayml/stable-diffusion-v1-5", torch_dtype=torch.float16)
 distributed_state = PartialState()
 pipe.to(distributed_state.device)
 
-# افترض عمليتين
-مع distributed_state.split_between_processes (["a dog"، "a cat"]) كموجه:
-    النتيجة = pipe (prompt).images [0]
-    النتيجة.save (f "result_ {distributed_state.process_index}. png")
+# Assume two processes
+with distributed_state.split_between_processes(["a dog", "a cat"]) as prompt:
+    result = pipe(prompt).images[0]
+    result.save(f"result_{distributed_state.process_index}.png")
 ```
 
 ولإطلاق الكود، يمكننا استخدام 🤗 Accelerate:
@@ -105,16 +105,16 @@ accelerate launch --num_processes 2 distributed_inference.py
 على سبيل المثال:
 
 ```python
-from accelerate import PartialState # يمكن أن يكون أيضًا مسرعًا أو حالة المسرع
+from accelerate import PartialState  # Can also be Accelerator or AcceleratorState
 from diffusers import DiffusionPipeline
 
 pipe = DiffusionPipeline.from_pretrained("runwayml/stable-diffusion-v1-5", torch_dtype=torch.float16)
 distributed_state = PartialState()
 pipe.to(distributed_state.device)
 
-# افترض عمليتين
-مع distributed_state.split_between_processes (["a dog"، "a cat"، "a chicken"]، apply_padding = True) كموجه:
-    النتيجة = pipe (prompt).images
+# Assume two processes
+with distributed_state.split_between_processes(["a dog", "a cat", "a chicken"], apply_padding=True) as prompt:
+    result = pipe(prompt).images
 ```
 
 على وحدة معالجة الرسومات الأولى، ستكون الموجهات `[“a dog”، “a cat”]`، وعلى وحدة معالجة الرسومات الثانية ستكون `[“a chicken”، “a chicken”]`.
@@ -189,15 +189,15 @@ model = prepare_pippy(model, example_args=(input,))
 عند تمرير الإدخالات، نوصي بشدة بتمريرها كمجموعة من الحجج. يتم دعم استخدام `kwargs`، ومع ذلك، فإن هذا النهج تجريبي.
 </Tip>
 
-```{python}
+```python
 args = some_more_arguments
-مع torch.no_grad ():
+with torch.no_grad ():
     output = model (* args)
 ```
 
 عندما تنتهي جميع البيانات ستكون على العملية الأخيرة فقط:
 
-```{python}
+```python
 from accelerate import PartialState
 if PartialState().is_last_process:
     print(output)

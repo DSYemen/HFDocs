@@ -28,16 +28,16 @@ debug: false
 distributed_type: FSDP
 downcast_bf16: 'no'
 fsdp_config:
-fsdp_auto_wrap_policy: TRANSFORMER_BASED_WRAP
-fsdp_backward_prefetch_policy: BACKWARD_PRE
-fsdp_forward_prefetch: false
-fsdp_cpu_ram_efficient_loading: true
-fsdp_offload_params: false
-fsdp_sharding_strategy: FULL_SHARD
-fsdp_state_dict_type: SHARDED_STATE_DICT
-fsdp_sync_module_states: true
-fsdp_transformer_layer_cls_to_wrap: BertLayer
-fsdp_use_orig_params: true
+  fsdp_auto_wrap_policy: TRANSFORMER_BASED_WRAP
+  fsdp_backward_prefetch_policy: BACKWARD_PRE
+  fsdp_forward_prefetch: false
+  fsdp_cpu_ram_efficient_loading: true
+  fsdp_offload_params: false
+  fsdp_sharding_strategy: FULL_SHARD
+  fsdp_state_dict_type: SHARDED_STATE_DICT
+  fsdp_sync_module_states: true
+  fsdp_transformer_layer_cls_to_wrap: BertLayer
+  fsdp_use_orig_params: true
 machine_rank: 0
 main_training_function: main
 mixed_precision: bf16
@@ -92,8 +92,8 @@ from accelerate import FullyShardedDataParallelPlugin
 from torch.distributed.fsdp.fully_sharded_data_parallel import FullOptimStateDictConfig, FullStateDictConfig
 
 fsdp_plugin = FullyShardedDataParallelPlugin(
-state_dict_config=FullStateDictConfig(offload_to_cpu=False, rank0_only=False),
-optim_state_dict_config=FullOptimStateDictConfig(offload_to_cpu=False, rank0_only=False),
+    state_dict_config=FullStateDictConfig(offload_to_cpu=False, rank0_only=False),
+    optim_state_dict_config=FullOptimStateDictConfig(offload_to_cpu=False, rank0_only=False),
 )
 
 accelerator = Accelerator(fsdp_plugin=fsdp_plugin)
@@ -135,11 +135,11 @@ accelerator.load_state("ckpt")
 فيما يلي مثال:
 
 ```diff
-unwrapped_model.save_pretrained(
-args.output_dir،
-is_main_process=accelerator.is_main_process،
-save_function=accelerator.save،
-+     state_dict=accelerator.get_state_dict(model)،
+  unwrapped_model.save_pretrained(
+      args.output_dir,
+      is_main_process=accelerator.is_main_process,
+      save_function=accelerator.save,
++     state_dict=accelerator.get_state_dict(model),
 )
 ```
 
@@ -155,7 +155,7 @@ save_function=accelerator.save،
 from accelerate.utils import merge_fsdp_weights
 
 # يتم حفظ أوزاننا عادةً في مجلد `pytorch_model_fsdp_{model_number}`
-merge_fsdp_weights("pytorch_model_fsdp_0"، "output_path"، safe_serialization=True)
+merge_fsdp_weights("pytorch_model_fsdp_0", "output_path", safe_serialization=True)
 ```
 
 ستكون النتيجة النهائية محفوظة إما في `model.safetensors` أو `pytorch_model.bin` (إذا تم تمرير `safe_serialization=False`).

@@ -1,0 +1,132 @@
+# تصدير نموذج إلى TFLite باستخدام optimum.exporters.tflite
+
+## ملخص
+
+تصدير نموذج إلى TFLite أمر بسيط مثل:
+
+```bash
+optimum-cli export tflite --model bert-base-uncased --sequence_length 128 bert_tflite/
+```
+
+راجع التعليمات للحصول على خيارات أكثر:
+
+```bash
+optimum-cli export tflite --help
+```
+
+## تصدير نموذج إلى TFLite باستخدام واجهة سطر الأوامر
+
+لتصدير نموذج 🤗 Transformers إلى TFLite، يجب أولاً تثبيت بعض التبعيات الإضافية:
+
+```bash
+pip install optimum[exporters-tf]
+```
+
+يمكن استخدام تصدير TFLite في Optimum من خلال واجهة سطر الأوامر. حيث أن الأشكال الثابتة للإدخال هي الوحيدة المدعومة الآن، لذلك يجب تحديدها أثناء التصدير.
+
+```bash
+optimum-cli export tflite --help
+
+usage: optimum-cli <command> [<args>] export tflite [-h] -m MODEL [--task TASK] [--atol ATOL] [--pad_token_id PAD_TOKEN_ID] [--cache_dir CACHE_DIR]
+[--trust-remote-code] [--batch_size BATCH_SIZE] [--sequence_length SEQUENCE_LENGTH]
+[--num_choices NUM_CHOICES] [--width WIDTH] [--height HEIGHT] [--num_channels NUM_CHANNELS]
+[--feature_size FEATURE_SIZE] [--nb_max_frames NB_MAX_FRAMES]
+[--audio_sequence_length AUDIO_SEQUENCE_LENGTH]
+output
+
+الحجج الاختيارية:
+-h، --help إظهار رسالة مساعدة والخروج.
+
+الحجج المطلوبة:
+-m MODEL، --model MODEL
+معرف النموذج على huggingface.co أو المسار على القرص لتحميل النموذج منه.
+output المسار الذي يشير إلى الدليل حيث سيتم تخزين نموذج TFLite المولد.
+
+الحجج الاختيارية:
+--task TASK المهمة التي سيتم تصدير النموذج لها. إذا لم يتم تحديدها، فسيتم استنتاج المهمة تلقائيًا بناءً على النموذج. تعتمد المهام المتاحة على
+النموذج، ولكنها من بين: ['default'، 'fill-mask'، 'text-generation'، 'text2text-generation'، 'text-classification'، 'token-classification'،
+'multiple-choice'، 'object-detection'، 'question-answering'، 'image-classification'، 'image-segmentation'، 'masked-im'، 'semantic-
+segmentation'، 'automatic-speech-recognition'، 'audio-classification'، 'audio-frame-classification'، 'automatic-speech-recognition'، 'audio-xvector'، 'vision2seq-
+lm'، 'stable-diffusion'، 'zero-shot-object-detection']. بالنسبة لنماذج فك التشفير، استخدم "xxx-with-past" لتصدير النموذج باستخدام قيم المفتاح الماضي
+في فك التشفير.
+--atol ATOL إذا تم تحديده، فإن الفرق المطلق في التسامح عند التحقق من صحة النموذج. وإلا، سيتم استخدام القيمة الافتراضية للتسامح المطلق للنموذج.
+--pad_token_id PAD_TOKEN_ID
+هذا مطلوب من قبل بعض النماذج، لبعض المهام. إذا لم يتم توفيره، فسيتم محاولة استخدام الرموز المميزة لتخمينه.
+--cache_dir CACHE_DIR
+المسار الذي يشير إلى المكان الذي سيتم تخزين الكاش فيه.
+--trust-remote-code السماح باستخدام التعليمات البرمجية المخصصة للنمذجة المستضافة في مستودع النموذج. يجب استخدام هذا الخيار فقط للمستودعات الموثوقة بها
+والتي قمت بقراءة التعليمات البرمجية فيها، حيث سيتم تنفيذ أي تعليمات برمجية موجودة في مستودع النموذج على جهازك المحلي.
+
+أشكال الإدخال:
+--batch_size BATCH_SIZE
+حجم الدفعة التي سيتمكن نموذج TFLite المصدر من استيعابها كإدخال.
+--sequence_length SEQUENCE_LENGTH
+طول التسلسل الذي سيتمكن نموذج TFLite المصدر من استيعابه كإدخال.
+--num_choices NUM_CHOICES
+فقط لمهمة الاختيار المتعدد. عدد الخيارات التي سيتمكن نموذج TFLite المصدر من استيعابها كإدخال.
+--width WIDTH مهام الرؤية فقط. عرض الصورة التي سيتمكن نموذج TFLite المصدر من استيعابها كإدخال.
+--height HEIGHT مهام الرؤية فقط. ارتفاع الصورة التي سيتمكن نموذج TFLite المصدر من استيعابها كإدخال.
+--num_channels NUM_CHANNELS
+مهام الرؤية فقط. عدد القنوات المستخدمة لتمثيل الصورة التي سيتمكن نموذج TFLite المصدر من استيعابها كإدخال.
+(GREY = 1، RGB = 3، ARGB = 4)
+--feature_size FEATURE_SIZE
+مهام الصوت فقط. البعد المميز للميزات المستخرجة بواسطة مستخرج الميزات الذي سيتمكن نموذج TFLite المصدر من استيعابه كإدخال.
+--nb_max_frames NB_MAX_FRAMES
+مهام الصوت فقط. العدد الأقصى من الإطارات التي سيتمكن نموذج TFLite المصدر من استيعابها كإدخال.
+--audio_sequence_length AUDIO_SEQUENCE_LENGTH
+مهام الصوت فقط. طول التسلسل الصوتي الذي سيتمكن نموذج TFLite المصدر من استيعابه كإدخال.
+```
+
+```bash
+optimum-cli export tflite --help
+
+usage: optimum-cli <command> [<args>] export tflite [-h] -m MODEL [--task TASK] [--atol ATOL] [--pad_token_id PAD_TOKEN_ID] [--cache_dir CACHE_DIR]
+                                                    [--trust-remote-code] [--batch_size BATCH_SIZE] [--sequence_length SEQUENCE_LENGTH]
+                                                    [--num_choices NUM_CHOICES] [--width WIDTH] [--height HEIGHT] [--num_channels NUM_CHANNELS]
+                                                    [--feature_size FEATURE_SIZE] [--nb_max_frames NB_MAX_FRAMES]
+                                                    [--audio_sequence_length AUDIO_SEQUENCE_LENGTH]
+                                                    output
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+Required arguments:
+  -m MODEL, --model MODEL
+                        Model ID on huggingface.co or path on disk to load model from.
+  output                Path indicating the directory where to store generated TFLite model.
+
+Optional arguments:
+  --task TASK           The task to export the model for. If not specified, the task will be auto-inferred based on the model. Available tasks depend on
+                        the model, but are among: ['default', 'fill-mask', 'text-generation', 'text2text-generation', 'text-classification', 'token-classification',
+                        'multiple-choice', 'object-detection', 'question-answering', 'image-classification', 'image-segmentation', 'masked-im', 'semantic-
+                        segmentation', 'automatic-speech-recognition', 'audio-classification', 'audio-frame-classification', 'automatic-speech-recognition', 'audio-xvector', 'vision2seq-
+                        lm', 'stable-diffusion', 'zero-shot-object-detection']. For decoder models, use `xxx-with-past` to export the model using past key
+                        values in the decoder.
+  --atol ATOL           If specified, the absolute difference tolerance when validating the model. Otherwise, the default atol for the model will be used.
+  --pad_token_id PAD_TOKEN_ID
+                        This is needed by some models, for some tasks. If not provided, will attempt to use the tokenizer to guess it.
+  --cache_dir CACHE_DIR
+                        Path indicating where to store cache.
+  --trust-remote-code   Allow to use custom code for the modeling hosted in the model repository. This option should only be set for repositories you trust
+                        and in which you have read the code, as it will execute on your local machine arbitrary code present in the model repository.
+
+Input shapes:
+  --batch_size BATCH_SIZE
+                        Batch size that the TFLite exported model will be able to take as input.
+  --sequence_length SEQUENCE_LENGTH
+                        Sequence length that the TFLite exported model will be able to take as input.
+  --num_choices NUM_CHOICES
+                        Only for the multiple-choice task. Num choices that the TFLite exported model will be able to take as input.
+  --width WIDTH         Vision tasks only. Image width that the TFLite exported model will be able to take as input.
+  --height HEIGHT       Vision tasks only. Image height that the TFLite exported model will be able to take as input.
+  --num_channels NUM_CHANNELS
+                        Vision tasks only. Number of channels used to represent the image that the TFLite exported model will be able to take as input.
+                        (GREY = 1, RGB = 3, ARGB = 4)
+  --feature_size FEATURE_SIZE
+                        Audio tasks only. Feature dimension of the extracted features by the feature extractor that the TFLite exported model will be able
+                        to take as input.
+  --nb_max_frames NB_MAX_FRAMES
+                        Audio tasks only. Maximum number of frames that the TFLite exported model will be able to take as input.
+  --audio_sequence_length AUDIO_SEQUENCE_LENGTH
+                        Audio tasks only. Audio sequence length that the TFLite exported model will be able to take as input.
+```

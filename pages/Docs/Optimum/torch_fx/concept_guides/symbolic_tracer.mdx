@@ -1,0 +1,21 @@
+# المُتتبع الرمزي
+
+في Torch FX، يُغذي المُتتبع الرمزي قيمًا وهمية عبر التعليمات البرمجية لتسجيل العمليات الأساسية.
+
+```python
+import torch
+from torch import nn
+from torch.fx import symbolic_trace
+
+class MyModule(nn.Module):
+    def forward(self, x):
+        if x.sum() > 10:
+            return x + 1
+        else:
+            return x - 1
+
+m = MyModule()
+traced_mod = symbolic_trace(m)
+```
+
+يتم استخدام المُتتبع الرمزي لتتبع نموذج PyTorch وإنشاء تمثيل رمزي له. في هذه العملية، يتم تمرير قيم وهمية عبر النموذج لتسجيل العمليات الأساسية التي يقوم بها. يتم بعد ذلك إنشاء تمثيل رمزي للنموذج، والذي يمكن استخدامه لمزيد من التحليل أو التحسين.

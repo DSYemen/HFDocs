@@ -23,7 +23,7 @@ my_model.load_state_dict(state_dict)
 ```py
 from accelerate import init_empty_weights
 with init_empty_weights():
-my_model = ModelClass(...)
+    my_model = ModelClass(...)
 ```
 
 مع هذا، فإن `my_model` حاليًا "بدون معلمات"، وبالتالي يترك بصمة أصغر مما قد يحصل عليه المرء عادةً عن طريق التحميل مباشرة إلى وحدة المعالجة المركزية.
@@ -47,7 +47,7 @@ my_model = ModelClass(...)
 from accelerate import load_checkpoint_and_dispatch
 
 model = load_checkpoint_and_dispatch(
-model, checkpoint=checkpoint_file, device_map="auto"
+    model, checkpoint=checkpoint_file, device_map="auto"
 )
 ```
 
@@ -96,7 +96,7 @@ with init_empty_weights():
 model = MyModel(...)
 
 model = load_checkpoint_and_dispatch(
-model, checkpoint=checkpoint_file, device_map="auto"
+    model, checkpoint=checkpoint_file, device_map="auto"
 )
 
 input = torch.randn(2,3)

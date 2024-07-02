@@ -1,5 +1,3 @@
-لم يتم ترجمة الأجزاء المحددة في النص الأصلي بناءً على طلبك.
-
 # استخدام Local SGD مع 🤗 Accelerate
 
 Local SGD هي تقنية للتدريب الموزع حيث لا يتم تزامن التدرجات في كل خطوة. وبالتالي، يقوم كل عملية بتحديث نسخته الخاصة من أوزان النموذج، وبعد عدد معين من الخطوات، يتم تزامن هذه الأوزان عن طريق حساب المتوسط عبر جميع العمليات. يحسن هذا من كفاءة الاتصال ويمكن أن يؤدي إلى تسريع التدريب بشكل كبير، خاصة عندما يفتقر الكمبيوتر إلى اتصال أسرع مثل NVLink.
@@ -42,17 +40,17 @@ for index, batch in enumerate(training_dataloader):
 +     model, optimizer, training_dataloader, scheduler
 + )
 
-for index, batch in enumerate(training_dataloader):
-inputs, targets = batch
+  for index, batch in enumerate(training_dataloader):
+      inputs, targets = batch
 -     inputs = inputs.to(device)
 -     targets = targets.to(device)
-outputs = model(inputs)
-loss = loss_function(outputs, targets)
-loss = loss / gradient_accumulation_steps
+      outputs = model(inputs)
+      loss = loss_function(outputs, targets)
+      loss = loss / gradient_accumulation_steps
 +     accelerator.backward(loss)
-if (index+1) % gradient_accumulation_steps == 0:
-optimizer.step()
-scheduler.step()
+      if (index+1) % gradient_accumulation_steps == 0:
+          optimizer.step()
+          scheduler.step()
 ```
 
 ## السماح لـ 🤗 Accelerate بالتعامل مع مزامنة النموذج
@@ -63,15 +61,15 @@ scheduler.step()
 +local_sgd_steps=8
 
 +with LocalSGD(accelerator=accelerator, model=model, local_sgd_steps=8, enabled=True) as local_sgd:
-for batch in training_dataloader:
-with accelerator.accumulate(model):
-inputs, targets = batch
-outputs = model(inputs)
-loss = loss_function(outputs, targets)
-accelerator.backward(loss)
-optimizer.step()
-scheduler.step()
-optimizer.zero_grad()
+    for batch in training_dataloader:
+        with accelerator.accumulate(model):
+            inputs, targets = batch
+            outputs = model(inputs)
+            loss = loss_function(outputs, targets)
+            accelerator.backward(loss)
+            optimizer.step()
+            scheduler.step()
+            optimizer.zero_grad()
 +           local_sgd.step()
 ```
 

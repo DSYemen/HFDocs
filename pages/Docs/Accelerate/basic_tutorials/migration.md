@@ -49,9 +49,7 @@ model.to(device)
 يتم إرجاع كائنات PyTorch بنفس الترتيب الذي يتم إرسالها به.
 
 ```py
-model, optimizer, training_dataloader, scheduler = accelerator.prepare(
-model, optimizer, training_dataloader, scheduler
-)
+model, optimizer, training_dataloader, scheduler = accelerator.prepare(model, optimizer, training_dataloader, scheduler)
 ```
 
 ## حلقة التدريب
@@ -75,7 +73,7 @@ accelerator = Accelerator()
 
 device = accelerator.device
 model, optimizer, training_dataloader, scheduler = accelerator.prepare(
-model, optimizer, training_dataloader, scheduler
+    model, optimizer, training_dataloader, scheduler
 )
 
 for batch in training_dataloader:
@@ -98,16 +96,16 @@ for batch in training_dataloader:
 
 ```diff
 + accelerator = Accelerator(gradient_accumulation_steps=2)
-model, optimizer, training_dataloader = accelerator.prepare(model, optimizer, training_dataloader)
+  model, optimizer, training_dataloader = accelerator.prepare(model, optimizer, training_dataloader)
 
-for input, label in training_dataloader:
+  for input, label in training_dataloader:
 +     with accelerator.accumulate(model):
-predictions = model(input)
-loss = loss_function(predictions, label)
-accelerator.backward(loss)
-optimizer.step()
-scheduler.step()
-optimizer.zero_grad()
+          predictions = model(input)
+          loss = loss_function(predictions, label)
+          accelerator.backward(loss)
+          optimizer.step()
+          scheduler.step()
+          optimizer.zero_grad()
 ```
 
 ### قص التدرجات
@@ -129,7 +127,7 @@ optimizer.zero_grad()
 ```diff
 + accelerator = Accelerator(mixed_precision="fp16")
 + with accelerator.autocast():
-loss = complex_loss_function(outputs, target):
+      loss = complex_loss_function(outputs, target):
 ```
 
 ## الحفظ والتحميل
@@ -159,9 +157,9 @@ from transformers import AutoModel
 
 unwrapped_model = accelerator.unwrap_model(model)
 unwrapped_model.save_pretrained(
-"path/to/my_model_directory",
-is_main_process=accelerator.is_main_process,
-save_function=accelerator.save,
+    "path/to/my_model_directory",
+    is_main_process=accelerator.is_main_process,
+    save_function=accelerator.save,
 )
 
 model = AutoModel.from_pretrained("path/to/my_model_directory")

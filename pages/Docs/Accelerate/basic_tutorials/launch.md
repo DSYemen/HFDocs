@@ -8,17 +8,17 @@ from accelerate import Accelerator
 accelerator = Accelerator()
 
 model, optimizer, training_dataloader, scheduler = accelerator.prepare(
-model, optimizer, training_dataloader, scheduler
+    model, optimizer, training_dataloader, scheduler
 )
 
 for batch in training_dataloader:
-optimizer.zero_grad()
-inputs, targets = batch
-outputs = model(inputs)
-loss = loss_function(outputs, targets)
-accelerator.backward(loss)
-optimizer.step()
-scheduler.step()
+    optimizer.zero_grad()
+    inputs, targets = batch
+    outputs = model(inputs)
+    loss = loss_function(outputs, targets)
+    accelerator.backward(loss)
+    optimizer.step()
+    scheduler.step()
 ```
 
 ولكن كيف يمكنك تشغيل هذا الرمز واستخدام الأجهزة الخاصة المتاحة له؟
@@ -26,23 +26,23 @@ scheduler.step()
 أولاً، يجب إعادة كتابة الرمز أعلاه في دالة، وجعله قابل للاستدعاء كنص برمجي. على سبيل المثال:
 
 ```diff
-from accelerate import Accelerator
-
+  from accelerate import Accelerator
+  
 + def main():
-accelerator = Accelerator()
+      accelerator = Accelerator()
 
-model, optimizer, training_dataloader, scheduler = accelerator.prepare(
-model, optimizer, training_dataloader, scheduler
-)
+      model, optimizer, training_dataloader, scheduler = accelerator.prepare(
+          model, optimizer, training_dataloader, scheduler
+      )
 
-for batch in training_dataloader:
-optimizer.zero_grad()
-inputs, targets = batch
-outputs = model(inputs)
-loss = loss_function(outputs, targets)
-accelerator.backward(loss)
-optimizer.step()
-scheduler.step()
+      for batch in training_dataloader:
+          optimizer.zero_grad()
+          inputs, targets = batch
+          outputs = model(inputs)
+          loss = loss_function(outputs, targets)
+          accelerator.backward(loss)
+          optimizer.step()
+          scheduler.step()
 
 + if __name__ == "__main__":
 +     main()

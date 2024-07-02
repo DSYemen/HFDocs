@@ -1,0 +1,65 @@
+# مدير المهام
+
+إن تصدير نموذج من إطار عمل إلى تنسيق ما (يُشار إليه أيضًا باسم backend هنا) يتضمن تحديد معلومات المدخلات والمخرجات التي تحتاجها وظيفة التصدير. يتم هيكلة `optimum.exporters` لكل backend على النحو التالي:
+
+- فئات التكوين التي تحتوي على معلومات لكل نموذج لأداء التصدير.
+- وظائف التصدير التي تستخدم التكوين المناسب للنموذج الذي سيتم تصديره.
+
+دور [`~optimum.exporters.tasks.TasksManager`] هو أن يكون نقطة الدخول الرئيسية لتحميل نموذج معين بناءً على الاسم والمهمة، والحصول على التكوين المناسب لزوج (architecture, backend). بهذه الطريقة، يوجد مكان مركزي لتسجيل الخرائط "task -> model class" و "(architecture, backend) -> configuration". يسمح هذا لوظائف التصدير باستخدام هذا، والاعتماد على الفحوصات المختلفة التي يوفرها.
+
+## أسماء المهام
+
+قد تعتمد المهام المدعومة على backend، ولكن فيما يلي الخرائط بين اسم المهمة والصف التلقائي لكل من PyTorch وTensorFlow.
+
+<Tip>
+من الممكن معرفة المهام المدعومة لنموذج ما لbackend معين، عن طريق القيام بما يلي:
+
+```python
+>>> from optimum.exporters.tasks import TasksManager
+
+>>> model_type = "distilbert"
+>>> # على سبيل المثال، لتصدير ONNX.
+>>> backend = "onnx"
+>>> distilbert_tasks = list(TasksManager.get_supported_tasks_for_model_type(model_type, backend).keys())
+
+>>> print(distilbert_tasks)
+['default', 'fill-mask', 'text-classification', 'multiple-choice', 'token-classification', 'question-answering']
+```
+</Tip>
+
+### PyTorch
+
+| المهمة                                 | الصف التلقائي                           |
+|--------------------------------------|--------------------------------------|
+| `text-generation`، `text-generation-with-past`   | `AutoModelForCausalLM`               |
+| `feature-extraction`، `feature-extraction-with-past`       | `AutoModel`                          |
+| `fill-mask`                          | `AutoModelForMaskedLM`               |
+| `question-answering`                 | `AutoModelForQuestionAnswering`      |
+| `text2text-generation`، `text2text-generation-with-past` | `AutoModelForSeq2SeqLM`              |
+| `text-classification`            | `AutoModelForSequenceClassification` |
+| `token-classification`               | `AutoModelForTokenClassification`    |
+| `multiple-choice`                    | `AutoModelForMultipleChoice`         |
+| `image-classification`               | `AutoModelForImageClassification`    |
+| `object-detection`                   | `AutoModelForObjectDetection`        |
+| `image-segmentation`                 | `AutoModelForImageSegmentation`      |
+| `masked-im`                          | `AutoModelForMaskedImageModeling`    |
+| `semantic-segmentation`              | `AutoModelForSemanticSegmentation`   |
+| `automatic-speech-recognition`                      | `AutoModelForSpeechSeq2Seq`          |
+
+### TensorFlow
+
+| المهمة                                 | الصف التلقائي                             |
+|--------------------------------------|----------------------------------------|
+| `text-generation`، `text-generation-with-past`   | `TFAutoModelForCausalLM`               |
+| `default`، `default-with-past`       | `TFAutoModel`                          |
+| `fill-mask`                          | `TFAutoModelForMaskedLM`               |
+| `question-answering`                 | `TFAutoModelForQuestionAnswering`      |
+| `text2text-generation`، `text2text-generation-with-past` | `TFAutoModelForSeq2SeqLM`              |
+| `text-classification`            | `TFAutoModelForSequenceClassification` |
+| `token-classification`               | `TFAutoModelForTokenClassification`    |
+| `multiple-choice`                    | `TFAutoModelForMultipleChoice`         |
+| `semantic-segmentation`              | `TFAutoModelForSemanticSegmentation`   |
+
+## المرجع
+
+[[autodoc]] exporters.tasks.TasksManager

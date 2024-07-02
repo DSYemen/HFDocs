@@ -17,10 +17,10 @@ ddp_model = DistributedDataParallel(model)
 ```diff
 + from accelerate import Accelerator
 + accelerator = Accelerator()
-import torch.nn as nn
+  import torch.nn as nn
 - from torch.nn.parallel import DistributedDataParallel
 
-model = nn.Linear(10,10)
+  model = nn.Linear(10,10)
 + model = accelerator.prepare(model)
 ```
 
@@ -52,44 +52,44 @@ model = nn.Linear(10,10)
 ddp_model, dataloader, optimizer = accelerator.prepare(model, dataloader, optimizer)
 
 for index, batch in enumerate(dataloader):
-inputs, targets = batch
-# Trigger gradient synchronization on the last batch
-if index != (len(dataloader) - 1):
-with ddp_model.no_sync():
-# Gradients only accumulate
-outputs = ddp_model(inputs)
-loss = loss_func(outputs)
-accelerator.backward(loss)
-else:
-# Gradients finally sync
-outputs = ddp_model(inputs)
-loss = loss_func(outputs)
-accelerator.backward(loss)
-optimizer.step()
+    inputs, targets = batch
+    # Trigger gradient synchronization on the last batch
+    if index != (len(dataloader) - 1):
+        with ddp_model.no_sync():
+            # Gradients only accumulate
+            outputs = ddp_model(inputs)
+            loss = loss_func(outputs)
+            accelerator.backward(loss)
+    else:
+        # Gradients finally sync
+        outputs = ddp_model(inputs)
+        loss = loss_func(outputs)
+        accelerator.backward(loss)
+        optimizer.step()
 ```
 
 في 🤗 Accelerate لجعل هذا واجهة برمجة تطبيقات يمكن استدعاؤها بغض النظر عن جهاز التدريب (على الرغم من أنه قد لا يفعل أي شيء إذا لم تكن في نظام موزع!)، يتم استبدال `ddp_model.no_sync` بـ [`~Accelerator.no_sync`] ويعمل بنفس الطريقة:
 
 ```diff
-ddp_model, dataloader, optimizer = accelerator.prepare(model, dataloader, optimizer)
+  ddp_model, dataloader, optimizer = accelerator.prepare(model, dataloader, optimizer)
 
-for index, batch in enumerate(dataloader):
-inputs, targets = batch
-# Trigger gradient synchronization on the last batch
-if index != (len(dataloader)-1):
+  for index, batch in enumerate(dataloader):
+      inputs, targets = batch
+      # Trigger gradient synchronization on the last batch
+      if index != (len(dataloader)-1):
 -         with ddp_model.no_sync():
 +         with accelerator.no_sync(model):
-# Gradients only accumulate
-outputs = ddp_model(inputs)
-loss = loss_func(outputs, targets)
-accelerator.backward(loss)
-else:
-# Gradients finally sync
-outputs = ddp_model(inputs)
-loss = loss_func(outputs)
-accelerator.backward(loss)
-optimizer.step()
-optimizer.zero_grad()
+              # Gradients only accumulate
+              outputs = ddp_model(inputs)
+              loss = loss_func(outputs, targets)
+              accelerator.backward(loss)
+      else:
+          # Gradients finally sync
+          outputs = ddp_model(inputs)
+          loss = loss_func(outputs)
+          accelerator.backward(loss)
+          optimizer.step()
+          optimizer.zero_grad()
 ```
 
 كما تتوقع، فإن دالة [`~Accelerator.accumulate`] تحيط بهذا الفحص الشرطي من خلال متابعة رقم الدفعة الحالي، مما يتركك بواجهة برمجة تطبيقات تراكم التدرج النهائية:
@@ -98,14 +98,14 @@ optimizer.zero_grad()
 ddp_model, dataloader, optimizer = accelerator.prepare(model, dataloader, optimizer)
 
 for batch in dataloader:
-with accelerator.accumulate(model):
-optimizer.zero_grad()
-inputs, targets = batch
-outputs = model(inputs)
-loss = loss_function(outputs, targets)
-accelerator.backward(loss)
-optimizer.step()
-optimizer.zero_grad()
+    with accelerator.accumulate(model):
+        optimizer.zero_grad()
+        inputs, targets = batch
+        outputs = model(inputs)
+        loss = loss_function(outputs, targets)
+        accelerator.backward(loss)
+        optimizer.step()
+        optimizer.zero_grad()
 ```
 
 ونتيجة لذلك، يجب عليك إما استخدام *`accelerator.accumulate` أو `accelerator.no_sync`* عندما يتعلق الأمر بخيار واجهة برمجة التطبيقات.

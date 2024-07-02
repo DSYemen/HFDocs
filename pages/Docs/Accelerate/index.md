@@ -11,16 +11,16 @@
 +     model, optimizer, training_dataloader, scheduler
 + )
 
-for batch in training_dataloader:
-optimizer.zero_grad()
-inputs, targets = batch
-inputs = inputs.to(device)
-targets = targets.to(device)
-outputs = model(inputs)
-loss = loss_function(outputs, targets)
+  for batch in training_dataloader:
+      optimizer.zero_grad()
+      inputs, targets = batch
+      inputs = inputs.to(device)
+      targets = targets.to(device)
+      outputs = model(inputs)
+      loss = loss_function(outputs, targets)
 +     accelerator.backward(loss)
-optimizer.step()
-scheduler.step()
+      optimizer.step()
+      scheduler.step()
 ```
 
 تم بناء 🤗 Accelerate على `torch_xla` و `torch.distributed`، ويتولى المهام الثقيلة، لذلك لا يتعين عليك كتابة أي كود مخصص للتكيف مع هذه المنصات.

@@ -20,7 +20,7 @@ def training_function():
     accelerator = Accelerator()
     model = AutoModelForSequenceClassification.from_pretrained("bert-base-cased", num_labels=2)
     train_dataloader, eval_dataloader = create_dataloaders(
-    train_batch_size=hyperparameters["train_batch_size"], eval_batch_size=hyperparameters["eval_batch_size"]
+        train_batch_size=hyperparameters["train_batch_size"], eval_batch_size=hyperparameters["eval_batch_size"]
     )
 
     # Instantiate optimizer
@@ -30,7 +30,7 @@ def training_function():
     # There is no specific order to remember, we just need to unpack the objects in the same order we gave them to the
     # prepare method.
     model, optimizer, train_dataloader, eval_dataloader = accelerator.prepare(
-    model, optimizer, train_dataloader, eval_dataloader
+        model, optimizer, train_dataloader, eval_dataloader
     )
 
     num_epochs = hyperparameters["num_epochs"]
@@ -69,19 +69,19 @@ model = AutoModelForSequenceClassification.from_pretrained("bert-base-cased", nu
 
 ```diff
 + def training_function(model):
-# Initialize accelerator
-accelerator = Accelerator()
+      # Initialize accelerator
+      accelerator = Accelerator()
 -     model = AutoModelForSequenceClassification.from_pretrained("bert-base-cased", num_labels=2)
-train_dataloader, eval_dataloader = create_dataloaders(
-train_batch_size=hyperparameters["train_batch_size"], eval_batch_size=hyperparameters["eval_batch_size"]
-)
-...
+      train_dataloader, eval_dataloader = create_dataloaders(
+          train_batch_size=hyperparameters["train_batch_size"], eval_batch_size=hyperparameters["eval_batch_size"]
+      )
+  ...
 ```
 
 وأخيرًا، استدع دالة التدريب باستخدام ما يلي:
 
 ```diff
-from accelerate import notebook_launcher
+  from accelerate import notebook_launcher
 - notebook_launcher(training_function)
 + notebook_launcher(training_function, (model,))
 ```

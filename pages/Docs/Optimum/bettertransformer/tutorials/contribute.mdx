@@ -1,0 +1,191 @@
+# إضافة دعم BetterTransformer لمعماريات جديدة
+
+تريد إضافة نموذج جديد لـ `Better Transformer`، المسار السريع لواجهة برمجة تطبيقات PyTorch Transformer؟ تحقق من هذا الدليل!
+
+## النماذج التي يجب دعمها
+
+من الناحية النظرية، يجب دعم أي نموذج يحتوي على طبقة ترميز محول تشبه الترميز الكلاسيكي الموضح في الورقة ["Attention Is All You Need"](https://arxiv.org/abs/1706.03762).
+
+وبشكل أكثر تحديدًا، يجب أن يكون من الممكن تحويل النموذج الذي يحتوي على كتلة ترميز مع وحدة MultiHead-Attention (مع طبقة طبقة التطبيع قبل أو بعد الانتباه) إلى ما يعادلها في `BetterTransformer`. ويمكن تلخيص الشروط على النحو التالي:
+
+- استخدام وحدة Multi Head attention الكلاسيكية (على سبيل المثال، لا يمكن دعم [DeBERTa](https://arxiv.org/abs/2006.03654))
+- استخدام دالة التنشيط `gelu` أو `relu`
+- يجب أن يكون عدد رؤوس الاهتمام زوجيًا
+- لا تستخدم أي انحياز اهتمام (على سبيل المثال، يستخدم `T5` انحياز الاهتمام، وبالتالي لا يمكن دعمه)
+- يجب أن يكون `eps` متساويًا بين طبقة التطبيع الأولى والثانية لكل طبقة
+
+## كيفية تحويل نموذج إلى تنسيق `BetterTransformer` الخاص به؟
+
+### الخطوة 1: تحديد طبقة المصدر للتغيير
+
+أولاً، انتقل إلى `optimum/bettertransformer/__init__.py` وستشاهد قاموس `BetterTransformerManager.MODEL_MAPPING`. يجب أن يحتوي هذا على الخريطة بين نوع النموذج، و`Tuple[str, BetterTransformerBaseLayer]` المكون من اسم `nn.Module` الذي يمكن تحويله إلى ما يعادله في `BetterTransformer`، وفئة طبقة `BetterTransformer` الفعلية.
+
+دعونا نحاول القيام بذلك خطوة بخطوة لـ `Bert`، أولاً نحتاج إلى تحديد الطبقات التي تحتاج إلى استبدال:
+
+```python
+>>> from transformers import AutoModel
+
+>>> model = AutoModel.from_pretrained("bert-base-uncased")
+>>> print(model)  # doctest: +IGNORE_RESULT
+...
+(LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+(dropout): Dropout(p=0.1, inplace=False)
+)
+)
+(11): BertLayer(
+(attention): BertAttention(
+(self): BertSelfAttention(
+(query): Linear(in_features=768, out_features=768, bias=True)
+(key): Linear(in_features=768, out_features=768, bias=True)
+(value): Linear(in_features=768, out_features=768, bias=True)
+(dropout): Dropout(p=0.1, inplace=False)
+)
+(output): BertSelfOutput(
+(dense): Linear(in_features=768, out_features=768, bias=True)
+(LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+(dropout): Dropout(p=0.1, inplace=False)
+)
+)
+(intermediate): BertIntermediate(
+(dense): Linear(in_features=768, out_features=3072, bias=True)
+(intermediate_act_fn): GELUActivation()
+)
+(output): BertOutput(
+(dense): Linear(in_features=3072, out_features=768, bias=True)
+(LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+(dropout): Dropout(p=0.1, inplace=False)
+)
+)
+)
+)
+(pooler): BertPooler(
+(dense): Linear(in_features=768, out_features=768, bias=True)
+(activation): Tanh()
+)
+)
+```
+
+يمكنك أن ترى بوضوح أن الطبقات التي تحتاج إلى استبدال هي وحدات `BertLayer` لأنها تحتوي على وحدة ترميز الطبقة بأكملها.
+
+### الخطوة 2: بناء وحدة `xxxLayerBetterTransformer`
+
+تحقق من أن الوحدة المحددة ليست نسخة من وحدة أخرى (عن طريق فحص رمز المصدر في [`transformers`](https://github.com/huggingface/transformers) والتأكد من أن تعريف الفئة لا يبدأ بـ `# Copied from ...`) - وإذا لم يكن الأمر كذلك، فقم بإنشاء فئة في `bettertransformer/models/encoder_model.py`.
+
+ابدأ بهذه الأسطر:
+
+```python
+import torch
+import torch.nn as nn
+
+from ..base import BetterTransformerBaseLayer
+
+
+class BertLayerBetterTransformer(BetterTransformerBaseLayer):
+def __init__(self, bert_layer, config):
+...
+```
+
+الآن، تأكد من ملء جميع السمات المطلوبة، وهي قائمة السمات:
+
+- `in_proj_weight`
+- `in_proj_bias`
+- `out_proj_weight`
+- `out_proj_bias`
+- `linear1_weight`
+- `linear1_bias`
+- `linear2_weight`
+- `linear2_bias`
+- `norm1_eps`
+- `norm1_weight`
+- `norm1_bias`
+- `norm2_weight`
+- `norm2_bias`
+- `num_heads`
+- `embed_dim`
+
+لاحظ أن هذه السمات تتوافق مع جميع المكونات اللازمة لتشغيل وحدة ترميز محول، راجع الشكل 1 في الورقة ["Attention Is All You Need"](https://arxiv.org/pdf/1706.03762.pdf).
+
+بمجرد ملء جميع هذه السمات (في بعض الأحيان تحتاج طبقات `query` و`key` و`value` إلى "التجميع"، راجع ملف [`modeling_encoder.py`](https://github.com/huggingface/optimum/blob/main/optimum/bettertransformer/models/encoder_models.py) لمعرفة المزيد).
+
+تأكد أيضًا من إضافة الأسطر التالية:
+
+```python
+self.is_last_layer = False
+self.validate_bettertransformer()
+```
+
+### الخطوة 3: بناء تمرير إلى الأمام
+
+أولاً، ابدأ بعبارة `super().forward_checker()`، وهذا مطلوب حتى تتمكن الفئة الأصلية من تشغيل جميع برامج الفحص السلامة مسبقًا.
+
+بعد أول تمرير للأمام، يجب "تضمين" حالات الإخفاء باستخدام قناع الاهتمام. بمجرد تضمينها، لم تعد هناك حاجة إلى قناع الاهتمام، ويمكن تعيينه على `None`. يتم بناء تمرير إلى الأمام لـ `Bert` على هذا النحو، يجب أن تظل هذه الأسطر متشابهة إلى حد كبير عبر النماذج، ولكن في بعض الأحيان تكون أشكال أقنعة الاهتمام مختلفة عبر النماذج.
+
+```python
+super().forward_checker()
+
+if hidden_states.is_nested:
+attention_mask = None
+
+if attention_mask is not None:
+# attention mask comes in with values 0 and -inf. we convert to torch.nn.TransformerEncoder style bool mask
+# 0->false->keep this token -inf->true->mask this token
+attention_mask = attention_mask.bool()
+attention_mask = torch.reshape(attention_mask, (attention_mask.shape[0], attention_mask.shape[-1]))
+seqlen = attention_mask.shape[1]
+lengths = torch.sum(~attention_mask, 1)
+if not all([l == seqlen for l in lengths]):
+hidden_states = torch._nested_tensor_from_mask(hidden_states, ~attention_mask)
+attention_mask = None
+```
+
+بمجرد "تضمين" `hidden_states`، قم بالاتصال بـ `torch._transformer_encoder_layer_fwd` باستخدام الحجج الصحيحة كما يلي:
+
+```python
+hidden_states = torch._transformer_encoder_layer_fwd(
+hidden_states,
+self.embed_dim,
+self.num_heads,
+self.in_proj_weight,
+self.in_proj_bias,
+self.out_proj_weight,
+self.out_proj_bias,
+self.use_gelu,
+self.norm_first,
+self.norm1_eps,
+self.norm1_weight,
+self.norm1_bias,
+self.norm2_weight,
+self.norm2_bias,
+self.linear1_weight,
+self.linear1_bias,
+self.linear2_weight,
+self.linear2_bias,
+attention_mask,
+)
+```
+
+في الطبقة الأخيرة، من المهم "إلغاء تضمين" `hidden_states` حتى تتمكن الوحدة التالية من معالجتها، ويتم ذلك في هذه الأسطر:
+
+```python
+if hidden_states.is_nested and self.is_last_layer:
+hidden_states = hidden_states.to_padded_tensor(0.0)
+return (hidden_states,)
+```
+
+تأكد أيضًا من إرجاع `tuple` لمتابعة اتفاقية `transformers`.
+
+أفضل طريقة لتكرار هذا التجربة على نموذجك الخاص هي تجربته عن طريق الحصول على بعض الإلهام من نصوص النمذجة المقدمة. بالطبع، سنكون سعداء لمساعدتك في تحويل نموذجك إذا قمت بفتح مشكلة أو طلب سحب على `optimum`!
+
+### الخطوة 4: الفحص السريع!
+
+كخطوة أخيرة، تأكد من تحديث قاموس `BetterTransformerManager.MODEL_MAPPING` في `optimum/bettertransformer/__init__.py` بالأسماء الصحيحة، ويجب أن تكون جاهزًا لتحويل نموذجك. على سبيل المثال، بالنسبة لـ Bert، سيكون ذلك:
+
+```
+MODEL_MAPPING = {
+...
+"bert": ("BertLayer", BertLayerBetterTransformer)،
+...
+}
+```
+
+جربه باستخدام طريقة التحويل المقدمة في قسم [البرامج التعليمية](../tutorials/convert)!

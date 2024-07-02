@@ -124,21 +124,21 @@ label_to_id = {lbl: i for i, lbl in enumerate(id_to_label)}
 
 ```python
 def get_dataloaders(batch_size: int = 64):
-    "Build a set of dataloaders with a batch_size"
+    "Builds a set of dataloaders with a batch_size"
     random_perm = np.random.permutation(len(fnames))
     cut = int(0.8 * len(fnames))
     train_split = random_perm[:cut]
     eval_split = random_perm[cut:]
 
-    # لاستخدام التدريب البسيط، سيتم استخدام RandomResizedCrop
+    # For training a simple RandomResizedCrop will be used
     train_tfm = Compose([RandomResizedCrop((224, 224), scale=(0.5, 1.0)), ToTensor()])
     train_dataset = PetsDataset([fnames[i] for i in train_split], image_transform=train_tfm, label_to_id=label_to_id)
 
-    # لتقييم حجم محدد سيتم استخدامه
+    # For evaluation a deterministic Resize will be used
     eval_tfm = Compose([Resize((224, 224)), ToTensor()])
     eval_dataset = PetsDataset([fnames[i] for i in eval_split], image_transform=eval_tfm, label_to_id=label_to_id)
 
-    # إنشاء برنامج التهيئة
+    # Instantiate dataloaders
     train_dataloader = DataLoader(train_dataset, shuffle=True, batch_size=batch_size, num_workers=4)
     eval_dataloader = DataLoader(eval_dataset, shuffle=False, batch_size=batch_size * 2, num_workers=4)
     return train_dataloader, eval_dataloader

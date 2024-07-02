@@ -77,12 +77,12 @@ accelerate launch my_script.py --args_to_my_script
 ```bash
 compute_environment: LOCAL_MACHINE
 deepspeed_config:
-gradient_accumulation_steps: 1
-gradient_clipping: 1.0
-offload_optimizer_device: none
-offload_param_device: none
-zero3_init_flag: true
-zero_stage: 2
+ gradient_accumulation_steps: 1
+ gradient_clipping: 1.0
+ offload_optimizer_device: none
+ offload_param_device: none
+ zero3_init_flag: true
+ zero_stage: 2
 distributed_type: DEEPSPEED
 fsdp_config: {}
 machine_rank: 0
@@ -104,13 +104,13 @@ accelerate launch examples/nlp_example.py --mixed_precision fp16
 ```bash
 compute_environment: LOCAL_MACHINE
 deepspeed_config:
-gradient_accumulation_steps: 1
-gradient_clipping: 1.0
-offload_optimizer_device: cpu
-offload_param_device: cpu
-zero3_init_flag: true
-zero3_save_16bit_model: true
-zero_stage: 3
+  gradient_accumulation_steps: 1
+  gradient_clipping: 1.0
+  offload_optimizer_device: cpu
+  offload_param_device: cpu
+  zero3_init_flag: true
+  zero3_save_16bit_model: true
+  zero_stage: 3
 distributed_type: DEEPSPEED
 fsdp_config: {}
 machine_rank: 0
@@ -172,8 +172,8 @@ accelerate launch my_script.py --args_to_my_script
 ```bash
 compute_environment: LOCAL_MACHINE
 deepspeed_config:
-deepspeed_config_file: /home/ubuntu/accelerate/examples/configs/deepspeed_config_templates/zero_stage2_config.json
-zero3_init_flag: true
+ deepspeed_config_file: /home/ubuntu/accelerate/examples/configs/deepspeed_config_templates/zero_stage2_config.json
+ zero3_init_flag: true
 distributed_type: DEEPSPEED
 fsdp_config: {}
 machine_rank: 0
@@ -190,47 +190,47 @@ use_cpu: false
 
 ```json
 {
-"fp16": {
-"enabled": true,
-"loss_scale": 0,
-"loss_scale_window": 1000,
-"initial_scale_power": 16,
-"hysteresis": 2,
-"min_loss_scale": 1
-},
-"optimizer": {
-"type": "AdamW",
-"params": {
-"lr": "auto",
-"weight_decay": "auto",
-"torch_adam": true,
-"adam_w_mode": true
-}
-},
-"scheduler": {
-"type": "WarmupDecayLR",
-"params": {
-"warmup_min_lr": "auto",
-"warmup_max_lr": "auto",
-"warmup_num_steps": "auto",
-"total_num_steps": "auto"
-}
-},
-"zero_optimization": {
-"stage": 2,
-"allgather_partitions": true,
-"allgather_bucket_size": 2e8,
-"overlap_comm": true,
-"reduce_scatter": true,
-"reduce_bucket_size": "auto",
-"contiguous_gradients": true
-},
-"gradient_accumulation_steps": 1,
-"gradient_clipping": "auto",
-"steps_per_print": 2000,
-"train_batch_size": "auto",
-"train_micro_batch_size_per_gpu": "auto",
-"wall_clock_breakdown": false
+    "fp16": {
+        "enabled": true,
+        "loss_scale": 0,
+        "loss_scale_window": 1000,
+        "initial_scale_power": 16,
+        "hysteresis": 2,
+        "min_loss_scale": 1
+    },
+    "optimizer": {
+        "type": "AdamW",
+        "params": {
+            "lr": "auto",
+            "weight_decay": "auto",
+            "torch_adam": true,
+            "adam_w_mode": true
+        }
+    },
+    "scheduler": {
+        "type": "WarmupDecayLR",
+        "params": {
+            "warmup_min_lr": "auto",
+            "warmup_max_lr": "auto",
+            "warmup_num_steps": "auto",
+            "total_num_steps": "auto"
+        }
+    },
+    "zero_optimization": {
+        "stage": 2,
+        "allgather_partitions": true,
+        "allgather_bucket_size": 2e8,
+        "overlap_comm": true,
+        "reduce_scatter": true,
+        "reduce_bucket_size": "auto",
+        "contiguous_gradients": true
+    },
+    "gradient_accumulation_steps": 1,
+    "gradient_clipping": "auto",
+    "steps_per_print": 2000,
+    "train_batch_size": "auto",
+    "train_micro_batch_size_per_gpu": "auto",
+    "wall_clock_breakdown": false
 }
 ```
 
@@ -244,7 +244,7 @@ accelerate launch examples/by_feature/deepspeed_with_config_support.py \
 --output_dir "./clm/clm_deepspeed_stage2_accelerate" \
 --learning_rate 5e-4 \
 --per_device_train_batch_size 24 \
---per_device_eval_batch_Multiplier 24 \
+--per_device_eval_batch_size 24 \
 --num_train_epochs 3 \
 --with_tracking \
 --report_to "wandb"\
@@ -255,8 +255,8 @@ accelerate launch examples/by_feature/deepspeed_with_config_support.py \
 ```bash
 compute_environment: LOCAL_MACHINE
 deepspeed_config:
-deepspeed_config_file: /home/ubuntu/accelerate/examples/configs/deepspeed_config_templates/zero_stage3_offload_config.json
-zero3_init_flag: true
+ deepspeed_config_file: /home/ubuntu/accelerate/examples/configs/deepspeed_config_templates/zero_stage3_offload_config.json
+ zero3_init_flag: true
 distributed_type: DEEPSPEED
 fsdp_config: {}
 machine_rank: 0
@@ -273,56 +273,56 @@ use_cpu: false
 
 ```json
 {
-"fp16": {
-"enabled": true,
-"loss_scale": 0,
-"loss_scale_window": 1000,
-"initial_scale_power": 16,
-"hysteresis": 2,
-"min_loss_scale": 1
-},
-"optimizer": {
-"type": "AdamW",
-"params": {
-"lr": "auto",
-"weight_decay": "auto"
-}
-},
-"scheduler": {
-"type": "WarmupDecayLR",
-"params": {
-"warmup_min_lr": "auto",
-"warmup_max_lr": "auto",
-"warmup_num_steps": "auto",
-"total_num_steps": "auto"
-}
-},
-"zero_optimization": {
-"stage": 3,
-"offload_optimizer": {
-"device": "cpu",
-"pin_memory": true
-},
-"offload_param": {
-"device": "cpu",
-"pin_memory": true
-},
-"overlap_comm": true,
-"contiguous_gradients": true,
-"reduce_bucket_size": "auto",
-"stage3_prefetch_bucket_size": "auto",
-"stage3_param_persistence_threshold": "auto",
-"sub_group_size": 1e9,
-"stage3_max_live_parameters": 1e9,
-"stage3_max_reuse_distance": 1e9,
-"stage3_gather_16bit_weights_on_model_save": "auto"
-},
-"gradient_accumulation_steps": 1,
-"gradient_clipping": "auto",
-"steps_per_print": 2000,
-"train_batch_size": "auto",
-"train_micro_batch_size_per_gpu": "auto",
-"wall_clock_breakdown": false
+    "fp16": {
+        "enabled": true,
+        "loss_scale": 0,
+        "loss_scale_window": 1000,
+        "initial_scale_power": 16,
+        "hysteresis": 2,
+        "min_loss_scale": 1
+    },
+    "optimizer": {
+        "type": "AdamW",
+        "params": {
+            "lr": "auto",
+            "weight_decay": "auto"
+        }
+    },
+    "scheduler": {
+        "type": "WarmupDecayLR",
+        "params": {
+            "warmup_min_lr": "auto",
+            "warmup_max_lr": "auto",
+            "warmup_num_steps": "auto",
+            "total_num_steps": "auto"
+        }
+    },
+    "zero_optimization": {
+        "stage": 3,
+        "offload_optimizer": {
+            "device": "cpu",
+            "pin_memory": true
+        },
+        "offload_param": {
+            "device": "cpu",
+            "pin_memory": true
+        },
+        "overlap_comm": true,
+        "contiguous_gradients": true,
+        "reduce_bucket_size": "auto",
+        "stage3_prefetch_bucket_size": "auto",
+        "stage3_param_persistence_threshold": "auto",
+        "sub_group_size": 1e9,
+        "stage3_max_live_parameters": 1e9,
+        "stage3_max_reuse_distance": 1e9,
+        "stage3_gather_16bit_weights_on_model_save": "auto"
+    },
+    "gradient_accumulation_steps": 1,
+    "gradient_clipping": "auto",
+    "steps_per_print": 2000,
+    "train_batch_size": "auto",
+    "train_micro_batch_size_per_gpu": "auto",
+    "wall_clock_breakdown": false
 }
 ```
 
@@ -348,17 +348,17 @@ accelerate launch examples/by_feature/deepspeed_with_config_support.py \
 
 ```json
 {
-"zero_optimization": {
-"stage": 3,
-"reduce_bucket_size": "auto",
+    "zero_optimization": {
+        "stage": 3,
+        "reduce_bucket_size": "auto",
 
-"zero_quantized_weights": true,
-"zero_hpz_partition_size": 8,
-"zero_quantized_gradients": true,
+        "zero_quantized_weights": true,
+        "zero_hpz_partition_size": 8,
+        "zero_quantized_gradients": true,
 
-"contiguous_gradients": true,
-"overlap_comm": true
-}
+        "contiguous_gradients": true,
+        "overlap_comm": true
+    }
 }
 ```
 
@@ -372,32 +372,32 @@ accelerate launch examples/by_feature/deepspeed_with_config_support.py \
 
    فيما يلي مقتطف من `examples/by_feature/deepspeed_with_config_support.py` يوضح ذلك:
 
-   ```python
-   # إنشاء محسن Dummy إذا تم تحديد "optimizer" في ملف التكوين، وإلا قم بإنشاء محسن Adam
-   optimizer_cls = (
-   torch.optim.AdamW
-   if accelerator.state.deepspeed_plugin is None
-   or "optimizer" not in accelerator.state.deepspeed_plugin.deepspeed_config
-   else DummyOptim
-   )
-   optimizer = optimizer_cls(optimizer_grouped_parameters, lr=args.learning_rate)
+```python
+    # Creates Dummy Optimizer if `optimizer` was specified in the config file else creates Adam Optimizer
+ optimizer_cls = (
+     torch.optim.AdamW
+     if accelerator.state.deepspeed_plugin is None
+     or "optimizer" not in accelerator.state.deepspeed_plugin.deepspeed_config
+     else DummyOptim
+ )
+ optimizer = optimizer_cls(optimizer_grouped_parameters, lr=args.learning_rate)
 
-   # إنشاء جدول زمني Dummy إذا تم تحديد "scheduler" في ملف التكوين، وإلا قم بإنشاء جدول زمني من النوع "args.lr_scheduler_type"
-   if (
-   accelerator.state.deepspeed_plugin is None
-   or "scheduler" not in accelerator.state.deepspeed_plugin.deepspeed_config
-   ):
-   lr_scheduler = get_scheduler(
-   name=args.lr_scheduler_type,
-   optimizer=optimizer,
-   num_warmup_steps=args.num_warmup_steps,
-   num_training_steps=args.max_train_steps,
-   )
-   else:
-   lr_scheduler = DummyScheduler(
-   optimizer, total_num_steps=args.max_train_steps, warmup_num_steps=args.num_warmup_steps
-   )
-   ```
+ # Creates Dummy Scheduler if `scheduler` was specified in the config file else creates `args.lr_scheduler_type` Scheduler
+ if (
+     accelerator.state.deepspeed_plugin is None
+     or "scheduler" not in accelerator.state.deepspeed_plugin.deepspeed_config
+ ):
+     lr_scheduler = get_scheduler(
+         name=args.lr_scheduler_type,
+         optimizer=optimizer,
+         num_warmup_steps=args.num_warmup_steps,
+         num_training_steps=args.max_train_steps,
+     )
+ else:
+     lr_scheduler = DummyScheduler(
+         optimizer, total_num_steps=args.max_train_steps, warmup_num_steps=args.num_warmup_steps
+     )
+```
 
    ب) محسن مخصص + جدول زمني مخصص: الحالة التي يكون فيها كل من مفتاحي `optimizer` و`scheduler` غائبين في ملف تكوين DeepSpeed. في هذه الحالة، لا يلزم إجراء أي تغييرات على الشفرة من قبل المستخدم، وهذه هي الحالة عند استخدام التكامل عبر مكون إضافي لـ DeepSpeed.
 
@@ -431,78 +431,78 @@ from accelerate.state import AcceleratorState
 
 
 def main():
-accelerator = Accelerator()
-accelerator.print(f"{AcceleratorState()}")
+    accelerator = Accelerator()
+    accelerator.print(f"{AcceleratorState()}")
 
 
 if __name__ == "__main__":
-main()
+    main()
 ```
 
 **السيناريو 1**: ملف تكوين Accelerate الذي تم التلاعب به يدويًا والذي يحتوي على `deepspeed_config_file` إلى جانب إدخالات أخرى.
 
 1. محتويات ملف تكوين `accelerate`:
 
-   ```yaml
-   command_file: null
-   commands: null
-   compute_environment: LOCAL_MACHINE
-   deepspeed_config:
-   gradient_accumulation_steps: 1
-   gradient_clipping: 1.0
-   offload_optimizer_device: 'cpu'
-   offload_param_device: 'cpu'
-   zero3_init_flag: true
-   zero3_save_16bit_model: true
-   zero_stage: 3
-   deepspeed_config_file: 'ds_config.json'
-   distributed_type: DEEPSPEED
-   downcast_bf16: 'no'
-   dynamo_backend: 'NO'
-   fsdp_config: {}
-   gpu_ids: null
-   machine_rank: 0
-   main_process_ip: null
-   main_process_port: null
-   main_training_function: main
-   megatron_lm_config: {}
-   num_machines: 1
-   num_processes: 2
-   rdzv_backend: static
-   same_network: true
-   tpu_name: null
-   tpu_zone: null
-   use_cpu: false
-   ```
+```yaml
+command_file: null
+commands: null
+compute_environment: LOCAL_MACHINE
+deepspeed_config:
+  gradient_accumulation_steps: 1
+  gradient_clipping: 1.0
+  offload_optimizer_device: 'cpu'
+  offload_param_device: 'cpu'
+  zero3_init_flag: true
+  zero3_save_16bit_model: true
+  zero_stage: 3
+  deepspeed_config_file: 'ds_config.json'
+distributed_type: DEEPSPEED
+downcast_bf16: 'no'
+dynamo_backend: 'NO'
+fsdp_config: {}
+gpu_ids: null
+machine_rank: 0
+main_process_ip: null
+main_process_port: null
+main_training_function: main
+megatron_lm_config: {}
+num_machines: 1
+num_processes: 2
+rdzv_backend: static
+same_network: true
+tpu_name: null
+tpu_zone: null
+use_cpu: false
+```
 
 2. `ds_config.json`:
 
-   ```json
-   {
-   "bf16": {
-   "enabled": true
-   },
-   "zero_optimization": {
-   "stage": 3,
-   "stage3_gather_16bit_weights_on_model_save": false,
-   "offload_optimizer": {
-   "device": "none"
-   },
-   "offload_param": {
-   "device": "none"
-   }
-   },
-   "gradient_clipping": 1.0,
-   "train_batch_size": "auto",
-   "train_micro_batch_size_per_gpu": "auto",
-   "gradient_accumulation_steps": 10,
-   "steps_per_print": 2000000
-   }
-   ```
+```json
+{
+    "bf16": {
+        "enabled": true
+    },
+    "zero_optimization": {
+        "stage": 3,
+        "stage3_gather_16bit_weights_on_model_save": false,
+        "offload_optimizer": {
+            "device": "none"
+        },
+        "offload_param": {
+            "device": "none"
+        }
+    },
+    "gradient_clipping": 1.0,
+    "train_batch_size": "auto",
+    "train_micro_batch_size_per_gpu": "auto",
+    "gradient_accumulation_steps": 10,
+    "steps_per_print": 2000000
+}
+```
 
 3. إخراج `accelerate launch test.py`:
 
-   ```bash
+```bash
    ValueError: When using `deepspeed_config_file`, the following accelerate config variables will be ignored:
    ['gradient_accumulation_steps', 'gradient_clipping', 'zero_stage', 'offload_optimizer_device', 'offload_param_device',
    'zero3_save_16bit_model', 'mixed_precision'].
@@ -510,23 +510,108 @@ main()
    If you are using an accelerate config file, remove other config variables mentioned in the above specified list.
    The easiest method is to create a new config following the questionnaire via `accelerate config`.
    It will only ask for the necessary config variables when using `deepspeed_config_file`.
-   ```
+```
 
 **السيناريو 2**: استخدم حل الخطأ لإنشاء ملف تكوين جديد وتحقق من عدم ظهور خطأ الغموض الآن.
 
 1. قم بتشغيل `accelerate config`:
 
-   ```bash
-   $ accelerate config
-   -------------------------------------------------------------------------------------------------------------------------------
-   On which compute environment are you running?
-   This machine
-   -------------------------------------------------------------------------------------------------------------------------------
-   What type of machine are you using?
-   multi-GPU
-   How many different machines will you use (use more than 1 for multi-node training)? [1]:
-   Do you wish to optimize your script with torch dynamo?[yes/NO]:
-## الحفظ والتحميل
+```bash
+$ accelerate config
+-------------------------------------------------------------------------------------------------------------------------------
+In which compute environment are you running?
+This machine
+-------------------------------------------------------------------------------------------------------------------------------
+Which type of machine are you using?
+multi-GPU
+How many different machines will you use (use more than 1 for multi-node training)? [1]:
+Do you wish to optimize your script with torch dynamo?[yes/NO]:
+Do you want to use DeepSpeed? [yes/NO]: yes
+Do you want to specify a json file to a DeepSpeed config? [yes/NO]: yes
+Please enter the path to the json DeepSpeed config file: ds_config.json
+Do you want to enable `deepspeed.zero.Init` when using ZeRO Stage-3 for constructing massive models? [yes/NO]: yes
+How many GPU(s) should be used for distributed training? [1]:4
+accelerate configuration saved at ds_config_sample.yaml
+```
+2. Content of the `accelerate` config:
+
+```yaml
+compute_environment: LOCAL_MACHINE
+deepspeed_config:
+  deepspeed_config_file: ds_config.json
+  zero3_init_flag: true
+distributed_type: DEEPSPEED
+downcast_bf16: 'no'
+dynamo_backend: 'NO'
+fsdp_config: {}
+machine_rank: 0
+main_training_function: main
+megatron_lm_config: {}
+num_machines: 1
+num_processes: 4
+rdzv_backend: static
+same_network: true
+use_cpu: false
+```
+
+3. Output of `accelerate launch test.py`:
+
+```bash
+Distributed environment: DEEPSPEED  Backend: nccl
+Num processes: 4
+Process index: 0
+Local process index: 0
+Device: cuda:0
+Mixed precision type: bf16
+ds_config: {'bf16': {'enabled': True}, 'zero_optimization': {'stage': 3, 'stage3_gather_16bit_weights_on_model_save': False, 'offload_optimizer': {'device': 'none'}, 'offload_param': {'device': 'none'}}, 'gradient_clipping': 1.0, 'train_batch_size': 'auto', 'train_micro_batch_size_per_gpu': 'auto', 'gradient_accumulation_steps': 10, 'steps_per_print': inf, 'fp16': {'enabled': False}}
+```
+
+**Scenario 3**: Setting the `accelerate launch` command arguments related to DeepSpeed as `"auto"` in the DeepSpeed` configuration file and check that things work as expected.
+
+1. New `ds_config.json` with `"auto"` for the `accelerate launch` DeepSpeed command arguments:
+
+```json
+{
+    "bf16": {
+        "enabled": "auto"
+    },
+    "zero_optimization": {
+        "stage": "auto",
+        "stage3_gather_16bit_weights_on_model_save": "auto",
+        "offload_optimizer": {
+            "device": "auto"
+        },
+        "offload_param": {
+            "device": "auto"
+        }
+    },
+    "gradient_clipping": "auto",
+    "train_batch_size": "auto",
+    "train_micro_batch_size_per_gpu": "auto",
+    "gradient_accumulation_steps": "auto",
+    "steps_per_print": 2000000
+}
+```
+
+2. Output of `accelerate launch --mixed_precision="fp16" --zero_stage=3 --gradient_accumulation_steps=5 --gradient_clipping=1.0 --offload_param_device="cpu" --offload_optimizer_device="nvme" --zero3_save_16bit_model="true" test.py`:
+
+```bash
+Distributed environment: DEEPSPEED  Backend: nccl
+Num processes: 4
+Process index: 0
+Local process index: 0
+Device: cuda:0
+Mixed precision type: fp16
+ds_config: {'bf16': {'enabled': False}, 'zero_optimization': {'stage': 3, 'stage3_gather_16bit_weights_on_model_save': True, 'offload_optimizer': {'device': 'nvme'}, 'offload_param': {'device': 'cpu'}}, 'gradient_clipping': 1.0, 'train_batch_size': 'auto', 'train_micro_batch_size_per_gpu': 'auto', 'gradient_accumulation_steps': 5, 'steps_per_print': inf, 'fp16': {'enabled': True, 'auto_cast': True}}
+```
+
+**Note**:
+1. Remaining `"auto"` values are handled in `accelerator.prepare()` call as explained in point 2 of
+`Important code changes when using DeepSpeed Config File`.
+2. Only when `gradient_accumulation_steps` is `auto`, the value passed while creating `Accelerator` object via `Accelerator(gradient_accumulation_steps=k)` will be used. When using DeepSpeed Plugin, the value from it will be used and it will overwrite the value passed while creating Accelerator object.
+
+## Saving and loading
+
 
 1. لم يتغير حفظ وتحميل النماذج في ZeRO Stage-1 وStage-2.
 2. في ZeRO Stage-3، يحتوي `state_dict` فقط على المؤشرات المكانية لأن أوزان النموذج مجزأة عبر عدة وحدات معالجة رسومية. يوفر ZeRO Stage-3 خيارين:
@@ -549,10 +634,10 @@ unwrapped_model = accelerator.unwrap_model(model)
 # For Zero Stages 1 and 2, models are saved as usual in the output directory.
 # The model name saved is `pytorch_model.bin`
 unwrapped_model.save_pretrained(
-args.output_dir,
-is_main_process=accelerator.is_main_process,
-save_function=accelerator.save,
-state_dict=accelerator.get_state_dict(model),
+    args.output_dir,
+    is_main_process=accelerator.is_main_process,
+    save_function=accelerator.save,
+    state_dict=accelerator.get_state_dict(model),
 )
 ```
 
@@ -564,9 +649,9 @@ state_dict=accelerator.get_state_dict(model),
 success = model.save_checkpoint(PATH, ckpt_id, checkpoint_state_dict)
 status_msg = f"checkpointing: PATH={PATH}, ckpt_id={ckpt_id}"
 if success:
-logging.info(f"Success {status_msg}")
+   logging.info(f"Success {status_msg}")
 else:
-logging.warning(f"Failure {status_msg}")
+   logging.warning(f"Failure {status_msg}")
 ```
 
 سيؤدي هذا إلى إنشاء أقسام نموذج ZeRO ومقسام المحسن إلى جانب `zero_to_fp32.py` script في دليل نقطة التفتيش.

@@ -78,19 +78,19 @@ debug: true
 
 ```py
 Traceback (most recent call last):
-File "/home/zach_mueller_huggingface_co/test.py", line 18, in <module>
-main()
-File "/home/zach_mueller_huggingface_co/test.py", line 15, in main
-broadcast_tensor = broadcast(tensor)
-File "/home/zach_mueller_huggingface_co/accelerate/src/accelerate/utils/operations.py", line 303, in wrapper
+  File "/home/zach_mueller_huggingface_co/test.py", line 18, in <module>
+    main()
+  File "/home/zach_mueller_huggingface_co/test.py", line 15, in main
+    broadcast_tensor = broadcast(tensor)
+  File "/home/zach_mueller_huggingface_co/accelerate/src/accelerate/utils/operations.py", line 303, in wrapper
 accelerate.utils.operations.DistributedOperationException:
 
 Cannot apply desired operation due to shape mismatches. All shapes across devices must be valid.
 
 Operation: `accelerate.utils.operations.broadcast`
 Input shapes:
-- Process 0: [1, 5]
-- Process 1: [1, 2, 5]
+  - Process 0: [1, 5]
+  - Process 1: [1, 2, 5]
 ```
 
 ### التوقف المبكر
@@ -103,11 +103,11 @@ Input shapes:
 # افترض أن `should_do_breakpoint` هي دالة مخصصة تعيد شرطًا،
 # وقد يكون هذا الشرط صحيحًا فقط في العملية 1
 if should_do_breakpoint(loss):
-accelerator.set_breakpoint()
+    accelerator.set_breakpoint()
 
 # لاحقًا في نص التدريب عند الحاجة إلى التحقق من نقطة التوقف
 if accelerator.check_breakpoint():
-break
+    break
 ```
 
 ### إصدارات kernel المنخفضة على Linux
@@ -142,25 +142,25 @@ mpirun -f hostfile -n {عدد العقد} -ppn 1 hostname
 
 ```diff
 def training_function(args):
-accelerator = Accelerator()
+    accelerator = Accelerator()
 
 +   @find_executable_batch_size(starting_batch_size=args.batch_size)
 +   def inner_training_loop(batch_size):
 +       nonlocal accelerator # Ensure they can be used in our context
 +       accelerator.free_memory() # Free all lingering references
-model = get_model()
-model.to(accelerator.device)
-optimizer = get_optimizer()
-train_dataloader, eval_dataloader = get_dataloaders(accelerator, batch_size)
-lr_scheduler = get_scheduler(
-optimizer,
-num_training_steps=len(train_dataloader)*num_epochs
-)
-model, optimizer, train_dataloader, eval_dataloader, lr_scheduler = accelerator.prepare(
-model, optimizer, train_dataloader, eval_dataloader, lr_scheduler
-)
-train(model, optimizer, train_dataloader, lr_scheduler)
-validate(model, eval_dataloader)
+        model = get_model()
+        model.to(accelerator.device)
+        optimizer = get_optimizer()
+        train_dataloader, eval_dataloader = get_dataloaders(accelerator, batch_size)
+        lr_scheduler = get_scheduler(
+            optimizer, 
+            num_training_steps=len(train_dataloader)*num_epochs
+        )
+        model, optimizer, train_dataloader, eval_dataloader, lr_scheduler = accelerator.prepare(
+            model, optimizer, train_dataloader, eval_dataloader, lr_scheduler
+        )
+        train(model, optimizer, train_dataloader, lr_scheduler)
+        validate(model, eval_dataloader)
 +   inner_training_loop()
 ```
 

@@ -40,18 +40,18 @@ for index, batch in enumerate(training_dataloader):
 +     model, optimizer, training_dataloader, scheduler
 + )
 
-for index, batch in enumerate(training_dataloader):
-    inputs, targets = batch
+  for index, batch in enumerate(training_dataloader):
+      inputs, targets = batch
 -     inputs = inputs.to(device)
 -     targets = targets.to(device)
-    outputs = model(inputs)
-    loss = loss_function(outputs, targets)
-    loss = loss / gradient_accumulation_steps
+      outputs = model(inputs)
+      loss = loss_function(outputs, targets)
+      loss = loss / gradient_accumulation_steps
 +     accelerator.backward(loss)
-    if (index+1) % gradient_accumulation_steps == 0:
-        optimizer.step()
-        scheduler.step()
-        optimizer.zero_grad()
+      if (index+1) % gradient_accumulation_steps == 0:
+          optimizer.step()
+          scheduler.step()
+          optimizer.zero_grad()
 ```
 
 <Tip warning={true}>
@@ -76,19 +76,19 @@ from accelerate import Accelerator
 - for index, batch in enumerate(training_dataloader):
 + for batch in training_dataloader:
 +     with accelerator.accumulate(model):
-    inputs, targets = batch
-    outputs = model(inputs)
+          inputs, targets = batch
+          outputs = model(inputs)
 ```
 
 يمكنك إزالة جميع الفحوصات الخاصة لرقم الخطوة وضبط الخسارة:
 
 ```diff
 - loss = loss / gradient_accumulation_steps
-accelerator.backward(loss)
+  accelerator.backward(loss)
 - if (index+1) % gradient_accumulation_steps == 0:
-    optimizer.step()
-    scheduler.step()
-    optimizer.zero_grad()
+  optimizer.step()
+  scheduler.step()
+  optimizer.zero_grad()
 ```
 
 كما ترى، يمكن لـ [`Accelerator`] تتبع رقم الدفعة التي تعمل عليها، وسيعرف تلقائيًا ما إذا كان سيتم تنفيذ الخطوة من خلال المحسن المُعد وكيفية ضبط الخسارة.
@@ -99,7 +99,7 @@ accelerator.backward(loss)
 
 <Tip warning={true}>
 يتم مزامنة [`state.GradientState`] مع محمل البيانات النشط الذي يتم التنقل خلاله. وبالتالي، يفترض بشكل بسيط أنه عند الوصول إلى نهاية محمل البيانات، سيتم مزامنة كل شيء وسيتم تنفيذ خطوة. لإيقاف هذا، قم بتعيين `sync_with_dataloader` على `False` في [`GradientAccumulationPlugin`]:
-```{python}
+```python
 from accelerate import Accelerator
 from accelerate.utils import GradientAccumulationPlugin
 
@@ -116,17 +116,17 @@ accelerator = Accelerator(..., gradient_accumulation_plugin=plugin)
 from accelerate import Accelerator
 accelerator = Accelerator(gradient_accumulation_steps=2)
 model, optimizer, training_dataloader, scheduler = accelerator.prepare(
-model, optimizer, training_dataloader, scheduler
+    model, optimizer, training_dataloader, scheduler
 )
 for batch in training_dataloader:
-with accelerator.accumulate(model):
-inputs, targets = batch
-outputs = model(inputs)
-loss = loss_function(outputs, targets)
-accelerator.backward(loss)
-optimizer.step()
-scheduler.step()
-optimizer.zero_grad()
+    with accelerator.accumulate(model):
+        inputs, targets = batch
+        outputs = model(inputs)
+        loss = loss_function(outputs, targets)
+        accelerator.backward(loss)
+        optimizer.step()
+        scheduler.step()
+        optimizer.zero_grad()
 ```
 
 <Tip warning={true}>
@@ -170,15 +170,15 @@ model_clone_optimizer = torch.optim.SGD([model_clone], lr=0.02)
 print(f"initial model weight is {model.mean().item():.5f}")
 print(f"initial model weight is {model_clone.mean().item():.5f}")
 for i, (inputs, labels) in enumerate(dataloader):
-with accelerator.accumulate(model):
-inputs = inputs.view(-1, 1)
-print(i, inputs.flatten())
-labels = labels.view(-1, 1)
-outputs = inputs @ model
-loss = criterion(outputs, labels)
-accelerator.backward(loss)
-model_optimizer.step()
-model_optimizer.zero_grad()
+    with accelerator.accumulate(model):
+        inputs = inputs.view(-1, 1)
+        print(i, inputs.flatten())
+        labels = labels.view(-1, 1)
+        outputs = inputs @ model
+        loss = criterion(outputs, labels)
+        accelerator.backward(loss)
+        model_optimizer.step()
+        model_optimizer.zero_grad()
 loss = criterion(x.view(-1, 1) @ model_clone, y.view(-1, 1))
 model_clone_optimizer.zero_grad()
 loss.backward()

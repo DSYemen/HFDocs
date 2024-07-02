@@ -29,7 +29,7 @@ torch.manual_seed(seed)
 torch.cuda.manual_seed_all(seed)
 # ^^ من الآمن استدعاء دالة حتى إذا لم تكن cuda متاحة
 if is_torch_xla_available():
-xm.set_rng_state(seed)
+    xm.set_rng_state(seed)
 ```
 
 حالة التعشيش العشوائي، وحالة النيبي، وحالة الشعلة، وحالة كودا للشعلة، وفي حالة توفر TPUs، حالة كودا للشعلة xla.

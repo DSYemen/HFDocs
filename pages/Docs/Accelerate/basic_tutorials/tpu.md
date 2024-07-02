@@ -19,5 +19,5 @@
 
 ```py
 if accelerator.distributed_type == DistributedType.TPU:
-model.tie_weights()
+    model.tie_weights()
 ```

@@ -1,5 +1,3 @@
-لم يتم ترجمة الأجزاء المحددة في النص الأصلي بناءً على طلبك.
-
 # تأجيل التنفيذ
 
 عند تشغيل النص البرمجي المعتاد، يتم تنفيذ التعليمات بترتيب تسلسلي. ولكن عند استخدام HuggingFace Accelerate لتشغيل النص البرمجي على عدة وحدات معالجة رسومية (GPUs) في نفس الوقت، تظهر بعض التعقيدات: ففي حين أن كل عملية تنفذ جميع التعليمات بترتيب تسلسلي، قد تكون بعض العمليات أسرع من غيرها.
@@ -28,7 +26,7 @@ accelerator.wait_for_everyone()
 
 ```python
 with accelerator.main_process_first():
-datasets = load_dataset("glue", "mrpc")
+    datasets = load_dataset("glue", "mrpc")
 ```
 
 في الخلفية، هذا يعادل استدعاء ما يلي:
@@ -36,15 +34,15 @@ datasets = load_dataset("glue", "mrpc")
 ```python
 # أولاً، قم بتنفيذ شيء ما على العملية الرئيسية
 if accelerator.is_main_process:
-datasets = load_dataset("glue", "mrpc")
+    datasets = load_dataset("glue", "mrpc")
 else:
-accelerator.wait_for_everyone()
+    accelerator.wait_for_everyone()
 
 # ثم أرسلها إلى بقية العمليات
 if not accelerator.is_main_process:
-datasets = load_dataset("glue", "mrpc")
+    datasets = load_dataset("glue", "mrpc")
 else:
-acceleramp.wait_for_everyone()
+    acceleramp.wait_for_everyone()
 ```
 
 ## حفظ `state_dict`
@@ -53,8 +51,8 @@ acceleramp.wait_for_everyone()
 
 ```python
 if accelerator.is_main_process:
-model = accelerator.unwrap_model(model)
-torch.save(model.state_dict(), "weights.pth")
+    model = accelerator.unwrap_model(model)
+    torch.save(model.state_dict(), "weights.pth")
 ```
 
 ## تحميل `state_dict`
@@ -63,8 +61,8 @@ torch.save(model.state_dict(), "weights.pth")
 
 ```python
 with accelerator.main_process_first():
-state = torch.load("weights.pth")
-model.load_state_dict(state)
+    state = torch.load("weights.pth")
+    model.load_state_dict(state)
 ```
 
 ## تنفيذ عملية CPU متعددة العمال
@@ -75,11 +73,11 @@ model.load_state_dict(state)
 datasets = load_dataset("glue", "mrpc")
 
 with accelerator.main_process_first():
-tokenized_datasets = datasets.map(
-tokenize_function,
-batched=True,
-remove_columns=["idx", "sentence1", "sentence2"],
-)
+    tokenized_datasets = datasets.map(
+        tokenize_function,
+        batched=True,
+        remove_columns=["idx", "sentence1", "sentence2"],
+    )
 ```
 
 ## تطبيق فحوصات مثل التوقف المبكر
@@ -90,13 +88,13 @@ remove_columns=["idx", "sentence1", "sentence2"],
 
 ```python
 for (x,y) in data_loader:
-logits = model(x)
-loss = loss_func(logits, y)
-# افترض أن `should_do_early_stopping` هي دالة مخصصة تعيد شرطًا
-if should_do_early_stopping(loss):
-accelerator.set_trigger()
+    logits = model(x)
+    loss = loss_func(logits, y)
+    # Assume `should_do_early_stopping` is a custom defined function that returns a conditional
+    if should_do_early_stopping(loss):
+        accelerator.set_trigger()
 
-# لاحقاً في النص البرمجي للتدريب عند الحاجة إلى التحقق من نقطة التوقف
-if accelerator.check_trigger():
-break
+    # Later in the training script when we need to check for the breakpoint
+    if accelerator.check_trigger():
+        break
 ```

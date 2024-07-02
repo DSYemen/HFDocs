@@ -48,7 +48,7 @@ model_config.vocab_size = 50257
 model_config.block_size = 1024
 
 with init_empty_weights():
-empty_model = GPT(model_config)
+    empty_model = GPT(model_config)
 ``` 
 
 بعد ذلك، نحتاج إلى الحصول على المسار إلى أوزان نموذجك. يمكن أن يكون المسار ملف حالة (مثل "pytorch_model.bin") أو مجلد يحتوي على نقاط تفتيش مجزأة. 
@@ -110,12 +110,12 @@ quantized_model_from_saved = load_and_quantize_model(empty_model, weights_locati
 
 ```py
 device_map = {
-"transformer.wte": 0,
-"transformer.wpe": 0,
-"transformer.drop": 0,
-"transformer.h": "cpu",
-"transformer.ln_f": "disk",
-"lm_head": "disk",
+    "transformer.wte": 0,
+    "transformer.wpe": 0,
+    "transformer.drop": 0,
+    "transformer.h": "cpu",
+    "transformer.ln_f": "disk",
+    "lm_head": "disk",
 }
 ```
 

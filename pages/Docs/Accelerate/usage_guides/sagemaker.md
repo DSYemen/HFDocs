@@ -154,8 +154,8 @@ ec2_instance_type: local
 
 ```yaml
 additional_args:
-# تمكين العزل الشبكي لتقييد الوصول إلى الإنترنت للحاويات
-enable_network_isolation: True
+    # تمكين العزل الشبكي لتقييد الوصول إلى الإنترنت للحاويات
+    enable_network_isolation: True
 ```
 
 يمكنك العثور على جميع التكوينات المتاحة [هنا](https://sagemaker.readthedocs.io/en/stable/api/training/estimators.html).
@@ -166,8 +166,8 @@ enable_network_isolation: True
 
 ```yaml
 additional_args:
-use_spot_instances: True
-max_wait: 86400
+    use_spot_instances: True
+    max_wait: 86400
 ```
 
 *ملاحظة: تخضع مثيلات Spot للإنهاء واستمرار التدريب من نقطة تفتيش. لا يتم التعامل مع هذا في 🤗 Accelerate خارج الصندوق. اتصل بنا إذا كنت تريد هذه الميزة.*

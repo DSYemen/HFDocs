@@ -1,0 +1,139 @@
+# تسريع الاستنتاج على معالجات الرسوميات AMD المدعومة من ROCm
+
+بشكل افتراضي، يقوم ONNX Runtime بتشغيل الاستنتاج على أجهزة CPU. ومع ذلك، من الممكن وضع العمليات المدعومة على معالج رسومات AMD Instinct، مع ترك أي عمليات غير مدعومة على وحدة المعالجة المركزية. في معظم الحالات، يسمح ذلك بوضع العمليات المكلفة على وحدة معالجة الرسومات وتسريع الاستنتاج بشكل كبير.
+
+شملت اختباراتنا معالجات رسومات AMD Instinct، ولتوافق GPU المحدد، يرجى الرجوع إلى قائمة التوافق الرسمية لمعالجات الرسوميات المتوفرة [هنا](https://rocm.docs.amd.com/en/latest/release/gpu_os_support.html).
+
+سيوضح هذا الدليل كيفية تشغيل الاستنتاج على موفر التنفيذ `ROCMExecutionProvider` الذي يدعمه ONNX Runtime لمعالجات رسومات AMD.
+
+## التثبيت
+
+تثبت عملية الإعداد التالية دعم ONNX Runtime مع موفر التنفيذ ROCM باستخدام ROCm 6.0.
+
+#### 1 تثبيت ROCm
+
+راجع [دليل تثبيت ROCm](https://rocm.docs.amd.com/en/latest/deploy/linux/index.html) لتثبيت ROCm 6.0.
+
+#### 2 تثبيت `onnxruntime-rocm`
+
+يرجى استخدام مثال [Dockerfile](https://github.com/huggingface/optimum-amd/blob/main/docker/onnx-runtime-amd-gpu/Dockerfile) المقدم أو قم بالتثبيت المحلي من المصدر نظرًا لعدم توفر عجلات pip حاليًا.
+
+**التثبيت باستخدام Docker:**
+
+```bash
+docker build -f Dockerfile -t ort/rocm .
+```
+
+**خطوات التثبيت المحلي:**
+
+##### 2.1 PyTorch مع دعم ROCm
+
+يعتمد تكامل ONNX Runtime الأمثل على بعض وظائف Transformers التي تتطلب PyTorch. في الوقت الحالي، نوصي باستخدام PyTorch المترجم مقابل ROCm 6.0، والذي يمكن تثبيته باتباع [دليل تثبيت PyTorch](https://pytorch.org/get-started/locally/):
+
+```bash
+pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm6.0
+# استخدم 'rocm/pytorch:rocm6.0.2_ubuntu22.04_py3.10_pytorch_2.1.2' كصورة أساسية مفضلة عند استخدام Docker لتثبيت PyTorch.
+```
+
+##### 2.2 ONNX Runtime مع موفر التنفيذ ROCm
+
+```bash
+# المتطلبات الأساسية
+pip install -U pip
+pip install cmake onnx
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# تثبيت ONNXRuntime من المصدر
+git clone --single-branch --branch main --recursive https://github.com/Microsoft/onnxruntime onnxruntime
+cd onnxruntime
+
+./build.sh --config Release --build_wheel --allow_running_as_root --update --build --parallel --cmake_extra_defines CMAKE_HIP_ARCHITECTURES=gfx90a,gfx942 ONNXRUNTIME_VERSION=$(cat ./VERSION_NUMBER) --use_rocm --rocm_home=/opt/rocm
+pip install build/Linux/Release/dist/*
+```
+
+ملاحظة: تقوم التعليمات ببناء ORT لمعالجات الرسوميات `MI210/MI250/MI300`. لدعم البنى الأخرى، يرجى تحديث `CMAKE_HIP_ARCHITECTURES` في أمر البناء.
+
+<Tip>
+
+لتجنب التعارضات بين `onnxruntime` و`onnxruntime-rocm`، تأكد من عدم تثبيت حزمة `onnxruntime` عن طريق تشغيل `pip uninstall onnxruntime` قبل تثبيت `onnxruntime-rocm`.
+
+</Tip>
+
+### التحقق من نجاح تثبيت ROCm
+
+قبل المتابعة، قم بتشغيل الكود التالي للتحقق مما إذا كان التثبيت ناجحًا:
+
+```python
+>>> from optimum.onnxruntime import ORTModelForSequenceClassification
+>>> from transformers import AutoTokenizer
+
+>>> ort_model = ORTModelForSequenceClassification.from_pretrained(
+...   "philschmid/tiny-bert-sst2-distilled",
+...   export=True,
+...   provider="ROCMExecutionProvider",
+... )
+
+>>> tokenizer = AutoTokenizer.from_pretrained("philschmid/tiny-bert-sst2-distilled")
+>>> inputs = tokenizer("expectations were low, actual enjoyment was high", return_tensors="pt", padding=True)
+
+>>> outputs = ort_model(**inputs)
+>>> assert ort_model.providers == ["ROCMExecutionProvider", "CPUExecutionProvider"]
+```
+
+إذا تم تشغيل هذا الكود بسلاسة، تهانينا، كان التثبيت ناجحًا! إذا واجهت الخطأ التالي أو ما شابهه،
+
+```
+ValueError: Asked to use ROCMExecutionProvider as an ONNX Runtime execution provider, but the available execution providers are ['CPUExecutionProvider'].
+```
+
+فثمة خطأ ما في تثبيت ROCM أو ONNX Runtime.
+
+## استخدام موفر التنفيذ ROCM مع نماذج ORT
+
+بالنسبة لنماذج ORT، يكون الاستخدام مباشرًا. ما عليك سوى تحديد وسيط `provider` في طريقة `ORTModel.from_pretrained()`. إليك مثال:
+
+```python
+>>> from optimum.onnxruntime import ORTModelForSequenceClassification
+
+>>> ort_model = ORTModelForSequenceClassification.from_pretrained(
+...   "distilbert-base-uncased-finetuned-sst-2-english",
+...   export=True,
+...   provider="ROCMExecutionProvider",
+... )
+```
+
+بعد ذلك، يمكن استخدام النموذج مع واجهة برمجة تطبيقات Transformers الشائعة للاستنتاج والتقييم، مثل [pipelines](https://huggingface.co/docs/optimum/onnxruntime/usage_guides/pipelines).
+
+عند استخدام خط أنابيب Transformers، لاحظ أنه يجب تعيين وسيط `device` على أداء المعالجة المسبقة والمعالجة اللاحقة على وحدة معالجة الرسوميات، كما هو موضح في المثال التالي:
+
+```python
+>>> from optimum.pipelines import pipeline
+>>> from transformers import AutoTokenizer
+
+>>> tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased-finetuned-sst-2-english")
+
+>>> pipe = pipeline(task="text-classification", model=ort_model, tokenizer=tokenizer, device="cuda:0")
+>>> result = pipe("Both the music and visual were astounding, not to mention the actors performance.")
+>>> print(result)  # doctest: +IGNORE_RESULT
+# printing: [{'label': 'POSITIVE', 'score': 0.9997727274894c714}]
+```
+
+بالإضافة إلى ذلك، يمكنك تمرير خيار الجلسة `log_severity_level = 0` (verbose)، للتحقق مما إذا كانت جميع العقد موجودة بالفعل على موفر التنفيذ ROCM أم لا:
+
+```python
+>>> import onnxruntime
+
+>>> session_options = onnxruntime.SessionOptions()
+>>> session_options.log_severity_level = 0
+
+>>> ort_model = ORTModelForSequenceClassification.from_pretrained(
+...     "distilbert-base-uncased-finetuned-sst-2-english",
+...     export=True,
+...     provider="ROCMExecutionProvider",
+...     session_options=session_options
+... )
+```
+
+## المكاسب الزمنية الملحوظة
+
+قريبا!

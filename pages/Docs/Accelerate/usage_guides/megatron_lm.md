@@ -1,5 +1,3 @@
-لم يتم ترجمة الأجزاء التي طلبت عدم ترجمتها، مثل الروابط ورموز HTML وCSS والشفرات البرمجية.
-
 # Megatron-LM
 
 يتيح [Megatron-LM](https://github.com/NVIDIA/Megatron-LM) تدريب نماذج اللغة الضخمة المحولة على نطاق واسع. يوفر موازاة فعالة للنسيج وخط الأنابيب والتسلسل لنماذج ما قبل التدريب المستندة إلى المحول مثل [GPT](https://arxiv.org/abs/2005.14165) (فك التشفير فقط) و [BERT](https://arxiv.org/pdf/1810.04805.pdf) (الترميز فقط) و [T5](https://arxiv.org/abs/1910.10683) (الترميز وفك التشفير). للحصول على معلومات مفصلة وكيفية عمل الأشياء خلف الكواليس، يرجى الرجوع إلى [repo](https://github.com/NVIDIA/Megatron-LM) على GitHub.
@@ -87,7 +85,7 @@ pip install --no-use-pep517 -e .
 يُظهر التكوين الناتج أدناه:
 
 ```
-~$ cat megatron_gpt_config.yaml
+~$ cat megatron_gpt_config.yaml 
 compute_environment: LOCAL_MACHINE
 deepspeed_config: {}
 distributed_type: MEGATRON_LM
@@ -98,13 +96,13 @@ main_process_ip: null
 main_process_port: null
 main_training_function: main
 megatron_lm_config:
-megatron_lm_gradient_clipping: 1.0
-megatron_lm_num_micro_batches: 2
-megatron_lm_pp_degree: 2
-megatronMultiplier_lm_recompute_activations: true
-megatron_lm_sequence_parallelism: true
-megatron_lm_tp_degree: 2
-megatron_lm_use_distributed_optimizer: true
+  megatron_lm_gradient_clipping: 1.0
+  megatron_lm_num_micro_batches: 2
+  megatron_lm_pp_degree: 2
+  megatron_lm_recompute_activations: true
+  megatron_lm_sequence_parallelism: true
+  megatron_lm_tp_degree: 2
+  megatron_lm_use_distributed_optimizer: true
 mixed_precision: bf16
 num_machines: 1
 num_processes: 4
@@ -121,53 +119,53 @@ use_cpu: false
 from accelerate.utils import MegatronLMDummyScheduler
 
 if accelerator.distributed_type == DistributedType.MEGATRON_LM:
-lr_scheduler = MegatronLMDummyScheduler(
-optimizer=optimizer,
-total_num_steps=args.max_train_steps,
-warmup_num_steps=args.num_warmup_steps,
-)
+    lr_scheduler = MegatronLMDummyScheduler(
+        optimizer=optimizer,
+        total_num_steps=args.max_train_steps,
+        warmup_num_steps=args.num_warmup_steps,
+    )
 else:
-lr_scheduler = get_scheduler(
-name=args.lr_scheduler_type,
-optimizer=optimizer,
-num_warmup_steps=args.num_warmup_steps * args.gradient_accumulation_steps,
-num_training_steps=args.max_train_steps * args.gradient_accumulation_steps,
-)
+    lr_scheduler = get_scheduler(
+        name=args.lr_scheduler_type,
+        optimizer=optimizer,
+        num_warmup_steps=args.num_warmup_steps * args.gradient_accumulation_steps,
+        num_training_steps=args.max_train_steps * args.gradient_accumulation_steps,
+    )
 ```
 
 2. يتطلب الحصول على تفاصيل حجم الدفعة الإجمالية الآن معرفة أحجام التوازي في المعالجة التنسورية والأنابيب. وفيما يلي مثال على كيفية الحصول على حجم الدفعة الإجمالية الفعالة:
 
 ```python
 if accelerator.distributed_type == DistributedType.MEGATRON_LM:
-total_batch_size = accelerator.state.megatron_lm_plugin.global_batch_size
+    total_batch_size = accelerator.state.megatron_lm_plugin.global_batch_size
 else:
-total_batch_size = args.per_device_train_batch_size * accelerator.num_processes * args.gradient_accumulation_steps
+    total_batch_size = args.per_device_train_batch_size * accelerator.num_processes * args.gradient_accumulation_steps
 ```
 
 3. عند استخدام Megatron-LM، يتم بالفعل حساب متوسط الخسائر عبر مجموعة التوازي في البيانات:
 
 ```python
 if accelerator.distributed_type == DistributedType.MEGATRON_LM:
-losses.append(loss)
+    losses.append(loss)
 else:
-losses.append(accelerator.gather_for_metrics(loss.repeat(args.per_device_eval_batch_size)))
+    losses.append(accelerator.gather_for_metrics(loss.repeat(args.per_device_eval_batch_size)))
 
 if accelerator.distributed_type == DistributedType.MEGATRON_LM:
-losses = torch.tensor(losses)
+    losses = torch.tensor(losses)
 else:
-losses = torch.cat(losses)
+    losses = torch.cat(losses)
 ```
 
 4. بالنسبة إلى Megatron-LM، يجب علينا حفظ النموذج باستخدام `accelerator.save_state`:
 
 ```python
 if accelerator.distributed_type == DistributedType.MEGATRON_LM:
-accelerator.save_state(args.output_dir)
+    accelerator.save_state(args.output_dir)
 else:
-unwrapped_model = accelerator.unwrap_model(model)
-unwrapped_model.save_pretrained(
-args.output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save
-)
+    unwrapped_model = accelerator.unwrap_model(model)
+    unwrapped_model.save_pretrained(
+        args.output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save
+    )
 ```
 
 هذا كل شيء! نحن مستعدون الآن للانطلاق 🚀. يمكنك العثور على مثال للنص البرمجي في مجلد الأمثلة على المسار `accelerate/examples/by_feature/megatron_lm_gpt_pretraining.py`.
@@ -196,16 +194,16 @@ examples/by_feature/megatron_lm_gpt_pretraining.py \
 ```bash
 Loading extension module fused_dense_cuda...
 >>> done with compiling and loading fused kernels. Compilation time: 3.569 seconds
-> padded vocab (size: 50257) with 175 dummy tokens (new size: 50432)
+ > padded vocab (size: 50257) with 175 dummy tokens (new size: 50432)
 Building gpt model in the pre-training mode.
 The Megatron LM model weights are initialized at random in `accelerator.prepare`. Please use `accelerator.load_checkpoint` to load a pre-trained checkpoint matching the distributed setup.
 Preparing dataloader
 Preparing dataloader
 Preparing model
-> number of parameters on (tensor, pipeline) model parallel rank (1, 0): 210753280
-> number of parameters on (tensor, pipeline) model parallel rank (1, 1): 209445120
-> number of parameters on (tensor, pipeline) model parallel rank (0, 0): 210753280
-> number of parameters on (tensor, pipeline) model parallel rank (0, 1): 209445120
+ > number of parameters on (tensor, pipeline) model parallel rank (1, 0): 210753280
+ > number of parameters on (tensor, pipeline) model parallel rank (1, 1): 209445120
+ > number of parameters on (tensor, pipeline) model parallel rank (0, 0): 210753280
+ > number of parameters on (tensor, pipeline) model parallel rank (0, 1): 209445120
 Preparing optimizer
 Preparing scheduler
 > learning rate decay style: linear
@@ -216,14 +214,14 @@ Preparing scheduler
 10/10/2022 22:57:22 - INFO - __main__ -   Total train batch size (w. parallel, distributed & accumulation) = 48
 10/10/2022 22:57:22 - INFO - __main__ -   Gradient Accumulation steps = 1
 10/10/2022 22:57:22 - INFO - __main__ -   Total optimization steps = 245
-20%|████████████▍                                                 | 49/245 [01:04<04:09,  1.27s/it]
-10/10/2022 22:58:29 - INFO - __main__ - epoch 0: perplexity: 1222.1594275215962 eval_loss: 7.10837459564209
-40%|████████████████████████▊                                     | 98/245 [02:10<03:07,  1.28s/it]
-10/10/2022 22:59:35 - INFO - __main__ - epoch 1: perplexity: 894.5236583794557 eval_loss: 6.796291351318359
-60%|████████████████████████████████████▌                        | 147/245 [03:16<02:05,  1.28s/it]
-10/10/2022 23:00:40 - INFO - __main__ - epoch 2: perplexity: 702.8458788508042 eval_loss: 6.555137634277344
-80%|████████████████████████████████████████████████▊            | 196/245 [04:22<01:02,  1.28s/it]
-10/10/2022 23:01:46 - INFO - __main__ - epoch 3: perplexity: 600.3220028695281 eval_loss: 6.39746618270874
+ 20%|████████████▍                                                 | 49/245 [01:04<04:09,  1.27s/it]
+ 10/10/2022 22:58:29 - INFO - __main__ - epoch 0: perplexity: 1222.1594275215962 eval_loss: 7.10837459564209
+ 40%|████████████████████████▊                                     | 98/245 [02:10<03:07,  1.28s/it]
+ 10/10/2022 22:59:35 - INFO - __main__ - epoch 1: perplexity: 894.5236583794557 eval_loss: 6.796291351318359
+ 60%|████████████████████████████████████▌                        | 147/245 [03:16<02:05,  1.28s/it]
+ 10/10/2022 23:00:40 - INFO - __main__ - epoch 2: perplexity: 702.8458788508042 eval_loss: 6.555137634277344
+ 80%|████████████████████████████████████████████████▊            | 196/245 [04:22<01:02,  1.28s/it]
+ 10/10/2022 23:01:46 - INFO - __main__ - epoch 3: perplexity: 600.3220028695281 eval_loss: 6.39746618270874
 100%|█████████████████████████████████████████████████████████████| 245/245 [05:27<00:00,  1.28s/it]
 ```
 
@@ -238,87 +236,116 @@ Preparing scheduler
 ```python
 from accelerate.utils import MegatronLMDummyScheduler, GPTTrainStep, avg_losses_across_data_parallel_group
 
+
 # Custom loss function for the Megatron model
 class GPTTrainStepWithCustomLoss(GPTTrainStep):
-def __init__(self, megatron_args, **kwargs):
-super().__init__(megatron_args)
-self.kwargs = kwargs
+    def __init__(self, megatron_args, **kwargs):
+        super().__init__(megatron_args)
+        self.kwargs = kwargs
 
-def get_loss_func(self):
-def loss_func(inputs, loss_mask, output_tensor):
-batch_size, seq_length = output_tensor.shape
-losses = output_tensor.float()
-loss_mask = loss_mask.view(-1).float()
-loss = losses.view(-1) * loss_mask
+    def get_loss_func(self):
+        def loss_func(inputs, loss_mask, output_tensor):
+            batch_size, seq_length = output_tensor.shape
+            losses = output_tensor.float()
+            loss_mask = loss_mask.view(-1).float()
+            loss = losses.view(-1) * loss_mask
 
-# Resize and average loss per sample
-loss_per_sample = loss.view(batch_size, seq_length).sum(axis=1)
-loss_mask_per_sample = loss_mask.view(batch_size, seq_length).sum(axis=1)
-loss_per_sample = loss_per_sample / loss_mask_per_sample
+            # Resize and average loss per sample
+            loss_per_sample = loss.view(batch_size, seq_length).sum(axis=1)
+            loss_mask_per_sample = loss_mask.view(batch_size, seq_length).sum(axis=1)
+            loss_per_sample = loss_per_sample / loss_mask_per_sample
 
-# Calculate and scale weighting
-weights = torch.stack([(inputs == kt).float() for kt in self.kwargs["keytoken_ids"]]).sum(axis=[0, 2])
-weights = 1.0 + self.kwargs["alpha"] * weights
-# Calculate weighted average
-weighted_loss = (loss_per_sample * weights).mean()
+            # Calculate and scale weighting
+            weights = torch.stack([(inputs == kt).float() for kt in self.kwargs["keytoken_ids"]]).sum(axis=[0, 2])
+            weights = 1.0 + self.kwargs["alpha"] * weights
+            # Calculate weighted average
+            weighted_loss = (loss_per_sample * weights).mean()
 
-# Reduce loss across data parallel groups
-averaged_loss = avg_losses_across_data_parallel_group([weighted_loss])
+            # Reduce loss across data parallel groups
+            averaged_loss = avg_losses_across_data_parallel_group([weighted_loss])
 
-return weighted_loss, {"lm loss": averaged_loss[0]}
+            return weighted_loss, {"lm loss": averaged_loss[0]}
 
-return loss_func
+        return loss_func
 
-def get_forward_step_func(self):
-def forward_step(data_iterator, model):
-"""Forward step."""
-# Get the batch.
-tokens, labels, loss_mask, attention_mask, position_ids = self.get_batch(data_iterator)
-output_tensor = model(tokens, position_ids, attention_mask, labels=labels)
+    def get_forward_step_func(self):
+        def forward_step(data_iterator, model):
+            """Forward step."""
+            # Get the batch.
+            tokens, labels, loss_mask, attention_mask, position_ids = self.get_batch(data_iterator)
+            output_tensor = model(tokens, position_ids, attention_mask, labels=labels)
 
-return output_tensor, partial(self.loss_func, tokens, loss_mask)
+            return output_tensor, partial(self.loss_func, tokens, loss_mask)
 
-return forward_step
+        return forward_step
 
 
 def main():
-# Custom loss function for the Megatron model
-keytoken_ids = []
-keywords = ["plt", "pd", "sk", "fit", "predict", " plt", " pd", " sk", " fit", " predict"]
-for keyword in keywords:
-ids = tokenizer([keyword]).input_ids[0]
-if len(ids) == 1:
-keytoken_ids.append(ids[0])
-accelerator.print(f"Keytoken ids: {keytoken_ids}")
-accelerator.state.megatron_lm_plugin.custom_train_step_class = GPTTrainStepWithCustomLoss
-accelerator.state.megatron_lm_plugin.custom_train_step_kwargs = {
-"keytoken_ids": keytoken_ids,
-"alpha": 0.25,
-}
+    # Custom loss function for the Megatron model
+    keytoken_ids = []
+    keywords = ["plt", "pd", "sk", "fit", "predict", " plt", " pd", " sk", " fit", " predict"]
+    for keyword in keywords:
+        ids = tokenizer([keyword]).input_ids[0]
+        if len(ids) == 1:
+            keytoken_ids.append(ids[0])
+    accelerator.print(f"Keytoken ids: {keytoken_ids}")
+    accelerator.state.megatron_lm_plugin.custom_train_step_class = GPTTrainStepWithCustomLoss
+    accelerator.state.megatron_lm_plugin.custom_train_step_kwargs = {
+        "keytoken_ids": keytoken_ids,
+        "alpha": 0.25,
+    }
 ```
 
 2. لاستخدام مجموعات بيانات Megatron-LM، هناك بعض التغييرات الإضافية المطلوبة. متاح برامج تحميل البيانات لهذه المجموعات من البيانات فقط على الرتبة 0 من كل مجموعة توازي تنسورية. وبالتالي، هناك رتب حيث لن يكون برنامج تحميل البيانات متاحًا، ويتطلب ذلك إجراء تعديلات على حلقة التدريب. إن القدرة على القيام بذلك تُظهر مدى مرونة وقابلية امتداد مكتبة 🤗 Accelerate. وفيما يلي التغييرات المطلوبة:
 
    - بالنسبة إلى مجموعات بيانات Megatron-LM المفهرسة، يجب علينا استخدام `MegatronLMDummyDataLoader` وتمرير وسائط مجموعة البيانات المطلوبة إليه مثل `data_path`، `seq_length`، وما إلى ذلك. انظر [هنا](https://github.com/NVIDIA/Megatron-LM/blob/main/megatron/arguments.py#L804) للحصول على قائمة بالوسائط المتاحة.
 
-   ```python
-   from accelerate.utils import MegatronLMDummyDataLoader
+```python
+from accelerate.utils import MegatronLMDummyDataLoader
 
-   megatron_dataloader_config = {
-   "data_path": args.data_path,
-   "splits_string": args.splits_string,
-   "seq_length": args.block_size,
-   "micro_batch_size": args.per_device_train_batch_size,
-   }
-   megatron_dataloader = MegatronLMDummyDataLoader(**megatron_dataloader_config)
-   accelerator.state.megatron_lm_plugin.megatron_dataset_flag = True
-   ```
+megatron_dataloader_config = {
+    "data_path": args.data_path,
+    "splits_string": args.splits_string,
+    "seq_length": args.block_size,
+    "micro_batch_size": args.per_device_train_batch_size,
+}
+megatron_dataloader = MegatronLMDummyDataLoader(**megatron_dataloader_config)
+accelerator.state.megatron_lm_plugin.megatron_dataset_flag = True
+```
 
    - يتم تكرار `megatron_dataloader` 3 مرات للحصول على برامج تحميل بيانات التدريب والتحقق والاختبار وفقًا لنسب `args.splits_string`
 
-   ```python
-   model, optimizer, lr_scheduler, train_dataloader, eval_dataloader, _ = accelerator.prepare(
-   model, optimizer, lr
+```python
+model, optimizer, lr_scheduler, train_dataloader, eval_dataloader, _ = accelerator.prepare(
+    model, optimizer, lr_scheduler, megatron_dataloader, megatron_dataloader, megatron_dataloader
+)
+```
+
+c. Changes to training and evaluation loops as dataloader is only available on tensor parallel ranks 0
+So, we need to iterate only if the dataloader isn't `None` else provide empty dict
+As such, we loop using `while` loop and break when `completed_steps` is equal to `args.max_train_steps`
+This is similar to the Megatron-LM setup wherein user has to provide `max_train_steps` when using Megaton-LM indexed datasets.
+This displays how flexible and extensible 🤗 Accelerate is.
+
+```python
+while completed_steps < args.max_train_steps:
+    model.train()
+    batch = next(train_dataloader) if train_dataloader is not None else {}
+    outputs = model(**batch)
+    loss = outputs.loss
+    ...
+
+    if completed_steps % eval_interval == 0:
+        eval_completed_steps = 0
+        losses = []
+        while eval_completed_steps < eval_iters:
+            model.eval()
+            with torch.no_grad():
+                batch = next(eval_dataloader) if eval_dataloader is not None else {}
+                outputs = model(**batch)
+```
+
+    
 ## أداة لتحويل نقطة التفتيش والتوافق التشغيلي 
 1. تتوفر النصوص البرمجية لهذه الأداة في مكتبة 🤗 Transformers تحت النماذج المقابلة.
 وهي متوفرة حاليًا لنموذج GPT [checkpoint_reshaping_and_interoperability.py](https://github.com/huggingface/transformers/blob/main/src/transformers/models/megatron_gpt2/checkpoint_reshaping_and_interoperability.py) 
@@ -358,62 +385,62 @@ megatron_lm_plugin = MegatronLMPlugin(return_logits=True)
 كما يتطلب أيضًا تحديد مسار ملف المفردات وملف الاندماج في المحلل اللغوي.
 يوضح المثال التالي كيفية تكوين واستخدام طريقة `megatron_generate` لنموذج Megatron-LM GPT.
 ```python
-# تحديد ملف المفردات وملف الاندماج في المحلل اللغوي
+# specifying tokenizer's vocab and merges file
 vocab_file = os.path.join(args.resume_from_checkpoint, "vocab.json")
 merge_file = os.path.join(args.resume_from_checkpoint, "merges.txt")
 other_megatron_args = {"vocab_file": vocab_file, "merge_file": merge_file}
 megatron_lm_plugin = MegatronLMPlugin(other_megatron_args=other_megatron_args)
 
-# الاستدلال باستخدام وظيفة `megatron_generate`
+# inference using `megatron_generate` functionality
 tokenizer.pad_token = tokenizer.eos_token
 max_new_tokens = 64
 batch_texts = [
-"Are you human?",
-"The purpose of life is",
-"The arsenal was constructed at the request of",
-"How are you doing these days?",
+    "Are you human?",
+    "The purpose of life is",
+    "The arsenal was constructed at the request of",
+    "How are you doing these days?",
 ]
 batch_encodings = tokenizer(batch_texts, return_tensors="pt", padding=True)
 
-# عينة top-p
+# top-p sampling
 generated_tokens = model.megatron_generate(
-batch_encodings["input_ids"],
-batch_encodings["attention_mask"],
-max_new_tokens=max_new_tokens,
-top_p=0.8,
-top_p_decay=0.5,
-temperature=0.9,
+    batch_encodings["input_ids"],
+    batch_encodings["attention_mask"],
+    max_new_tokens=max_new_tokens,
+    top_p=0.8,
+    top_p_decay=0.5,
+    temperature=0.9,
 )
 decoded_preds = tokenizer.batch_decode(generated_tokens.cpu().numpy())
 accelerator.print(decoded_preds)
 
-# عينة top-k
+# top-k sampling
 generated_tokens = model.megatron_generate(
-batch_encodings["input_ids"],
-batch_encodings["attention_mask"],
-max_new_tokens=max_new_tokens,
-top_k=50,
-temperature=0.9,
+    batch_encodings["input_ids"],
+    batch_encodings["attention_mask"],
+    max_new_tokens=max_new_tokens,
+    top_k=50,
+    temperature=0.9,
 )
 decoded_preds = tokenizer.batch_decode(generated_tokens.cpu().numpy())
 accelerator.print(decoded_preds)
 
-# إضافة رمز `bos` في البداية
+# adding `bos` token at the start
 generated_tokens = model.megatron_generate(
-batch_encodings["input_ids"], batch_encodings["attention_mask"], max_new_tokens=max_new_tokens, add_BOS=True
+    batch_encodings["input_ids"], batch_encodings["attention_mask"], max_new_tokens=max_new_tokens, add_BOS=True
 )
 decoded_preds = tokenizer.batch_decode(generated_tokens.cpu().numpy())
 accelerator.print(decoded_preds)
 
-# بحث شعاعي => يأخذ موجه واحد فقط
+# beam search => only takes single prompt
 batch_texts = ["The purpose of life is"]
 batch_encodings = tokenizer(batch_texts, return_tensors="pt", padding=True)
 generated_tokens = model.megatron_generate(
-batch_encodings["input_ids"],
-batch_encodings["attention_mask"],
-max_new_tokens=max_new_tokens,
-num_beams=20,
-length_penalty=1.5,
+    batch_encodings["input_ids"],
+    batch_encodings["attention_mask"],
+    max_new_tokens=max_new_tokens,
+    num_beams=20,
+    length_penalty=1.5,
 )
 decoded_preds = tokenizer.batch_decode(generated_tokens.cpu().numpy())
 accelerator.print(decoded_preds)

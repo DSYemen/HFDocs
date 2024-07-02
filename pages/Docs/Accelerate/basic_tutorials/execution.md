@@ -26,7 +26,7 @@ progress_bar = tqdm(range(args.max_train_steps), disable=not accelerator.is_loca
 
 ```py
 if accelerator.is_local_main_process:
-print("Accelerate is the best")
+    print("Accelerate is the best")
 ```
 
 </hfoption>
@@ -37,8 +37,8 @@ print("Accelerate is the best")
 ```py
 @accelerator.on_local_main_process
 def do_my_thing():
-"Something done once per server"
-do_thing_once_per_server()
+    "Something done once per server"
+    do_thing_once_per_server()
 ```
 
 </hfoption>
@@ -53,7 +53,7 @@ do_thing_once_per_server()
 
 ```py
 if accelerator.is_main_process:
-repo.push_to_hub()
+    repo.push_to_hub()
 ```
 
 </hfoption>
@@ -64,8 +64,8 @@ repo.push_to_hub()
 ```py
 @accelerator.on_main_process
 def do_my_thing():
-"Something done once"
-do_thing_once()
+    "Something done once"
+    do_thing_once()
 ```
 
 </hfoption>
@@ -83,8 +83,8 @@ do_thing_once()
 ```py
 @accelerator.on_process(process_index=0)
 def do_my_thing():
-"Something done on process index 0"
-do_thing_on_index_zero()
+    "Something done on process index 0"
+    do_thing_on_index_zero()
 ```
 
 </hfoption>
@@ -95,8 +95,8 @@ do_thing_on_index_zero()
 ```py
 @accelerator.on_local_process(local_process_idx=0)
 def do_my_thing():
-"Something done on process index 0 on each server"
-do_thing_on_index_zero_on_each_server()
+    "Something done on process index 0 on each server"
+    do_thing_on_index_zero_on_each_server()
 ```
 
 </hfoption>

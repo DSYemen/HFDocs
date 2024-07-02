@@ -1,0 +1,187 @@
+# التحسين
+
+يوفر 🤗 Optimum حزمة `optimum.onnxruntime` التي تتيح لك تطبيق تحسين الرسم البياني على العديد من النماذج المستضافة على 🤗 hub باستخدام أداة تحسين نموذج [ONNX Runtime](https://github.com/microsoft/onnxruntime/tree/master/onnxruntime/python/tools/transformers).
+
+## تحسين نموذج أثناء تصدير ONNX
+
+يمكن تحسين نموذج ONNX مباشرة أثناء تصدير ONNX باستخدام واجهة سطر أوامر Optimum، عن طريق تمرير وسيط `--optimize {O1، O2، O3، O4}` في واجهة سطر الأوامر، على سبيل المثال:
+
+```
+optimum-cli export onnx --model gpt2 --optimize O3 gpt2_onnx/
+```
+
+مستويات التحسين هي:
+
+- O1: تحسينات عامة أساسية.
+- O2: تحسينات عامة أساسية وممتدة، عمليات دمج محولات محددة.
+- O3: نفس O2 مع تقريب GELU.
+- O4: نفس O3 مع الدقة المختلطة (fp16، GPU فقط، يتطلب `--device cuda`).
+
+## تحسين نموذج برمجياً مع `ORTOptimizer`
+
+يمكن تحسين نماذج ONNX باستخدام [`~ onnxruntime.ORTOptimizer`]. يمكن تهيئة الفئة باستخدام طريقة [`~ onnxruntime.ORTOptimizer.from_pretrained`]، والتي تدعم تنسيقات نقاط التفتيش المختلفة.
+
+1. استخدام فئة [`~ onnxruntime.ORTModel`] التي تم تهيئتها بالفعل.
+
+```python
+>>> from optimum.onnxruntime import ORTOptimizer, ORTModelForSequenceClassification
+
+# تحميل نموذج ONNX من المركز
+>>> model = ORTModelForSequenceClassification.from_pretrained(
+...     "optimum/distilbert-base-uncased-finetuned-sst-2-english"
+... )
+
+# إنشاء محسن من ORTModelForXXX
+>>> optimizer = ORTOptimizer.from_pretrained(model)
+```
+
+2. استخدام نموذج ONNX محلي من دليل.
+
+```python
+>>> from optimum.onnxruntime import ORTOptimizer
+
+# يفترض هذا وجود نموذج. onnx في path/to/model
+>>> optimizer = ORTOptimizer.from_pretrained("path/to/model")  # doctest: +SKIP
+```
+
+### تكوين التحسين
+
+تسمح فئة [`~ onnxruntime.configuration.OptimizationConfig`] بتحديد كيفية تنفيذ التحسين بواسطة [`~ onnxruntime.ORTOptimizer`].
+
+في تكوين التحسين، هناك 4 مستويات تحسين ممكنة:
+
+- `optimization_level=0`: لتعطيل جميع التحسينات
+- `optimization_level=1`: لتمكين التحسينات الأساسية مثل طي الثوابت أو إزالة العقد الزائدة
+- `optimization_level=2`: لتمكين التحسينات الممتدة للرسم البياني مثل عمليات دمج العقدة
+- `optimization_level=99`: لتمكين تحسينات تخطيط البيانات
+
+يؤدي اختيار مستوى إلى تمكين تحسينات هذا المستوى، بالإضافة إلى تحسينات جميع المستويات السابقة.
+
+لمزيد من المعلومات، انقر [هنا](https://onnxruntime.ai/docs/performance/graph-optimizations.html).
+
+`enable_transformers_specific_optimizations=True` يعني أنه يتم تنفيذ دمج الرسم البياني وتقريب محولات محددة بالإضافة إلى تحسينات ONNX Runtime الموضحة أعلاه.
+
+فيما يلي قائمة بالتحسينات الممكنة التي يمكنك تمكينها:
+
+- دمج Gelu مع `disable_gelu_fusion=False`،
+- دمج التطبيع الطبقي مع `disable_layer_norm_fusion=False`،
+- دمج الاهتمام مع `disable_attention_fusion=False`،
+- تخطي دمج التطبيع الطبقي مع `disable_skip_layer_norm_fusion=False`،
+- إضافة تحيز ودمج التطبيع الطبقي مع `disable_bias_skip_layer_norm_fusion=False`،
+- إضافة تحيز ودمج Gelu / FastGelu مع `disable_bias_gelu_fusion=False`،
+- تقريب Gelu مع `enable_gelu_approximation=True`.
+
+<Tip>
+
+تم تصميم دمج الاهتمام للترميز من الجانب الأيمن لبنيات BERT-like (مثل BERT، وRoBERTa، وVIT، وما إلى ذلك) وللترميز من الجانب الأيسر للنماذج التوليدية (GPT-like). إذا كنت لا تتبع الاتفاقية، يرجى تعيين `use_raw_attention_mask=True` لتجنب مشكلات الدقة المحتملة ولكن التضحية بالأداء.
+
+</Tip>
+
+في حين أن [`~ onnxruntime.configuration.OptimizationConfig`] يمنحك تحكمًا كاملاً في كيفية إجراء التحسين، فقد يكون من الصعب معرفة ما يجب تمكينه / تعطيله. بدلاً من ذلك، يمكنك استخدام [`~ onnxruntime.configuration.AutoOptimizationConfig`] الذي يوفر أربعة مستويات تحسين شائعة:
+
+- O1: تحسينات عامة أساسية.
+- O2: تحسينات عامة أساسية وممتدة، عمليات دمج محولات محددة.
+- O3: نفس O2 مع تقريب GELU.
+- O4: نفس O3 مع الدقة المختلطة (fp16، GPU فقط).
+
+مثال: تحميل [`~ onnxruntime.configuration.OptimizationConfig`] O2
+
+```python
+>>> from optimum.onnxruntime import AutoOptimizationConfig
+>>> optimization_config = AutoOptimizationConfig.O2()
+```
+
+يمكنك أيضًا تحديد وسيط مخصص لم يتم تعريفه في تكوين O2، على سبيل المثال:
+
+```python
+>>> from optimum.onnxruntime import AutoOptimizationConfig
+>>> optimization_config = AutoOptimizationConfig.O2(disable_embed_layer_norm_fusion=False)
+```
+
+### أمثلة على التحسين
+
+فيما يلي مثال سهل من البداية إلى النهاية حول كيفية تحسين [distilbert-base-uncased-finetuned-sst-2-english](https://huggingface.co/distilbert-base-uncased-finetuned-sst-2-english).
+
+```python
+>>> from optimum.onnxruntime import (
+...     AutoOptimizationConfig، ORTOptimizer، ORTModelForSequenceClassification
+... )
+
+>>> model_id = "distilbert-base-uncased-finetuned-sst-2-english"
+>>> save_dir = "distilbert_optimized"
+
+>>> # تحميل نموذج PyTorch وتصديره إلى تنسيق ONNX
+>>> model = ORTModelForSequenceClassification.from_pretrained(model_id, export=True)
+
+>>> # إنشاء المحسن
+>>> optimizer = ORTOptimizer.from_pretrained(model)
+
+>>> # تحديد استراتيجية التحسين من خلال إنشاء التكوين المناسب
+>>> optimization_config = AutoOptimizationConfig.O2()
+
+>>> # تحسين النموذج
+>>> optimizer.optimize(save_dir=save_dir,optimization_config=optimization_config)  # doctest: +IGNORE_RESULT
+```
+
+فيما يلي مثال سهل من البداية إلى النهاية حول كيفية تحسين نموذج Seq2Seq [sshleifer/distilbart-cnn-12-6"](https://huggingface.co/sshleifer/distilbart-cnn-12-6).
+
+```python
+>>> from transformers import AutoTokenizer
+>>> from optimum.onnxruntime import OptimizationConfig, ORTOptimizer, ORTModelForSeq2SeqLM
+
+>>> model_id = "sshleifer/distilbart-cnn-12-6"
+>>> save_dir = "distilbart_optimized"
+
+>>> # تحميل نموذج PyTorch وتصديره إلى تنسيق ONNX
+>>> model = ORTModelForSeq2SeqLM.from_pretrained(model_id, export=True)
+
+>>> # إنشاء المحسن
+>>> optimizer = ORTOptimizer.from_pretrained(model)
+
+>>> # تحديد استراتيجية التحسين من خلال إنشاء التكوين المناسب
+>>> optimization_config = OptimizationConfig(
+...     optimization_level=2,
+...     enable_transformers_specific_optimizations=True,
+...     optimize_for_gpu=False,
+... )
+
+>>> # تحسين النموذج
+>>> optimizer.optimize(save_dir=save_dir، optimization_config=optimization_config)  # doctest: +IGNORE_RESULT
+
+>>> tokenizer = AutoTokenizer.from_pretrained(model_id)
+>>> optimized_model = ORTModelForSeq2SeqLM.from_pretrained(save_dir)
+>>> tokens = tokenizer("This is a sample input", return_tensors="pt")
+>>> outputs = optimized_model.generate(**tokens)
+```
+
+## تحسين نموذج مع Optimum CLI
+
+يمكن استخدام أدوات تحسين Optimum ONNX Runtime مباشرة من خلال واجهة سطر الأوامر Optimum:
+
+```bash
+optimum-cli onnxruntime optimize --help
+usage: optimum-cli <command> [<args>] onnxruntime optimize [-h] --onnx_model ONNX_MODEL -o OUTPUT (-O1 | -O2 | -O3 | -O4 | -c CONFIG)
+
+options:
+-h، --help show this help message and exit
+-O1 التحسينات العامة الأساسية (راجع: https://huggingface.co/docs/optimum/onnxruntime/usage_guides/optimization لمزيد من التفاصيل).
+-O2 تحسينات عامة أساسية وممتدة، عمليات دمج محولات محددة (راجع: https://huggingface.co/docs/optimum/onnxruntime/usage_guides/optimization لمزيد من التفاصيل).
+-O3 نفس O2 مع تقريب Gelu (راجع: https://huggingface.co/docs/optimum/onnxruntime/usage_guides/optimization لمزيد من التفاصيل).
+-O4 نفس O3 مع الدقة المختلطة (راجع: https://huggingface.co/docs/optimum/onnxruntime/usage_guides/optimization لمزيد من التفاصيل).
+-c CONFIG، --config CONFIG
+ملف `ORTConfig` المستخدم لتحسين النموذج.
+
+الحجج المطلوبة:
+--onnx_model ONNX_MODEL
+مسار إلى المستودع حيث توجد نماذج ONNX التي سيتم تحسينها.
+-o OUTPUT، --output OUTPUT
+مسار إلى الدليل الذي سيتم فيه تخزين نموذج ONNX المولد.
+```
+
+يمكن تحسين نموذج ONNX على النحو التالي:
+
+```bash
+optimum-cli onnxruntime optimize --onnx_model onnx_model_location/ -O1 -o optimized_model/
+```
+
+هذا يحسن جميع ملفات ONNX في `onnx_model_location` مع التحسينات العامة الأساسية.

@@ -52,16 +52,16 @@ accelerate launch path_to_script.py --args_for_the_script
 +     model, optimizer, training_dataloader, scheduler
 + )
 
-for batch in training_dataloader:
-optimizer.zero_grad()
-inputs, targets = batch
+  for batch in training_dataloader:
+      optimizer.zero_grad()
+      inputs, targets = batch
 -     inputs = inputs.to(device)
--     targets = targets.target.to(device)
-outputs = model(inputs)
-loss = loss_function(outputs, targets)
+-     targets = targets.to(device)
+      outputs = model(inputs)
+      loss = loss_function(outputs, targets)
 +     accelerator.backward(loss)
-optimizer.step()
-scheduler.step()
+      optimizer.step()
+      scheduler.step()
 ```
 
 1. استورد وقم بتنفيذ فئة [`Accelerator`] في بداية نص التدريب البرمجي الخاص بك. تقوم فئة [`Accelerator`] بإعداد كل ما هو ضروري للتدريب الموزع، وتكشف تلقائيًا عن بيئة التدريب الخاصة بك (جهاز واحد مع وحدة معالجة الرسومات، أو جهاز به عدة وحدات معالجة الرسومات، أو أجهزة متعددة مع وحدات معالجة الرسومات المتعددة أو وحدة معالجة الرسومات، إلخ) بناءً على كيفية إطلاق الكود.
@@ -88,7 +88,7 @@ device = accelerator.device
 
 ```python
 model, optimizer, train_dataloader, lr_scheduler = accelerator.prepare(
-model, optimizer, train_dataloader, lr_scheduler
+    model, optimizer, train_dataloader, lr_scheduler
 )
 ```
 
@@ -112,11 +112,11 @@ validation_dataloader = accelerator.prepare(validation_dataloader)
 
 ```python
 for inputs, targets in validation_dataloader:
-predictions = model(inputs)
-# قم بتجميع جميع التنبؤات والأهداف
-all_predictions, all_targets = accelerator.gather_for_metrics((predictions, targets))
-# مثال على الاستخدام مع *Datasets.Metric*
-metric.add_batch(all_predictions, all_targets)
+    predictions = model(inputs)
+    # قم بتجميع جميع التنبؤات والأهداف
+    all_predictions, all_targets = accelerator.gather_for_metrics((predictions, targets))
+    # مثال على الاستخدام مع *Datasets.Metric*
+    metric.add_batch(all_predictions, all_targets)
 ```
 
 بالنسبة للحالات الأكثر تعقيدًا (مثل المصفوفات ثنائية الأبعاد، لا تريد دمج المصفوفات، قاموس من المصفوفات ثلاثية الأبعاد)، يمكنك تمرير `use_gather_object=True` في `gather_for_metrics`. سيتم إرجاع قائمة الكائنات بعد التجميع. لاحظ أن استخدامها مع المصفوفات GPU غير مدعوم جيدًا وغير فعال.
@@ -143,7 +143,7 @@ from transformers import AutoConfig, AutoModelForCausalLM
 
 config = AutoConfig.from_pretrained("mistralai/Mixtral-8x7B-Instruct-v0.1")
 with init_empty_weights():
-model = AutoModelForCausalLM.from_config(config)
+    model = AutoModelForCausalLM.from_config(config)
 ```
 
 ### تحميل الأوزان وإرسالها
@@ -156,7 +156,7 @@ model = AutoModelForCausalLM.from_config(config)
 from accelerate import load_checkpoint_and_dispatch
 
 model = load_checkpoint_and_dispatch(
-model, checkpoint="mistralai/Mixtral-8x7B-Instruct-v0.1", device_map="auto", no_split_module_classes=['Block']
+    model, checkpoint="mistralai/Mixtral-8x7B-Instruct-v0.1", device_map="auto", no_split_module_classes=['Block']
 )
 ```
 

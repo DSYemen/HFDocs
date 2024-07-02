@@ -258,8 +258,8 @@ class MyModel(torch.nn.Module):
 
 # إعداد خطاف اتصال DDP
 ddp_kwargs = DistributedDataParallelKwargs(
-comm_hook=DDPCommunicationHookType.POWER_SGD،
-comm_wrapper=DDPCommunicationHookType.FP16
+    comm_hook=DDPCommunicationHookType.POWER_SGD،
+    comm_wrapper=DDPCommunicationHookType.FP16
 )
 accelerator = Accelerator(kwargs_handlers=[ddp_kwargs])
 
@@ -296,8 +296,8 @@ class MyModel(torch.nn.Module):
 
 # إعداد خطاف اتصال DDP
 ddp_kwargs = DistributedDataParallelKwargs(
-comm_hook=DDPCommunicationHookType.POWER_SGD،
-comm_state_option={"matrix_approximation_rank": 2}
+    comm_hook=DDPCommunicationHookType.POWER_SGD،
+    comm_state_option={"matrix_approximation_rank": 2}
 )
 accelerator = Accelerator(kwargs_handlers=[ddp_kwargs])
 

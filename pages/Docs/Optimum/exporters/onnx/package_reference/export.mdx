@@ -1,0 +1,21 @@
+# وظائف التصدير
+
+يمكنك تصدير النماذج إلى ONNX من إطارين في 🤗 Optimum: PyTorch و TensorFlow. هناك دالة تصدير لكل من هذه الأطر، [`~optimum.exporters.onnx.convert.export_pytorch`] و [`~optimum.exporters.onnx.convert.export_tensorflow`]، ولكن الطريقة الموصى بها لاستخدامها هي عبر دالة التصدير الرئيسية [`~optimum.exporters.main_export`]، والتي ستتولى استخدام دالة التصدير المناسبة وفقًا للإطار المتاح، والتحقق من صحة النموذج المصدر، وتوفير خيارات ممتدة لتشغيل التحسينات على النموذج المصدر.
+
+## الوظائف الرئيسية
+
+[[autodoc]] exporters.onnx.main_export
+
+[[autodoc]] exporters.onnx.onnx_export_from_model
+
+[[autodoc]] exporters.onnx.convert.export
+
+[[autodoc]] exporters.onnx.convert.export_pytorch
+
+[[autodoc]] exporters.onnx.convert.export_tensorflow
+
+## وظائف المساعدة
+
+[[autodoc]] exporters.onnx.convert.check_dummy_inputs_are_allowed
+
+[[autodoc]] exporters.onnx.convert.validate_model_outputs

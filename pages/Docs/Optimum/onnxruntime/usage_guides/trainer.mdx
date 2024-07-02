@@ -1,0 +1,318 @@
+# تسريع التدريب باستخدام ONNX Runtime 
+
+يدمج Optimum ONNX Runtime Training من خلال واجهة برمجة تطبيقات `ORTTrainer` التي توسع `Trainer` في [Transformers](https://huggingface.co/docs/transformers/index).
+
+مع هذا التوسيع، يمكن تقليل وقت التدريب بأكثر من 35% للعديد من نماذج Hugging Face الشائعة مقارنة بـ PyTorch في وضع eager.
+
+تسهل واجهات برمجة التطبيقات [`ORTTrainer`] و [`ORTSeq2SeqTrainer`] تكوين __[ONNX Runtime (ORT)](https://onnxruntime.ai/)__ مع ميزات أخرى في [`Trainer`](https://huggingface.co/docs/transformers/main_classes/trainer).
+
+وهي تحتوي على حلقة تدريب وحلقة تقييم كاملة الميزات، وتدعم البحث عن أفضل المعلمات، والتدريب على الدقة المختلطة، والتدريب الموزع باستخدام العديد من [NVIDIA](https://techcommunity.microsoft.com/t5/ai-machine-learning-blog/accelerate-pytorch-transformer-model-training-with-onnx-runtime/ba-p/2540471)
+
+و [AMD](https://cloudblogs.microsoft.com/opensource/2021/07/13/onnx-runtime-release-1-8-1-previews-support-for-accelerated-training-on-amd-gpus-with-the-amd-rocm-open-software-platform/) GPUs.
+
+مع backend ONNX Runtime، تستفيد [`ORTTrainer`] و [`ORTSeq2SeqTrainer`] من:
+
+* تحسين رسم الحساب: طي الثوابت، وإزالة العقد، واندماج العقد
+* التخطيط الفعال للذاكرة
+* تحسين kernel
+* محسن Adam المندمج في ORT: يجمع التحديثات elementwise المطبقة على جميع معلمات النموذج في عملية أو بضع عمليات إطلاق kernel
+* محسن FP16 أكثر كفاءة: يلغي عددًا كبيرًا من عمليات نسخ الذاكرة من الجهاز إلى المضيف
+* التدريب على الدقة المختلطة
+
+جربها لتحقيق __انخفاض الكمون، وسرعة أعلى، وحجم دفعة قصوى أكبر__ أثناء تدريب النماذج في 🤗 Transformers!
+
+## الأداء
+
+يوضح الرسم البياني أدناه تسريعًا مثيرًا للإعجاب __من 39% إلى 130%__ لنماذج Hugging Face مع Optimum عند __استخدام ONNX Runtime و DeepSpeed ZeRO Stage 1__ للتدريب.
+
+تم إجراء قياسات الأداء على نماذج Hugging Face المحددة مع PyTorch كخط أساس، و ONNX Runtime فقط للتدريب كتشغيل ثانٍ، و ONNX
+
+Runtime + DeepSpeed ZeRO Stage 1 كتشغيل نهائي، مما يظهر المكاسب القصوى. كان المحسن المستخدم لتشغيل خط الأساس PyTorch هو محسن AdamW ومحسنات ORT Training
+
+تستخدم محسن Adam المندمج (المتاح في `ORTTrainingArguments`). تم إجراء التشغيل على عقدة Nvidia A100 واحدة مع 8 وحدات معالجة رسومية.
+
+<figure class="image table text-center m-0 w-full">
+<img src="https://huggingface.co/datasets/optimum/documentation-images/resolve/main/onnxruntime/onnxruntime-training-benchmark.png" alt="ONNX Runtime Training Benchmark"/>
+</figure>
+
+معلومات الإصدار المستخدمة لهذه التشغيلات هي كما يلي:
+
+```
+PyTorch: 1.14.0.dev20221103+cu116; ORT: 1.14.0.dev20221103001+cu116; DeepSpeed: 0.6.6; HuggingFace: 4.24.0.dev0; Optimum: 1.4.1.dev0; Cuda: 11.6.2
+```
+
+## ابدأ بإعداد البيئة
+
+لاستخدام ONNX Runtime للتدريب، تحتاج إلى جهاز به وحدة معالجة رسومات (GPU) واحدة على الأقل من NVIDIA أو AMD.
+
+لاستخدام `ORTTrainer` أو `ORTSeq2SeqTrainer`، تحتاج إلى تثبيت وحدة نمطية ONNX Runtime Training و Optimum.
+
+### تثبيت ONNX Runtime
+
+لإعداد البيئة، نوصي بشدة بتثبيت التبعيات باستخدام Docker لضمان صحة الإصدارات وتكوينها بشكل صحيح. يمكنك العثور على ملفات docker مع مجموعات مختلفة [هنا](https://github.com/huggingface/optimum/tree/main/examples/onnxruntime/training/docker).
+
+#### الإعداد لـ NVIDIA GPU
+
+فيما يلي نأخذ تثبيت `onnxruntime-training 1.14.0` كمثال:
+
+* إذا كنت تريد تثبيت `onnxruntime-training 1.14.0` عبر [Dockerfile](https://github.com/huggingface/optimum/blob/main/examples/onnxruntime/training/docker/Dockerfile-ort1.14.0-cu116):
+
+```bash
+docker build -f Dockerfile-ort1.14.0-cu116 -t ort/train:1.14.0 .
+```
+
+* إذا كنت تريد تثبيت التبعيات في بيئة Python المحلية. يمكنك تثبيت pip بمجرد تثبيت [CUDA 11.6](https://docs.nvidia.com/cuda/archive/11.6.2/) و [cuDNN 8](https://developer.nvidia.com/cudnn) بشكل جيد.
+
+```bash
+pip install onnx ninja
+pip install torch==1.13.1+cu116 torchvision==0.14.1 -f https://download.pytorch.org/whl/cu116/torch_stable.html
+pip install onnxruntime-training==1.14.0 -f https://download.onnxruntime.ai/onnxruntime_stable_cu116.html
+pip install torch-ort
+pip install --upgrade protobuf==3.20.2
+```
+
+وقم بتشغيل التكوين بعد التثبيت:
+
+```bash
+python -m torch_ort.configure
+```
+
+#### الإعداد لـ AMD GPU
+
+فيما يلي نأخذ تثبيت `onnxruntime-training` nightly كمثال:
+
+* إذا كنت تريد تثبيت `onnxruntime-training` عبر [Dockerfile](https://github.com/huggingface/optimum/blob/main/examples/onnxruntime/training/docker/Dockerfile-ort-nightly-rocm57):
+
+```bash
+docker build -f Dockerfile-ort-nightly-rocm57 -t ort/train:nightly .
+```
+
+* إذا كنت تريد تثبيت التبعيات في بيئة Python المحلية. يمكنك تثبيت pip بمجرد تثبيت [ROCM 5.7](https://rocmdocs.amd.com/en/latest/deploy/linux/quick_start.html) بشكل جيد.
+
+```bash
+pip install onnx ninja
+pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+pip install pip install --pre onnxruntime-training -f https://download.onnxruntime.ai/onnxruntime_nightly_rocm57.html
+pip install torch-ort
+pip install --upgrade protobuf==3.20.2
+```
+
+وقم بتشغيل التكوين بعد التثبيت:
+
+```bash
+python -m torch_ort.configure
+```
+
+### تثبيت Optimum
+
+يمكنك تثبيت Optimum عبر pypi:
+
+```bash
+pip install optimum
+```
+
+أو تثبيته من المصدر:
+
+```bash
+pip install git+https://github.com/huggingface/optimum.git
+```
+
+تثبت هذه الأوامر الإصدار الرئيسي الحالي لـ Optimum، والذي قد يتضمن أحدث التطورات (ميزات جديدة، وإصلاح الأخطاء). ومع ذلك، قد لا يكون الإصدار الرئيسي مستقرًا جدًا. إذا واجهتك أي مشكلة، يرجى فتح [قضية](https://github.com/huggingface/optimum/issues) حتى
+
+يمكننا إصلاحها في أقرب وقت ممكن.
+
+## ORTTrainer
+
+ترث فئة [`ORTTrainer`] فئة [`Trainer`](https://huggingface.co/docs/transformers/main/en/main_classes/trainer#trainer)
+
+من Transformers. يمكنك بسهولة تكييف الرموز عن طريق استبدال `Trainer` من transformers بـ `ORTTrainer` للاستفادة من التسريع
+
+المدعوم من ONNX Runtime. فيما يلي مثال على كيفية استخدام `ORTTrainer` مقارنة بـ `Trainer`:
+
+```diff
+-from transformers import Trainer, TrainingArguments
++from optimum.onnxruntime import ORTTrainer, ORTTrainingArguments
+
+# Step 1: Define training arguments
+-training_args = TrainingArguments(
++training_args = ORTTrainingArguments(
+    output_dir="path/to/save/folder/",
+-   optim = "adamw_hf",
++   optim="adamw_ort_fused",
+    ...
+)
+
+# Step 2: Create your ONNX Runtime Trainer
+-trainer = Trainer(
++trainer = ORTTrainer(
+    model=model,
+    args=training_args,
+    train_dataset=train_dataset,
++   feature="text-classification",
+    ...
+)
+
+# Step 3: Use ONNX Runtime for training!🤗
+trainer.train()
+```
+
+تحقق من [نصوص المثال](https://github.com/huggingface/optimum/tree/main/examples/onnxruntime/training) الأكثر تفصيلاً في مستودع Optimum.
+
+## ORTSeq2SeqTrainer
+
+تشبه فئة [`ORTSeq2SeqTrainer`] فئة [`Seq2SeqTrainer`](https://huggingface.co/docs/transformers/main/en/main_classes/trainer#transformers.Seq2SeqTrainer)
+
+من Transformers. يمكنك بسهولة تكييف الرموز عن طريق استبدال `Seq2SeqTrainer` من transformers بـ `ORTSeq2SeqTrainer` للاستفادة من التسريع
+
+المدعوم من ONNX Runtime. فيما يلي مثال على كيفية استخدام `ORTSeq2SeqTrainer` مقارنة بـ `Seq2SeqTrainer`:
+
+```diff
+-from transformers import Seq2SeqTrainer, Seq2SeqTrainingArguments
++from optimum.onnxruntime import ORTSeq2SeqTrainer, ORTSeq2SeqTrainingArguments
+
+# Step 1: Define training arguments
+-training_args = Seq2SeqTrainingArguments(
++training_args = ORTSeq2SeqTrainingArguments(
+    output_dir="path/to/save/folder/",
+-   optim = "adamw_hf",
++   optim="adamw_ort_fused",
+    ...
+)
+
+# Step 2: Create your ONNX Runtime Seq2SeqTrainer
+-trainer = Seq2SeqTrainer(
++trainer = ORTSeq2SeqTrainer(
+    model=model,
+    args=training_args,
+    train_dataset=train_dataset,
++   feature="text2text-generation",
+    ...
+)
+
+# Step 3: Use ONNX Runtime for training!🤗
+trainer.train()
+```
+
+تحقق من [نصوص المثال](https://github.com/huggingface/optimum/tree/main/examples/onnxruntime/training) الأكثر تفصيلاً في مستودع Optimum.
+
+## ORTTrainingArguments
+
+ترث فئة [`ORTTrainingArguments`] فئة [`TrainingArguments`](https://huggingface.co/docs/transformers/main/en/main_classes/trainer#transformers.TrainingArguments)
+
+في Transformers. بالإضافة إلى المحسنات المنفذة في Transformers، فإنه يسمح لك باستخدام المحسنات المنفذة في ONNX Runtime.
+
+استبدل `Seq2SeqTrainingArguments` بـ `ORTSeq2SeqTrainingArguments`:
+
+```diff
+-from transformers import TrainingArguments
++from optimum.onnxruntime import ORTTrainingArguments
+
+-training_args = TrainingArguments(
++training_args =  ORTTrainingArguments(
+    output_dir="path/to/save/folder/",
+    num_train_epochs=1,
+    per_device_train_batch_size=8,
+    per_device_eval_batch_size=8,
+    warmup_steps=500,
+    weight_decay=0.01,
+    logging_dir="path/to/save/folder/",
+-   optim = "adamw_hf",
++   optim="adamw_ort_fused",  # Fused Adam optimizer implemented by ORT
+)
+```
+
+<Tip warning={false}>
+تدعم ONNX Runtime DeepSpeed (فقط ZeRO stage 1 و 2 في الوقت الحالي).
+
+يمكنك العثور على بعض [أمثلة تكوين DeepSpeed](https://github.com/huggingface/optimum/tree/main/tests/onnxruntime/ds_configs)
+
+في مستودع Optimum.
+</Tip>
+
+## ORTSeq2SeqTrainingArguments
+
+ترث فئة [`ORTSeq2SeqTrainingArguments`] فئة [`Seq2SeqTrainingArguments`](https://huggingface.co/docs/transformers/main/en/main_classes/trainer#transformers.Seq2SeqTrainingArguments)
+
+في Transformers. بالإضافة إلى المحسنات المنفذة في Transformers، فإنه يسمح لك باستخدام المحسنات المنفذة في ONNX Runtime.
+
+استبدل `Seq2SeqTrainingArguments` بـ `ORTSeq2SeqTrainingArguments`:
+
+```diff
+-from transformers import Seq2SeqTrainingArguments
++from optimum.onnxruntime import ORTSeq2SeqTrainingArguments
+
+-training_args = Seq2SeqTrainingArguments(
++training_args =  ORTSeq2SeqTrainingArguments(
+    output_dir="path/to/save/folder/",
+    num_train_epochs=1,
+    per_device_train_batch_size=8,
+    per_device_eval_batch_size=8,
+    warmup_steps=500,
+    weight_decay=0.01,
+    logging_dir="path/to/save/folder/",
+-   optim = "adamw_hf",
++   optim="adamw_ort_fused",  # Fused Adam optimizer implemented by ORT
+)
+```
+
+<Tip warning={false}>
+تدعم ONNX Runtime DeepSpeed (فقط ZeRO stage 1 و 2 في الوقت الحالي).
+
+يمكنك العثور على بعض [أمثلة تكوين DeepSpeed](https://github.com/huggingface/optimum/tree/main/tests/onnxruntime/ds_configs)
+
+في مستودع Optimum.
+</Tip>
+
+## ORTModule+StableDiffusion
+
+يدعم Optimum تسريع Hugging Face Diffusers باستخدام ONNX Runtime في [هذا المثال](https://github.com/huggingface/optimum/tree/main/examples/onnxruntime/training/stable-diffusion/text-to-image).
+
+فيما يلي ملخص للتغييرات الأساسية اللازمة لتمكين ONNX Runtime Training:
+
+```diff
+import torch
+from diffusers import AutoencoderKL, UNet2DConditionModel
+from transformers import CLIPTextModel
+
++from onnxruntime.training.ortmodule import ORTModule
++from onnxruntime.training.optim.fp16_optimizer import FP16_Optimizer as ORT_FP16_Optimizer
+
+unet = UNet2DConditionModel.from_pretrained(
+    "CompVis/stable-diffusion-v1-4", 
+    subfolder="unet",
+    ...
+)
+text_encoder = CLIPTextModel.from_pretrained(
+    "CompVis/stable-diffusion-v1-4", 
+    subfolder="text_encoder",
+    ...
+)
+vae = AutoencoderKL.from_pretrained(
+    "CompVis/stable-diffusion-v1-4", 
+    subfolder="vae",
+    ...
+)
+
+optimizer = torch.optim.AdamW(
+    unet.parameters(),
+    ...
+)
+
++vae = ORTModule(vae)
++text_encoder = ORTModule(text_encoder)
++unet = ORTModule(unet)
+
++optimizer = ORT_FP16_Optimizer(optimizer)
+```
+## موارد أخرى:
+
+* تدوينات المدونة:
+* [Optimum + ONNX Runtime: Easier, Faster training for your Hugging Face models](https://huggingface.co/blog/optimum-onnxruntime-training)
+* تسريع تدريب نماذج محولات PyTorch باستخدام ONNX Runtime - نظرة عميقة](https://techcommunity.microsoft.com/t5/ai-machine-learning-blog/accelerate-pytorch-transformer-model-training-with-onnx-runtime/ba-p/2540471)
+* [نظرة فنية متعمقة على ONNX Runtime Training](https://techcommunity.microsoft.com/t5/ai-machine-learning-blog/onnx-runtime-training-technical-deep-dive/ba-p/1398310)
+* [مستودع Optimum على GitHub](https://github.com/huggingface/optimum)
+* [مستودع ONNX Runtime على GitHub](https://github.com/microsoft/onnxruntime)
+* [مستودع Torch ORT على GitHub](https://github.com/pytorch/ort)
+* [تنزيل الإصدارات المستقرة من ONNX Runtime](https://download.onnxruntime.ai/)
+
+إذا واجهتك أي مشاكل أو أسئلة تتعلق بـ `ORTTrainer`، يرجى إرسال مشكلة إلى [مستودع Optimum على GitHub](https://github.com/huggingface/optimum) أو مناقشتها معنا على [منتدى مجتمع Hugging Face](https://discuss.huggingface.co/c/optimum/)، تحياتي 🤗 !

@@ -1,16 +1,3 @@
-هذا هو النص المترجم مع اتباع التعليمات المحددة: 
-
-<!--Copyright 2022 The HuggingFace Team. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
-the License. You may obtain a copy of the License at
-http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
-an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
-⚠️ Note that this file is in Markdown but contain specific syntax for our doc-builder (similar to MDX) that may not be
-rendered properly in your Markdown viewer.
--->
-
 # التتبع
 
 هناك عدد كبير من واجهات برمجة التطبيقات الخاصة بتتبع التجارب، ولكن جعلها جميعًا تعمل في بيئة متعددة المعالجات يمكن أن يكون معقدًا في كثير من الأحيان. يوفر HuggingFace Accelerate واجهة برمجة تطبيقات عامة للتتبع يمكن استخدامها لتسجيل العناصر المفيدة أثناء تشغيل النص البرمجي الخاص بك من خلال [Accelerator.log]
@@ -66,9 +53,9 @@ from accelerate import Accelerator
 
 accelerator = Accelerator(log_with="all")
 config = {
-"num_iterations": 5,
-"learning_rate": 1e-2,
-"loss_function": str(my_loss_function),
+    "num_iterations": 5,
+    "learning_rate": 1e-2,
+    "loss_function": str(my_loss_function),
 }
 
 accelerator.init_trackers("example_project", config=config)
@@ -78,16 +65,16 @@ device = accelerator.device
 my_model.to(device)
 
 for iteration in config["num_iterations"]:
-for step, batch in my_training_dataloader:
-my_optimizer.zero_grad()
-inputs, targets = batch
-inputs = inputs.to(device)
-targets = targets.to(device)
-outputs = my_model(inputs)
-loss = my_loss_function(outputs, targets)
-accelerator.backward(loss)
-my_optimizer.step()
-accelerator.log({"training_loss": loss}, step=step)
+    for step, batch in my_training_dataloader:
+        my_optimizer.zero_grad()
+        inputs, targets = batch
+        inputs = inputs.to(device)
+        targets = targets.to(device)
+        outputs = my_model(inputs)
+        loss = my_loss_function(outputs, targets)
+        accelerator.backward(loss)
+        my_optimizer.step()
+        accelerator.log({"training_loss": loss}, step=step)
 accelerator.end_training()
 ```
 
@@ -135,25 +122,25 @@ import wandb
 
 
 class MyCustomTracker(GeneralTracker):
-name = "wandb"
-requires_logging_directory = False
+    name = "wandb"
+    requires_logging_directory = False
 
-@on_main_process
-def __init__(self, run_name: str):
-self.run_name = run_name
-run = wandb.init(self.run_name)
+    @on_main_process
+    def __init__(self, run_name: str):
+        self.run_name = run_name
+        run = wandb.init(self.run_name)
 
-@property
-def tracker(self):
-return self.run.run
+    @property
+    def tracker(self):
+        return self.run.run
 
-@on_main_process
-def store_init_configuration(self, values: dict):
-wandb.config(values)
+    @on_main_process
+    def store_init_configuration(self, values: dict):
+        wandb.config(values)
 
-@on_main_process
-def log(self, values: dict, step: Optional[int] = None):
-wandb.log(values, step=step)
+    @on_main_process
+    def log(self, values: dict, step: Optional[int] = None):
+        wandb.log(values, step=step)
 ```
 
 عندما تكون مستعدًا لبناء كائن "Accelerator"، قم بتمرير مثيل من جهاز التتبع الخاص بك إلى [Accelerator.log_with] لاستخدامه تلقائيًا مع واجهة برمجة التطبيقات:
@@ -198,7 +185,7 @@ wandb_run.log_artifact(some_artifact_to_log)
 ```python
 wandb_tracker = accelerator.get_tracker("wandb", unwrap=True)
 if accelerator.is_main_process:
-wandb_tracker.log_artifact(some_artifact_to_log)
+    wandb_tracker.log_artifact(some_artifact_to_log)
 ```
 
 ## عندما لا يعمل الغلاف
@@ -206,27 +193,27 @@ wandb_tracker.log_artifact(some_artifact_to_log)
 إذا كانت المكتبة تحتوي على واجهة برمجة تطبيقات لا تتبع `.log` الصارم مع قاموس شامل مثل Neptune.AI، فيمكن إجراء التسجيل يدويًا ضمن عبارة `if accelerator.is_main_process`:
 
 ```diff
-from accelerate import Accelerator
+  from accelerate import Accelerator
 + import neptune.new as neptune
 
-accelerator = Accelerator()
+  accelerator = Accelerator()
 + run = neptune.init(...)
 
-my_model, my_optimizer, my_training_dataloader = accelerate.prepare(my_model, my_optimizer, my_training_dataloader)
-device = accelerator.device
-my_model.to(device)
+  my_model, my_optimizer, my_training_dataloader = accelerate.prepare(my_model, my_optimizer, my_training_dataloader)
+  device = accelerator.device
+  my_model.to(device)
 
-for iteration in config["num_iterations"]:
-for batch in my_training_dataloader:
-my_optimizer.zero_grad()
-inputs, targets = batch
-inputs = inputs.to(device)
-targets = targets.to(device)
-outputs = my_model(inputs)
-loss = my_loss_function(outputs, targets)
-total_loss += loss
-accelerator.backward(loss)
-my_optimizer.step()
+  for iteration in config["num_iterations"]:
+      for batch in my_training_dataloader:
+          my_optimizer.zero_grad()
+          inputs, targets = batch
+          inputs = inputs.to(device)
+          targets = targets.to(device)
+          outputs = my_model(inputs)
+          loss = my_loss_function(outputs, targets)
+          total_loss += loss
+          accelerator.backward(loss)
+          my_optimizer.step()
 +         if accelerator.is_main_process:
 +             run["logs/training/batch/loss"].log(loss)
 ```

@@ -122,42 +122,43 @@
 
 > إذا لم تجد ورقتك هنا، قم بإنشاء طلب سحب (Pull Request) لإضافتها!
 
-* يوافال كريستين، وآدم بولياك، وأورييل سينجر، وشاهبولاند ماتيانا، وجو بينا، وعمر ليفي: "Pick-a-Pic: قاعدة بيانات مفتوحة لتفضيلات المستخدم في النص إلى توليد الصور"، 2023؛ [arXiv:2305.01569](http://arxiv.org/abs/2305.01569).
-* لي وانج، ووانيو شو، وييهواي لان، وزيقيانج هو، ويونشي لان، وروي كا-وي لي، وإي-بينغ ليم: "تخطيط وإثارة الفكر: تحسين الاستدلال التسلسلي بدون سلسلة الصفر من خلال نماذج اللغة الضخمة"، 2023؛ [arXiv:2305.04091](http://arxiv.org/abs/2305.04091).
-* أرثر كامارا، وكلوديا هوف: "نقل الأشياء: دراسة حول كفاءة نقل المستندات إلى الذاكرة لنماذج الاسترجاع العصبية"، 2022؛ [arXiv:2205.08343](http://arxiv.org/abs/2205.08343).
-* ينج شينغ، ويانمين تشنغ، وبيهانغ يوان، وزوهوهان لي، وماكس ريبانين، ودانيال ي. فو، وزي تشيانغ شي، وبيدي تشن، وكلارك باريت، وجوزيف إي. غونزاليس، وبيرسي ليانغ، وكريستوفر ريه، وآيون ستوايكا، وتشانغ: "الاستدلال التنموي عالي الإنتاجية لنماذج اللغة الضخمة باستخدام وحدة معالجة الرسومات (GPU) واحدة"، 2023؛ [arXiv:2303.06865](http://arxiv.org/abs/2303.06865).
-* بيتر ميلكيور، ويان ليانغ، وشانغهون هان، وأندي جولدينج: "ترميز الطيف المجري الأول: الهندسة المعمارية"، 2022؛ [arXiv:2211.07890](http://arxiv.org/abs/2211.07890).
-* جياو تشن، وأستون تشانغ، ومو لي، وأليكس سمولا، ودييي يانغ: "نموذج انتشار أرخص وأفضل للغة مع ضوضاء مقنعة ناعمة"، 2023؛ [arXiv:2304.04746](http://arxiv.org/abs/2304.04746).
-* أيان حق، وماثيو تانكيك، وأليكسي أي. إيفروس، وأليكساندر هولينسكي، وأنغجو كانازاوا: "Instruct-NeRF2NeRF: تحرير المشاهد ثلاثية الأبعاد بالتعليمات"، 2023؛ [arXiv:2303.12789](http://arxiv.org/abs/2303.12789).
-* لوك ميلاس-كيريازي، وكريستيان روببريشت، وإيرو لاينا، وأندريا فيدالدي: "RealFusion: إعادة بناء 360 درجة لأي كائن من صورة واحدة"، 2023؛ [arXiv:2302.10663](http://arxiv.org/abs/2302.10663).
-* شياوشي وو، وكيكيانج صن، وفنج تشو، وروي تشاو، وهونجشنج لي: "تحسين محاذاة نماذج النص إلى الصورة مع التفضيل البشري"، 2023؛ [arXiv:2303.14420](http://arxiv.org/abs/2303.14420).
-* يونجليانج شين، وكايتاو سونج، وشي تان، ودونجشنج لي، وويمنج لو، ويويتينغ تشوانج: "HuggingGPT: حل مهام الذكاء الاصطناعي مع ChatGPT وأصدقائه في Hugging Face"، 2023؛ [arXiv:2303.17580](http://arxiv.org/abs/2303.17580).
-* يو يانج، وونلين يايو، وهونجمينج تشانج، وشياويانج وانج، ودونج يو، وجيانشو تشن: "Z-LaVI: محدد الصيغة الصفرية المدعوم بالخيال المرئي"، 2022؛ [arXiv:2210.12261](http://arxiv.org/abs/2210.12261).
-* شينج-ين تشو، و بين-يو تشن، وتسونج-يي هو: "كيفية اختراق نماذج الانتشار؟"، 2022؛ [arXiv:2212.05400](http://arxiv.org/abs/2212.05400).
-* جونيونج سيو، ووسوك جانج، ومين-سوب كواك، وجايهون كو، وهايونسو كيم، وجونهو كيم، وجين-هوا كيم، وجيونج لي، وسيونجريونج كيم: "دع نموذج الانتشار ثنائي الأبعاد يعرف الاتساق ثلاثي الأبعاد للجيل القوي للنص إلى 3D"، 2023؛ [arXiv:2303.07937](http://arxiv.org/abs/2303.07937).
-* أور باتاشنيك، ودانيال جاربي، وإيدان أزوري، وهادار أفيربوش-إلور، ودانيال كوهين-أور: "تحديد موقع تباين شكل الكائن باستخدام نماذج الانتشار من النص إلى الصورة"، 2023؛ [arXiv:2303.11306](http://arxiv.org/abs/2303.11306).
-* ديداك سوريس، وساشيت مينون، وكارل فونديريك: "ViperGPT: الاستدلال المرئي عبر تنفيذ بايثون للاستدلال"، 2023؛ [arXiv:2303.08128](http://arxiv.org/abs/2303.08128).
-* تشنيانج تشي، وشيادونج كون، ويونج تشانج، وتشنيانج لي، وشينتاو وانج، ويينج شان، وكيفن تشين: "FateZero: دمج الانتباه لتحرير الفيديو القائم على النص بدون تصوير"، 2023؛ [arXiv:2303.09535](http://arxiv.org/abs/2303.09535).
-* شون ويليك، وجياشنج ليو، وشيمينج لو، وهانانه حاجيشيرزي، ويجين تشوي: "NaturalProver: إنشاء برهان رياضي مدعوم باللغة باستخدام نماذج اللغة"، 2022؛ [arXiv:2205.12910](http://arxiv.org/abs/2205.12910).
-* إلاد ريتشاردسون، وجال ميتزر، ويواف ألالوف، وراجا جريس، ودانيال كوهين-أور: "نص الملمس: توجيه النص لتشكيل أشكال 3D"، 2023؛ [arXiv:2302.01721](http://arxiv.org/abs/2302.01721).
-* بويجين تشنغ، ولي لين، ويوي جين هوانج، وهوا تشينغ هو، وونهان لوه، وشياوينج تانج: "تعلم التعزيز من التدهور: نموذج انتشار لتعزيز صورة القاع"، 2023؛ [arXiv:2303.04603](http://arxiv.org/abs/2303.04603).
-* شون شاو، ويافتاه زيسر، وشاي كوهين: "محو الصفات غير المحاذاة من التمثيلات العصبية"، 2023؛ [arXiv:2302.02997](http://arxiv.org/abs/2302.02997).
-* سيونجهيون يي، ويونجبين هوانج، وسوهي يانج، وهيونجو يون، وييرون كيم، ومينجون سيو: "التعلم التعليمي في السياق"، 2023؛ [arXiv:2302.14691](http://arxiv.org/abs/2302.14691).
-* شيكون ليو، ولينكسي فان، وإدوارد جونز، وزهيدينج يو، وتشاووي شياو، وأنيميا أناندكومار: "Prismer: نموذج اللغة والرؤية مع مجموعة من الخبراء"، 2023؛ [arXiv:2303.02506](http://arxiv.org/abs/2303.02506).
-* هايو تشين، وزهيهوا وانج، ويانج يانج، و تشيلين صن، وكيدي ما: "تعلم مقياس اختلاف الألوان العميق للصور الفوتوغرافية"، 2023؛ [arXiv:2303.14964](http://arxiv.org/abs/2303.14964).
-* فان-هوانج لي، وهونجيو تشانج: "تحليل السجلات باستخدام التعلم القائم على التوجيه القليل التصوير"، 2023؛ [arXiv:2302.07435](http://arxiv.org/abs/2302.07435).
-* كيتو كودو، ويويتشي أوكي، وتاتسوكي كوريباياشي، وآنا براسارد، وماساشي يوشيكاوا، وكيسوكي ساكاجوتشي، وكينتارو إينوي: "هل تلتقط الشبكات العصبية العميقة التكوين في الاستدلال الحسابي؟"، 2023؛ [arXiv:2302.07866](http://arxiv.org/abs/2302.07866).
-* روياو وانج، وبيتر جانسن، ومارك-ألكسندر كوت، وبريثفيراج أمانابرو: "المحولات المستنسخة للسلوك هي أجهزة استدلال رمزية عصبية"، 2022؛ [arXiv:2210.07382](http://arxiv.org/abs/2210.07382).
-* مارتن ويسل، وتوماش هوريتش، وتيري رواس، وأكيكو أيزاوا، وبيلا جيب، وتيمو سبندي: "تقديم MBIB - أول مجموعة بيانات وتعيين مهام لتحديد الانحياز الإعلامي"، 2023؛ [arXiv:2304.13148](http://arxiv.org/abs/2304.13148). DOI: [https://dx.doi.org/10.1145/3539618.3591882 10.1145/3539618.3591882].
-* هيلا شيفر، ويواف ألالوف، ويائيل فينكر، وليور وولف، ودانيال كوهين-أور: "Attend-and-Excite: التوجيه الدلالي القائم على الاهتمام لنماذج الانتشار من النص إلى الصورة"، 2023؛ [arXiv:2301.13826](http://arxiv.org/abs/2301.13826).
-* مارسيو فونسيكا، ويافتاه زيسر، وشاي ب. كوهين: "عامل المحتوى وقرارات الميزانية في الملخص الاستخلاصي للوثائق الطويلة"، 2022؛ [arXiv:2205.12486](http://arxiv.org/abs/2205.12486).
-* إلاد ريتشاردسون، وجال ميتزر، ويواف ألالوف، وراجا جريس، ودانيال كوهين-أور: "نص الملمس: توجيه النص لتشكيل أشكال 3D"، 2023؛ [arXiv:2302.01721](http://arxiv.org/abs/2302.01721).
-* تيانكسينج هي، وجينغيو تشانج، وتيانلي وانج، وساتشين كومار، وكيونجهيون تشو، وجيمس جلاس، ويوليا تسفيتكوف: "حول البقع العمياء لتقييم المهام المستندة إلى النماذج لتوليد النصوص"، 2022؛ [arXiv:2212.10020](http://arxiv.org/abs/2212.10020).
-* أوري رام، ويواف ليفين، وإيتاي دالميديجوس، ودور موهليجاي، وأمنون شاشوا، وكيفن ليتون-براون، ويواف شوهام: "نماذج اللغة المعززة بالاسترجاع في السياق"، 2023؛ [arXiv:2302.00083](http://arxiv.org/abs/2302.00083).
-* داتشنج لي، ورولين شاو، وهونجي وانج، وهان جو، وإريك ب. إكسينج، وهاو تشانج: "MPCFormer: تحويل سريع وفعال وآمن للاستدلال باستخدام MPC"، 2022؛ [arXiv:2211.01452](http://arxiv.org/abs/2211.01452).
-* باولين بينج، وميشيل جالي، وبيشنغ هي، وكريس بروكيت، ولارس ليدن، وإلناز نوري، وزو يو، وبيل دولان، وجيانفنغ جاو: "GODEL: التدريب المسبق واسع النطاق للحوار الموجه نحو الهدف"، 2022؛ [arXiv:2206.11309](http://arxiv.org/abs/2206.11309).
-* إجيل رونينجستاد، وإريك فيلدال، وليليا أوفيرليد: "تحليل المشاعر على مستوى الكيان (ELSA): دراسة استقصائية حول المهام"، 2023، وقائع المؤتمر الدولي التاسع والعشرين حول اللغويات الحاسوبية، 2022، الصفحات 6773-6783؛ [arXiv:2304.14241](http://arxiv.org/abs/2304.14241).
-* تشارلي سنيل، وإيليا كوستريوف، ووي سو، ومينجياو يانج، وسيرجي ليفين: "تعزيز التعلم خارج الاتصال لتوليد اللغة الطبيعية مع التعلم الضمني Q"، 2022؛ [arXiv:2206.11871](http://arxiv.org/abs/2206.11871).
-* زيروو وانج، وشويان تشو، ودانيال فرايد، وغراهام نيوبيج: "التقييم القائم على التنفيذ لتوليد التعليمات البرمجية مفتوحة المجال"، 2022؛ [arXiv:2212.10481](http://arxiv.org/abs/2212.10481).
-* مينه-لونج لوو، وزيي هوانج، وإريك ب. إكسينج، ويونج جاي لي، وهاوهان وانج: "المزج السريع الموجه بالبروز من خلال عتبات التدرجات العشوائية"، 2022؛ [arXiv:2212.04875](http://arxiv.org/abs/2212.04875).
-* جون هاو ليو، وهانشو يان، وداقوان تشو، وجياشي فينج: "MagicMix: المزج الدلالي مع نماذج الانتشار"، 2022؛ [arXiv:2210
+* Yuval Kirstain, Adam Polyak, Uriel Singer, Shahbuland Matiana, Joe Penna, Omer Levy: “Pick-a-Pic: An Open Dataset of User Preferences for Text-to-Image Generation”, 2023; [arXiv:2305.01569](http://arxiv.org/abs/2305.01569).
+* Lei Wang, Wanyu Xu, Yihuai Lan, Zhiqiang Hu, Yunshi Lan, Roy Ka-Wei Lee, Ee-Peng Lim: “Plan-and-Solve Prompting: Improving Zero-Shot Chain-of-Thought Reasoning by Large Language Models”, 2023; [arXiv:2305.04091](http://arxiv.org/abs/2305.04091).
+* Arthur Câmara, Claudia Hauff: “Moving Stuff Around: A study on efficiency of moving documents into memory for Neural IR models”, 2022; [arXiv:2205.08343](http://arxiv.org/abs/2205.08343).
+* Ying Sheng, Lianmin Zheng, Binhang Yuan, Zhuohan Li, Max Ryabinin, Daniel Y. Fu, Zhiqiang Xie, Beidi Chen, Clark Barrett, Joseph E. Gonzalez, Percy Liang, Christopher Ré, Ion Stoica, Ce Zhang: “High-throughput Generative Inference of Large Language Models with a Single GPU”, 2023; [arXiv:2303.06865](http://arxiv.org/abs/2303.06865).
+* Peter Melchior, Yan Liang, ChangHoon Hahn, Andy Goulding: “Autoencoding Galaxy Spectra I: Architecture”, 2022; [arXiv:2211.07890](http://arxiv.org/abs/2211.07890).
+* Jiaao Chen, Aston Zhang, Mu Li, Alex Smola, Diyi Yang: “A Cheaper and Better Diffusion Language Model with Soft-Masked Noise”, 2023; [arXiv:2304.04746](http://arxiv.org/abs/2304.04746).
+* Ayaan Haque, Matthew Tancik, Alexei A. Efros, Aleksander Holynski, Angjoo Kanazawa: “Instruct-NeRF2NeRF: Editing 3D Scenes with Instructions”, 2023; [arXiv:2303.12789](http://arxiv.org/abs/2303.12789).
+* Luke Melas-Kyriazi, Christian Rupprecht, Iro Laina, Andrea Vedaldi: “RealFusion: 360° Reconstruction of Any Object from a Single Image”, 2023; [arXiv:2302.10663](http://arxiv.org/abs/2302.10663).
+* Xiaoshi Wu, Keqiang Sun, Feng Zhu, Rui Zhao, Hongsheng Li: “Better Aligning Text-to-Image Models with Human Preference”, 2023; [arXiv:2303.14420](http://arxiv.org/abs/2303.14420).
+* Yongliang Shen, Kaitao Song, Xu Tan, Dongsheng Li, Weiming Lu, Yueting Zhuang: “HuggingGPT: Solving AI Tasks with ChatGPT and its Friends in HuggingFace”, 2023; [arXiv:2303.17580](http://arxiv.org/abs/2303.17580).
+* Yue Yang, Wenlin Yao, Hongming Zhang, Xiaoyang Wang, Dong Yu, Jianshu Chen: “Z-LaVI: Zero-Shot Language Solver Fueled by Visual Imagination”, 2022; [arXiv:2210.12261](http://arxiv.org/abs/2210.12261).
+* Sheng-Yen Chou, Pin-Yu Chen, Tsung-Yi Ho: “How to Backdoor Diffusion Models?”, 2022; [arXiv:2212.05400](http://arxiv.org/abs/2212.05400).
+* Junyoung Seo, Wooseok Jang, Min-Seop Kwak, Jaehoon Ko, Hyeonsu Kim, Junho Kim, Jin-Hwa Kim, Jiyoung Lee, Seungryong Kim: “Let 2D Diffusion Model Know 3D-Consistency for Robust Text-to-3D Generation”, 2023; [arXiv:2303.07937](http://arxiv.org/abs/2303.07937).
+* Or Patashnik, Daniel Garibi, Idan Azuri, Hadar Averbuch-Elor, Daniel Cohen-Or: “Localizing Object-level Shape Variations with Text-to-Image Diffusion Models”, 2023; [arXiv:2303.11306](http://arxiv.org/abs/2303.11306).
+* Dídac Surís, Sachit Menon, Carl Vondrick: “ViperGPT: Visual Inference via Python Execution for Reasoning”, 2023; [arXiv:2303.08128](http://arxiv.org/abs/2303.08128).
+* Chenyang Qi, Xiaodong Cun, Yong Zhang, Chenyang Lei, Xintao Wang, Ying Shan, Qifeng Chen: “FateZero: Fusing Attentions for Zero-shot Text-based Video Editing”, 2023; [arXiv:2303.09535](http://arxiv.org/abs/2303.09535).
+* Sean Welleck, Jiacheng Liu, Ximing Lu, Hannaneh Hajishirzi, Yejin Choi: “NaturalProver: Grounded Mathematical Proof Generation with Language Models”, 2022; [arXiv:2205.12910](http://arxiv.org/abs/2205.12910).
+* Elad Richardson, Gal Metzer, Yuval Alaluf, Raja Giryes, Daniel Cohen-Or: “TEXTure: Text-Guided Texturing of 3D Shapes”, 2023; [arXiv:2302.01721](http://arxiv.org/abs/2302.01721).
+* Puijin Cheng, Li Lin, Yijin Huang, Huaqing He, Wenhan Luo, Xiaoying Tang: “Learning Enhancement From Degradation: A Diffusion Model For Fundus Image Enhancement”, 2023; [arXiv:2303.04603](http://arxiv.org/abs/2303.04603).
+* Shun Shao, Yftah Ziser, Shay Cohen: “Erasure of Unaligned Attributes from Neural Representations”, 2023; [arXiv:2302.02997](http://arxiv.org/abs/2302.02997).
+* Seonghyeon Ye, Hyeonbin Hwang, Sohee Yang, Hyeongu Yun, Yireun Kim, Minjoon Seo: “In-Context Instruction Learning”, 2023; [arXiv:2302.14691](http://arxiv.org/abs/2302.14691).
+* Shikun Liu, Linxi Fan, Edward Johns, Zhiding Yu, Chaowei Xiao, Anima Anandkumar: “Prismer: A Vision-Language Model with An Ensemble of Experts”, 2023; [arXiv:2303.02506](http://arxiv.org/abs/2303.02506).
+* Haoyu Chen, Zhihua Wang, Yang Yang, Qilin Sun, Kede Ma: “Learning a Deep Color Difference Metric for Photographic Images”, 2023; [arXiv:2303.14964](http://arxiv.org/abs/2303.14964).
+* Van-Hoang Le, Hongyu Zhang: “Log Parsing with Prompt-based Few-shot Learning”, 2023; [arXiv:2302.07435](http://arxiv.org/abs/2302.07435).
+* Keito Kudo, Yoichi Aoki, Tatsuki Kuribayashi, Ana Brassard, Masashi Yoshikawa, Keisuke Sakaguchi, Kentaro Inui: “Do Deep Neural Networks Capture Compositionality in Arithmetic Reasoning?”, 2023; [arXiv:2302.07866](http://arxiv.org/abs/2302.07866).
+* Ruoyao Wang, Peter Jansen, Marc-Alexandre Côté, Prithviraj Ammanabrolu: “Behavior Cloned Transformers are Neurosymbolic Reasoners”, 2022; [arXiv:2210.07382](http://arxiv.org/abs/2210.07382).
+* Martin Wessel, Tomáš Horych, Terry Ruas, Akiko Aizawa, Bela Gipp, Timo Spinde: “Introducing MBIB -- the first Media Bias Identification Benchmark Task and Dataset Collection”, 2023; [arXiv:2304.13148](http://arxiv.org/abs/2304.13148). DOI: [https://dx.doi.org/10.1145/3539618.3591882 10.1145/3539618.3591882].
+* Hila Chefer, Yuval Alaluf, Yael Vinker, Lior Wolf, Daniel Cohen-Or: “Attend-and-Excite: Attention-Based Semantic Guidance for Text-to-Image Diffusion Models”, 2023; [arXiv:2301.13826](http://arxiv.org/abs/2301.13826).
+* Marcio Fonseca, Yftah Ziser, Shay B. Cohen: “Factorizing Content and Budget Decisions in Abstractive Summarization of Long Documents”, 2022; [arXiv:2205.12486](http://arxiv.org/abs/2205.12486).
+* Elad Richardson, Gal Metzer, Yuval Alaluf, Raja Giryes, Daniel Cohen-Or: “TEXTure: Text-Guided Texturing of 3D Shapes”, 2023; [arXiv:2302.01721](http://arxiv.org/abs/2302.01721).
+* Tianxing He, Jingyu Zhang, Tianle Wang, Sachin Kumar, Kyunghyun Cho, James Glass, Yulia Tsvetkov: “On the Blind Spots of Model-Based Evaluation Metrics for Text Generation”, 2022; [arXiv:2212.10020](http://arxiv.org/abs/2212.10020).
+* Ori Ram, Yoav Levine, Itay Dalmedigos, Dor Muhlgay, Amnon Shashua, Kevin Leyton-Brown, Yoav Shoham: “In-Context Retrieval-Augmented Language Models”, 2023; [arXiv:2302.00083](http://arxiv.org/abs/2302.00083).
+* Dacheng Li, Rulin Shao, Hongyi Wang, Han Guo, Eric P. Xing, Hao Zhang: “MPCFormer: fast, performant and private Transformer inference with MPC”, 2022; [arXiv:2211.01452](http://arxiv.org/abs/2211.01452).
+* Baolin Peng, Michel Galley, Pengcheng He, Chris Brockett, Lars Liden, Elnaz Nouri, Zhou Yu, Bill Dolan, Jianfeng Gao: “GODEL: Large-Scale Pre-Training for Goal-Directed Dialog”, 2022; [arXiv:2206.11309](http://arxiv.org/abs/2206.11309).
+* Egil Rønningstad, Erik Velldal, Lilja Øvrelid: “Entity-Level Sentiment Analysis (ELSA): An exploratory task survey”, 2023, Proceedings of the 29th International Conference on Computational Linguistics, 2022, pages 6773-6783; [arXiv:2304.14241](http://arxiv.org/abs/2304.14241).
+* Charlie Snell, Ilya Kostrikov, Yi Su, Mengjiao Yang, Sergey Levine: “Offline RL for Natural Language Generation with Implicit Language Q Learning”, 2022; [arXiv:2206.11871](http://arxiv.org/abs/2206.11871).
+* Zhiruo Wang, Shuyan Zhou, Daniel Fried, Graham Neubig: “Execution-Based Evaluation for Open-Domain Code Generation”, 2022; [arXiv:2212.10481](http://arxiv.org/abs/2212.10481).
+* Minh-Long Luu, Zeyi Huang, Eric P. Xing, Yong Jae Lee, Haohan Wang: “Expeditious Saliency-guided Mix-up through Random Gradient Thresholding”, 2022; [arXiv:2212.04875](http://arxiv.org/abs/2212.04875).
+* Jun Hao Liew, Hanshu Yan, Daquan Zhou, Jiashi Feng: “MagicMix: Semantic Mixing with Diffusion Models”, 2022; [arXiv:2210.16056](http://arxiv.org/abs/2210.16056).
+* Yaqing Wang, Subhabrata Mukherjee, Xiaodong Liu, Jing Gao, Ahmed Hassan Awadallah, Jianfeng Gao: “LiST: Lite Prompted Self-training Makes Parameter-Efficient Few-shot Learners”, 2021; [arXiv:2110.06274](http://arxiv.org/abs/2110.06274).

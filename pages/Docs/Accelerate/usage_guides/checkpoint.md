@@ -20,7 +20,7 @@ import torch
 accelerator = Accelerator(project_dir="my/save/path")
 
 my_scheduler = torch.optim.lr_scheduler.StepLR(my_optimizer, step_size=1, gamma=0.99)
-my_model, my_optimizer, my_training_dataloader = accelerator.prepare(my_model, my_optimizer, my_training_dataloader)
+my_model, my_optimizer, my_training_dataloader = accelerator.prepare(my_model, my_optimizer,  y_training_dataloader)
 
 # تسجيل جدول معدل التعلم
 accelerator.register_for_checkpointing(my_scheduler)

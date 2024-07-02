@@ -36,14 +36,14 @@ my_model.load_state_dict(state_dict)
 from accelerate import init_empty_weights
 
 with init_empty_weights():
-my_model = ModelClass(...)
+    my_model = ModelClass(...)
 ```
 
 على سبيل المثال:
 
 ```py
 with init_empty_weights():
-model = nn.Sequential(*[nn.Linear(10000, 10000) for _ in range(1000)])
+    model = nn.Sequential(*[nn.Linear(10000, 10000) for _ in range(1000)])
 ```
 
 يتم تهيئة نموذج فارغ بأكثر بقليل من 100 بليون من المعلمات. وفي الخلفية، يعتمد هذا على الجهاز الميتا الذي تم تقديمه في PyTorch 1.9. أثناء التهيئة في إطار مدير السياق، يتم نقل كل معلمة يتم إنشاؤها على الفور إلى هذا الجهاز.
@@ -68,10 +68,10 @@ second_state_dict.bin
 
 ```
 {
-"linear1.weight": "first_state_dict.bin",
-"linear1.bias": "first_state_dict.bin",
-"linear2.weight": "second_state_dict.bin",
-"linear2.bias": "second_state_dict.bin"
+    "linear1.weight": "first_state_dict.bin",
+    "linear1.bias": "first_state_dict.bin",
+    "linear2.weight": "second_state_dict.bin",
+    "linear2.bias": "second_state_dict.bin"
 }
 ```
 
@@ -114,7 +114,7 @@ model_config.vocab_size = 50257
 model_config.block_size = 1024
 
 with init_empty_weights():
-model = GPT(model_config)
+    model = GPT(model_config)
 ```
 
 بعد ذلك، قم بتحميل نقطة التفتيش التي قمنا بتنزيلها للتو باستخدام:
@@ -123,8 +123,7 @@ model = GPT(model_config)
 from accelerate import load_checkpoint_and_dispatch
 
 model = load_checkpoint_and_dispatch(
-model, checkpoint=weights_location, device_map="auto", no_split_module_classes=['Block']
-)
+    model, checkpoint=weights_location, device_map="auto", no_split_module_classes=['Block'])
 ```
 
 من خلال تمرير `device_map="auto"`، نطلب من 🤗 Accelerate أن يحدد تلقائيًا المكان الذي يجب وضع كل طبقة من النموذج فيه اعتمادًا على الموارد المتاحة:
@@ -165,15 +164,13 @@ model.hf_device_map
 
 ```python
 device_map = {
-"transformer.wte": "cpu"،
-"transformer.wpe": 0،
-"transformer.drop": "cpu"،
-"transformer.h.0": "disk"
+    "transformer.wte": "cpu"،
+    "transformer.wpe": 0،
+    "transformer.drop": "cpu"،
+    "transformer.h.0": "disk"
 }
 
-model = load_checkpoint_and_dispatch(
-model، checkpoint=weights_location، device_map=device_map
-)
+model = load_checkpoint_and_dispatch(model، checkpoint=weights_location، device_map=device_map)
 ```
 
 ### تشغيل النموذج
