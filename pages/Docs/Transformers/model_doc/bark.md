@@ -98,7 +98,7 @@ import torch
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 # تحميل في fp16 واستخدام Flash Attention 2
-model = BarkModel.from_pretrained("suno/bark-small"، torch_dtype=torch.float16، attn_implementation="flash_attention_2").to(device)
+model = BarkModel.from_pretrained("suno/bark-small", torch_dtype=torch.float16, attn_implementation="flash_attention_2").to(device)
 
 # تمكين تفريغ وحدة المعالجة المركزية
 model.enable_cpu_offload()
@@ -119,7 +119,7 @@ model.enable_cpu_offload()
 
 >>> voice_preset = "v2/en_speaker_6"
 
->>> المدخلات = المعالج ("مرحبًا، كلبتي لطيفة")
+>>> inputs = processor("Hello, my dog is cute", voice_preset=voice_preset)
 
 >>> audio_array = model.generate(**inputs)
 >>> audio_array = audio_array.cpu().numpy().squeeze()
@@ -127,15 +127,15 @@ model.enable_cpu_offload()
 
 يمكن لـ Bark إنشاء كلام **متعدد اللغات** واقعي للغاية بالإضافة إلى أصوات أخرى - بما في ذلك الموسيقى وضجيج الخلفية والمؤثرات الصوتية البسيطة.
 
-```python
->>> # الكلام متعدد اللغات - الصينية المبسطة
->>> المدخلات = المعالج ("مدهش! يمكنني التحدث باللغة الصينية")
+```py
+>>> # Multilingual speech - simplified Chinese
+>>> inputs = processor("惊人的！我会说中文")
 
->>> # الكلام متعدد اللغات - الفرنسية - دعنا نستخدم إعدادًا مسبقًا للصوت أيضًا
->>> المدخلات = المعالج ("Incroyable! Je peux générer du son."، voice_preset="fr_speaker_5")
+>>> # Multilingual speech - French - let's use a voice_preset as well
+>>> inputs = processor("Incroyable! Je peux générer du son.", voice_preset="fr_speaker_5")
 
->>> # يمكن لـ Bark أيضًا إنشاء الموسيقى. يمكنك مساعدته عن طريق إضافة علامات موسيقية حول كلمات الأغاني.
->>> المدخلات = المعالج ("♪ مرحبًا، كلبتي لطيفة ♪")
+>>> # Bark can also generate music. You can help it out by adding music notes around your lyrics.
+>>> inputs = processor("♪ Hello, my dog is cute ♪")
 
 >>> audio_array = model.generate(**inputs)
 >>> audio_array = audio_array.cpu().numpy().squeeze()
@@ -144,8 +144,8 @@ model.enable_cpu_offload()
 يمكن للنموذج أيضًا إنتاج اتصالات **غير لفظية** مثل الضحك والتنهد والبكاء.
 
 ```python
->>> # إضافة إشارات غير لفظية إلى نص الإدخال
->>> المدخلات = المعالج ("مرحبًا، أ ... [يصف حنجرته]، كلبتي لطيفة [الضحك]")
+>>> # Adding non-speech cues to the input text
+>>> inputs = processor("Hello uh ... [clears throat], my dog is cute [laughter]")
 
 >>> audio_array = model.generate(**inputs)
 >>> audio_array = audio_array.cpu().numpy().squeeze()
@@ -158,18 +158,18 @@ model.enable_cpu_offload()
 
 >>> # حفظ الصوت على القرص، ولكن أولاً خذ معدل العينة من تكوين النموذج
 >>> sample_rate = model.generation_config.sample_rate
->>> write_wav("bark_generation.wav"، sample_rate، audio_array)
+>>> write_wav("bark_generation.wav", sample_rate, audio_array)
 ```
 
 ## BarkConfig
 
 [[autodoc]] BarkConfig
-- الكل
+- all
 
 ## BarkProcessor
 
 [[autodoc]] BarkProcessor
-- الكل
+- all
 - __call__
 
 ## BarkModel
@@ -201,14 +201,14 @@ model.enable_cpu_offload()
 ## BarkCoarseConfig
 
 [[autodoc]] BarkCoarseConfig
-- الكل
+- all
 
 ## BarkFineConfig
 
 [[autodoc]] BarkFineConfig
-- الكل
+- all
 
 ## BarkSemanticConfig
 
 [[autodoc]] BarkSemanticConfig
-- الكل
+- all

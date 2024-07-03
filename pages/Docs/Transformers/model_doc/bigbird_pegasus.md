@@ -31,29 +31,29 @@
 ## BigBirdPegasusConfig
 
 [[autodoc]] BigBirdPegasusConfig
-- الكل
+- all
 
 ## BigBirdPegasusModel
 
 [[autodoc]] BigBirdPegasusModel
-- إلى الأمام
+- forword
 
 ## BigBirdPegasusForConditionalGeneration
 
 [[autodoc]] BigBirdPegasusForConditionalGeneration
-- إلى الأمام
+- forword
 
 ## BigBirdPegasusForSequenceClassification
 
 [[autodoc]] BigBirdPegasusForSequenceClassification
-- إلى الأمام
+- forword
 
 ## BigBirdPegasusForQuestionAnswering
 
 [[autodoc]] BigBirdPegasusForQuestionAnswering
-- إلى الأمام
+- forword
 
 ## BigBirdPegasusForCausalLM
 
 [[autodoc]] BigBirdPegasusForCausalLM
-- إلى الأمام
+- forword

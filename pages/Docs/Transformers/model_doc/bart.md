@@ -69,17 +69,17 @@
 ## BartConfig
 
 [[autodoc]] BartConfig
-- الكل
+- all
 
 ## BartTokenizer
 
 [[autodoc]] BartTokenizer
-- الكل
+- all
 
 ## BartTokenizerFast
 
 [[autodoc]] BartTokenizerFast
-- الكل
+- all
 
 ## BartModel
 

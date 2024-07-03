@@ -123,7 +123,7 @@ model = BertModel.from_pretrained("bert-base-uncased", torch_dtype=torch.float16
 
 [[autodoc]] BertConfig
 
-- الكل
+- all
 
 ## BertTokenizer
 
