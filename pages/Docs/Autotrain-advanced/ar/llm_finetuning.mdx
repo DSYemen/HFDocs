@@ -1,0 +1,58 @@
+# LLM Finetuning 
+
+> لا تترجم هذا التعليق
+
+مع AutoTrain، يمكنك بسهولة ضبط نماذج اللغة الكبيرة (LLMs) على بياناتك الخاصة! يدعم AutoTrain الأنواع التالية من الضبط الدقيق لـ LLM:
+
+- نمذجة اللغة السببية (CLM)
+- نمذجة اللغة المقنعة (MLM) [قريبا]
+
+## إعداد البيانات
+
+يقبل الضبط الدقيق لـ LLM البيانات بتنسيق CSV.
+
+### تنسيق البيانات لمدرب SFT / Generic
+
+بالنسبة لمدرب SFT / Generic، يجب أن تكون البيانات بالتنسيق التالي:
+
+| text |
+| --- |
+| human: hello <br> bot: hi nice to meet you |
+| human: how are you <br> bot: I am fine |
+| human: What is your name? <br> bot: My name is Mary |
+| human: Which is the best programming language? <br> bot: Python |
+
+يمكن العثور على مجموعة بيانات مثال لهذا التنسيق هنا: https://huggingface.co/datasets/timdettmers/openassistant-guanaco
+
+بالنسبة للتدريب SFT/Generic، يجب أن تحتوي مجموعة بياناتك على عمود `text`.
+
+### تنسيق البيانات لمدرب المكافأة
+
+بالنسبة لمدرب المكافأة، يجب أن تكون البيانات بالتنسيق التالي:
+
+| text | rejected_text |
+| --- | --- |
+| human: hello <br> bot: hi nice to meet you | human: hello <br> bot: leave me alone |
+| human: how are you <br> bot: I am fine | human: how are you <br> bot: I am not fine |
+| human: What is your name? <br> bot: My name is Mary | human: What is your name? <br> bot: Whats it to you? |
+| human: Which is the best programming language? <br> bot: Python | human: Which is the best programming language? <br> bot: Javascript |
+
+بالنسبة لمدرب المكافأة، يجب أن تحتوي مجموعة بياناتك على عمود `text` (النص المختار) وعمود `rejected_text`.
+
+### تنسيق البيانات لمدرب DPO/ORPO
+
+بالنسبة لمدرب DPO/ORPO، يجب أن تكون البيانات بالتنسيق التالي:
+
+| prompt | text | rejected_text |
+| --- | --- | --- |
+| hello | hi nice to meet you | leave me alone |
+| how are you | I am fine | I am not fine |
+| What is your name? | My name is Mary | Whats it to you? |
+| What is your name? | My name is Mary | I don't have a name |
+| Which is the best programming language? | Python | Javascript |
+| Which is the best programming language? | Python | C++ |
+| Which is the best programming language? | Java | C++ |
+
+بالنسبة لمدرب DPO/ORPO، يجب أن تحتوي مجموعة بياناتك على عمود `prompt`، وعمود `text` (النص المختار)، وعمود `rejected_text`.
+
+بالنسبة لجميع المهام، يمكنك استخدام ملفات CSV و JSONL!

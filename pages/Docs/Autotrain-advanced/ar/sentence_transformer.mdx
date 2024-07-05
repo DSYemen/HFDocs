@@ -1,0 +1,70 @@
+# محولات الجمل
+
+يتيح لك هذا المهمة تدريب أو ضبط نموذج محول جمل بسهولة على مجموعة البيانات الخاصة بك.
+
+يدعم AutoTrain الأنواع التالية من الضبط الدقيق لمحول الجمل:
+
+- `pair`: مجموعة بيانات بجملتين: الجملة الأساسية والجملة الإيجابية
+- `pair_class`: مجموعة بيانات بجملتين: المقدمة والاستنتاج والتصنيف المستهدف
+- `pair_score`: مجموعة بيانات بجملتين: الجملة الأولى والجملة الثانية والدرجة المستهدفة
+- `triplet`: مجموعة بيانات بثلاث جمل: الجملة الأساسية، والجملة الإيجابية، والجملة السلبية
+- `qa`: مجموعة بيانات بجملتين: الاستعلام والإجابة
+
+## تنسيق البيانات
+
+يقبل الضبط الدقيق لمحول الجمل البيانات بتنسيق CSV/JSONL. يمكنك أيضًا استخدام مجموعة بيانات من Hugging Face Hub.
+
+### `pair`
+
+بالنسبة للتدريب على نوع `pair`، يجب أن تكون البيانات بالتنسيق التالي:
+
+| anchor | positive |
+|--------|----------|
+| hello  | hi       |
+| how are you | I am fine |
+| What is your name? | My name is Abhishek |
+| Which is the best programming language? | Python |
+
+### `pair_class`
+
+بالنسبة للتدريب على نوع `pair_class`، يجب أن تكون البيانات بالتنسيق التالي:
+
+| premise | hypothesis | label |
+|---------|------------|-------|
+| hello   | hi         | 1     |
+| how are you | I am fine | 0 |
+| What is your name? | My name is Abhishek | 1 |
+| Which is the best programming language? | Python | 1 |
+
+### `pair_score`
+
+بالنسبة للتدريب على نوع `pair_score`، يجب أن تكون البيانات بالتنسيق التالي:
+
+| sentence1 | sentence2 | score |
+|-----------|-----------|-------|
+| hello     | hi        | 0.8   |
+| how are you | I am fine | 0.2 |
+| What is your name? | My name is Abhishek | 0.9 |
+| Which is the best programming language? | Python | 0.7 |
+
+### `triplet`
+
+بالنسبة للتدريب على نوع `triplet`، يجب أن تكون البيانات بالتنسيق التالي:
+
+| anchor | positive | negative |
+|--------|----------|----------|
+| hello  | hi       | bye      |
+| how are you | I am fine | I am not fine |
+| What is your name? | My name is Abhishek | Whats it to you? |
+| Which is the best programming language? | Python | Javascript |
+
+### `qa`
+
+بالنسبة للتدريب على نوع `qa`، يجب أن تكون البيانات بالتنسيق التالي:
+
+| query | answer |
+|-------|--------|
+| hello | hi     |
+| how are you | I am fine |
+| What is your name? | My name is Abhishek |
+| Which is the best programming language? | Python |

@@ -1,0 +1,81 @@
+## معلمات DreamBooth
+
+```
+--batch-size BATCH_SIZE
+حجم دفعة التدريب التي سيتم استخدامها
+--seed SEED           البذرة العشوائية لإمكانية إعادة الإنتاج
+--epochs EPOCHS       عدد دورات التدريب
+--gradient_accumulation GRADIENT_ACCUMULATION
+خطوات تجميع التدرجات
+--disable_gradient_checkpointing
+تعطيل نقاط تفتيش التدرجات
+--lr LR               معدل التعلم
+--tokenizer TOKENIZER
+محلل الرموز الذي سيتم استخدامه للتدريب
+--class-image-path CLASS_IMAGE_PATH
+مسار صور الفئات
+--prompt PROMPT       موجهة المثال
+--prior-preservation  مع الحفاظ على الأولوية
+--prior-loss-weight PRIOR_LOSS_WEIGHT
+وزن فقدان الأولوية
+--resolution RESOLUTION
+الدقة
+--center-crop         قص الصورة من المنتصف
+--train-text-encoder  تدريب مشفر النص
+--sample-batch-size SAMPLE_BATCH_SIZE
+حجم دفعة العينات
+--num-steps NUM_STEPS
+الحد الأقصى لخطوات التدريب
+--checkpointing-steps CHECKPOINTING_STEPS
+خطوات نقاط التفتيش
+--resume-from-checkpoint RESUME_FROM_CHECKPOINT
+استئناف من نقطة التفتيش
+--scale-lr            تغيير مقياس معدل التعلم
+--scheduler SCHEDULER
+معدل جدول التعلم
+--warmup-steps WARMUP_STEPS
+خطوات الإحماء لمعدل التعلم
+--num-cycles NUM_CYCLES
+عدد الدورات لمعدل التعلم
+--lr-power LR_POWER   قوة معدل التعلم
+--dataloader-num-workers DATALOADER_NUM_WORKERS
+عدد عمال تحميل البيانات
+--use-8bit-adam       استخدام Adam ببت 8
+--adam-beta1 ADAM_BETA1
+Adam beta 1
+--adam-beta2 ADAM_BETA2
+Adam beta 2
+--adam-weight-decay ADAM_WEIGHT_DECAY
+اضمحلال وزن Adam
+--adam-epsilon ADAM_EPSILON
+أبسلون Adam
+--max-grad-norm MAX_GRAD_NORM
+المعيار الأقصى للتدرجات
+--allow-tf32          السماح بـ TF32
+--prior-generation-precision PRIOR_GENERATION_PRECISION
+دقة توليد الأولوية
+--local-rank LOCAL_RANK
+الترتيب المحلي
+--xformers            تمكين xformers لانتباه كفاءة الذاكرة
+--pre-compute-text-embeddings
+حساب تضمين النص مسبقًا
+--tokenizer-max-length TOKENIZER_MAX_LENGTH
+الطول الأقصى لمحلل الرموز
+--text-encoder-use-attention-mask
+استخدام قناع الانتباه لمشفر النص
+--rank RANK           الترتيب
+--xl                  XL
+--mixed-precision MIXED_PRECISION
+الدقة المختلطة، fp16، bf16، none
+--validation-prompt VALIDATION_PROMPT
+موجه التحقق من الصحة
+--num-validation-images NUM_VALIDATION_IMAGES
+عدد صور التحقق من الصحة
+--validation-epochs VALIDATION_EPOCHS
+دورات التحقق من الصحة
+--checkpoints-total-limit CHECKPOINTS_TOTAL_LIMIT
+الحد الأقصى الإجمالي لنقاط التفتيش
+--validation-images VALIDATION_IMAGES
+صور التحقق من الصحة
+--logging             تسجيل باستخدام TensorBoard
+```

@@ -1,5 +1,3 @@
-بالتأكيد! فيما يلي ترجمة للنص الموجود في الفقرات والعناوين:
-
 # إنشاء بنية مخصصة
 
 تستنتج فئة `AutoClass` تلقائيًا بنية النموذج وتقوم بتنزيل تكوين ووزن مسبق. بشكل عام، نوصي باستخدام `AutoClass` لإنتاج كود غير مرتبط بنقطة تفتيش معينة. ولكن يمكن للمستخدمين الذين يريدون مزيدًا من التحكم في معلمات النموذج المحددة إنشاء نموذج مخصص من 🤗 Transformers من مجرد بضع فئات أساسية. قد يكون هذا مفيدًا بشكل خاص لأي شخص مهتم بدراسة نموذج 🤗 Transformers أو تدريبه أو إجراء تجارب عليه. في هذا الدليل، سنغوص بشكل أعمق في إنشاء نموذج مخصص بدون `AutoClass`. تعرف على كيفية:
@@ -23,22 +21,22 @@
 >>> config = DistilBertConfig()
 >>> print(config)
 DistilBertConfig {
-"activation": "gelu"،
-"attention_dropout": 0.1،
-"dim": 768،
-"dropout": 0.1،
-"hidden_dim": 3072،
-"initializer_range": 0.02،
-"max_position_embeddings": 512،
-"model_type": "distilbert"،
-"n_heads": 12،
-"n_layers": 6،
-"pad_token_id": 0،
-"qa_dropout": 0.1،
-"seq_classif_dropout": 0.2،
-"sinusoidal_pos_embds": false،
-"transformers_version": "4.16.2"،
-"vocab_size": 30522
+    "activation": "gelu",
+    "attention_dropout": 0.1,
+    "dim": 768,
+    "dropout": 0.1,
+    "hidden_dim": 3072,
+    "initializer_range": 0.02,
+    "max_position_embeddings": 512,
+    "model_type": "distilbert",
+    "n_heads": 12,
+    "n_layers": 6,
+    "pad_token_id": 0,
+    "qa_dropout": 0.1,
+    "seq_classif_dropout": 0.2,
+    "sinusoidal_pos_embds": false,
+    "transformers_version": "4.16.2",
+    "vocab_size": 30522
 }
 ```
 
@@ -51,29 +49,29 @@ DistilBertConfig {
 >>> my_config = DistilBertConfig(activation="relu"، attention_dropout=0.4)
 >>> print(my_config)
 DistilBertConfig {
-"activation": "relu"،
-"attention_dropout": 0.4،
-"dim": 768،
-"dropout": 0.1،
-"hidden_dim": 3072،
-"initializer_range": 0.02،
-"max_position_embeddings": 512،
-"model_type": "distilbert"،
-"n_heads": 12،
-"n_layers": 6،
-"pad_token_id": 0،
-"qa_dropout": 0.1،
-"seq_classif_dropout": 0.2،
-"sinusoidal_pos_embds": false،
-"transformers_version": "4.16.2"،
-"vocab_size": 30522
+    "activation": "relu",
+    "attention_dropout": 0.4,
+    "dim": 768,
+    "dropout": 0.1,
+    "hidden_dim": 3072,
+    "initializer_range": 0.02,
+    "max_position_embeddings": 512,
+    "model_type": "distilbert",
+    "n_heads": 12,
+    "n_layers": 6,
+    "pad_token_id": 0,
+    "qa_dropout": 0.1,
+    "seq_classif_dropout": 0.2,
+    "sinusoidal_pos_embds": false,
+    "transformers_version": "4.16.2",
+    "vocab_size": 30522
 }
 ```
 
 يمكن تعديل سمات النموذج المُدرَّب مسبقًا في دالة [`~PretrainedConfig.from_pretrained`]:
 
 ```py
->>> my_config = DistilBertConfig.from_pretrained("distilbert/distilbert-base-uncased"، activation="relu"، attention_dropout=0.4)
+>>> my_config = DistilBertConfig.from_pretrained("distilbert/distilbert-base-uncased", activation="relu", attention_dropout=0.4)
 ```
 
 بمجرد أن تصبح راضيًا عن تكوين نموذجك، يمكنك حفظه باستخدام [`~PretrainedConfig.save_pretrained`]. يتم تخزين ملف التكوين الخاص بك على أنه ملف JSON في دليل الحفظ المحدد:
@@ -255,22 +253,22 @@ DistilBertConfig {
 >>> vit_extractor = ViTImageProcessor()
 >>> print(vit_extractor)
 ViTImageProcessor {
-"do_normalize": true,
-"do_resize": true,
-"image_processor_type": "ViTImageProcessor",
-"image_mean": [
-0.5,
-0.5,
-0.5
-],
-"image_std": [
-0.5,
-0.5,
-0.5
-],
-"resample": 2,
-"size": 224
-}
+    "do_normalize": true,
+    "do_resize": true,
+    "image_processor_type": "ViTImageProcessor",
+    "image_mean": [
+        0.5,
+        0.5,
+        0.5
+    ],
+    "image_std": [
+        0.5,
+        0.5,
+        0.5
+    ],
+    "resample": 2,
+    "size": 224
+    }
 ```
 
 <Tip>
@@ -285,21 +283,21 @@ ViTImageProcessor {
 >>> my_vit_extractor = ViTImageProcessor(resample="PIL.Image.BOX", do_normalize=False, image_mean=[0.3, 0.3, 0.3])
 >>> print(my_vit_extractor)
 ViTImageProcessor {
-"do_normalize": false,
-"do-resize": true,
-"image_processor_type": "ViTImageProcessor",
-"image_mean": [
-0.3,
-0.3,
-0.3
-],
-"image_std": [
-0.5,
-0.5,
-0.5
-],
-"resample": "PIL.Image.BOX",
-"size": 224
+    "do_normalize": false,
+    "do-resize": true,
+    "image_processor_type": "ViTImageProcessor",
+    "image_mean": [
+        0.3,
+        0.3,
+        0.3
+    ],
+    "image_std": [
+        0.5,
+        0.5,
+        0.5
+    ],
+    "resample": "PIL.Image.BOX",
+    "size": 224
 }
 ```
 
@@ -373,15 +371,15 @@ model = MaskFormerForInstanceSegmentation(config) # الرأس
 يمكنك أيضًا تحميل تكوين العمود الفقري واستخدامه لإنشاء `TimmBackbone` أو تمريره إلى تكوين النموذج. سيقوم Timm backbones بتحميل الأوزان المُدربة مسبقًا بشكل افتراضي. قم بتعيين `use_pretrained_backbone=False` لتحميل الأوزان المُستهلة عشوائيًا.
 
 ```python
-from transformers import TimmBackboneConfig، TimmBackbone
+from transformers import TimmBackboneConfig, TimmBackbone
 
-backbone_config = TimmBackboneConfig("resnet50"، use_pretrained_backbone=False)
+backbone_config = TimmBackboneConfig("resnet50", use_pretrained_backbone=False)
 
 # قم بإنشاء فئة العمود الفقري
-العمود الفقري = TimmBackbone(config=backbone_config)
+backbone= TimmBackbone(config=backbone_config)
 
 # قم بإنشاء نموذج بعمود فقري timm
-from transformers import MaskFormerConfig، MaskFormerForInstanceSegmentation
+from transformers import MaskFormerConfig, MaskFormerForInstanceSegmentation
 
 config = MaskFormerConfig(backbone_config=backbone_config)
 model = MaskFormerForInstanceSegmentation(config)
@@ -399,13 +397,13 @@ model = MaskFormerForInstanceSegmentation(config)
 >>> w2v2_extractor = Wav2Vec2FeatureExtractor()
 >>> print(w2v2_extractor)
 Wav2Vec2FeatureExtractor {
-"do_normalize": true,
-"feature_extractor_type": "Wav2Vec2FeatureExtractor"،
-"feature_size": 1،
-"padding_side": "right"،
-"padding_value": 0.0،
-"return_attention_mask": false،
-"sampling_rate": 16000
+    "do_normalize": true,
+    "feature_extractor_type": "Wav2Vec2FeatureExtractor",
+    "feature_size": 1,
+    "padding_side": "right",
+    "padding_value": 0.0,
+    "return_attention_mask": false,
+    "sampling_rate": 16000
 }
 ```
 
@@ -421,13 +419,13 @@ Wav2Vec2FeatureExtractor {
 >>> w2v2_extractor = Wav2Vec2FeatureExtractor(sampling_rate=8000, do_normalize=False)
 >>> print(w2v2_extractor)
 Wav2Vec2FeatureExtractor {
-"do_normalize": false,
-"feature_extractor_type": "Wav2Vec2FeatureExtractor"،
-"feature_size": 1،
-"padding_side": "right"،
-"padding_value": 0.0،
-"return_attention_mask": false،
-"sampling_rate": 8000
+    "do_normalize": false,
+    "feature_extractor_type": "Wav2Vec2FeatureExtractor",
+    "feature_size": 1,
+    "padding_side": "right",
+    "padding_value": 0.0,
+    "return_attention_mask": false,
+    "sampling_rate": 8000
 }
 ```
 
