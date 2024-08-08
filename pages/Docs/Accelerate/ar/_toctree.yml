@@ -1,119 +1,119 @@
 - sections:
   - local: index
-    title: 🤗 Accelerate
+    title: 🤗 تسريع
   - local: basic_tutorials/install
-    title: Installation
+    title: التثبيت
   - local: quicktour
-    title: Quicktour
-  title: Getting started
+    title: جولة سريعة
+  title: البدء
 - sections:
   - local: basic_tutorials/overview
-    title: Overview
+    title: نظرة عامة
   - local: basic_tutorials/migration
-    title: Add Accelerate to your code
+    title: إضافة تسريع إلى كودك
   - local: basic_tutorials/execution
-    title: Execution process
+    title: عملية التنفيذ
   - local: basic_tutorials/tpu
-    title: TPU training
+    title: التدريب على وحدة معالجة الدقة (TPU)
   - local: basic_tutorials/launch
-    title: Launching distributed code
+    title: تشغيل التعليمات البرمجية الموزعة
   - local: basic_tutorials/notebook
-    title: Launching distributed training from Jupyter Notebooks
-  title: Tutorials
+    title: تشغيل التدريب الموزع من دفاتر Jupyter
+  title: البرامج التعليمية
 - sections:
   - isExpanded: true
     sections:
     - local: usage_guides/explore
-      title: Start Here!
+      title: ابدأ من هنا!
     - local: usage_guides/model_size_estimator
-      title: Model memory estimator
+      title: مقدر ذاكرة النموذج
     - local: usage_guides/quantization
-      title: Model quantization
+      title: ضغط النموذج
     - local: usage_guides/tracking
-      title: Experiment trackers
+      title: متعقبات التجارب
     - local: usage_guides/checkpoint
-      title: Save and load training states
+      title: حفظ وحمل حالات التدريب
     - local: basic_tutorials/troubleshooting
-      title: Troubleshoot
+      title: استكشاف الأخطاء وإصلاحها
     - local: usage_guides/training_zoo
-      title: Example Zoo
-    title: Accelerate
+      title: مثال Zoo
+    title: تسريع
   - isExpanded: true
     sections:
     - local: usage_guides/gradient_accumulation
-      title: Gradient accumulation
+      title: تجميع التدرجات
     - local: usage_guides/local_sgd
-      title: Local SGD
+      title: SGD المحلي
     - local: usage_guides/low_precision_training
-      title: Low precision (FP8) training
+      title: التدريب عالي الدقة (FP8)
     - local: usage_guides/deepspeed
       title: DeepSpeed
     - local: usage_guides/ddp_comm_hook
-      title: DDP Communication Hooks
+      title: خطافات الاتصال DDP
     - local: usage_guides/fsdp
-      title: Fully Sharded Data Parallelism
+      title: التوازي الموزع بالكامل
     - local: usage_guides/megatron_lm
       title: Megatron-LM
     - local: usage_guides/sagemaker
       title: Amazon SageMaker
     - local: usage_guides/mps
-      title: Apple M1 GPUs
+      title: وحدات معالجة الرسومات (GPU) من Apple M1
     - local: usage_guides/ipex
-      title: IPEX training with CPU
-    title: Training
+      title: التدريب على وحدة المعالجة المركزية (CPU) باستخدام IPEX
+    title: التدريب
   - isExpanded: true
     sections:
     - local: usage_guides/big_modeling
-      title: Big Model Inference
+      title: استدلال النموذج الكبير
     - local: usage_guides/distributed_inference
-      title: Distributed inference
-    title: Inference
-  title: How to guides
+      title: الاستدلال الموزع
+    title: الاستدلال
+  title: أدلة الاستخدام
 - sections:
   - local: concept_guides/internal_mechanism
-    title: 🤗 Accelerate's internal mechanism
+    title: الآلية الداخلية لـ 🤗 Accelerate
   - local: concept_guides/big_model_inference
-    title: Loading big models into memory
+    title: تحميل النماذج الكبيرة في الذاكرة
   - local: concept_guides/performance
-    title: Comparing performance across distributed setups
+    title: مقارنة الأداء عبر الإعدادات الموزعة
   - local: concept_guides/deferring_execution
-    title: Executing and deferring jobs
+    title: تنفيذ وتأجيل الوظائف
   - local: concept_guides/gradient_synchronization
-    title: Gradient synchronization
+    title: مزامنة التدرج
   - local: concept_guides/fsdp_and_deepspeed
-    title: FSDP vs DeepSpeed
+    title: FSDP مقابل DeepSpeed
   - local: concept_guides/low_precision_training
-    title: How training in low-precision environments is possible (FP8)
+    title: كيف يمكن التدريب في بيئات الدقة المنخفضة (FP8)
   - local: concept_guides/training_tpu
-    title: TPU best practices
-  title: Concepts and fundamentals
+    title: أفضل الممارسات لوحدة معالجة الدقة (TPU)
+  title: المفاهيم والمبادئ الأساسية
 - sections: 
   - local: package_reference/accelerator
-    title: Accelerator
+    title: مسرع
   - local: package_reference/state
-    title: Stateful configuration classes
+    title: فئات التكوين ذات الحالة
   - local: package_reference/cli
-    title: The Command Line
+    title: سطر الأوامر
   - local: package_reference/torch_wrappers
-    title: Torch wrapper classes
+    title: فئات الأغطية الشعلة
   - local: package_reference/tracking
-    title: Experiment trackers
+    title: متعقبات التجارب
   - local: package_reference/launchers
-    title: Distributed launchers
+    title: برامج الإطلاق الموزعة
   - local: package_reference/deepspeed
-    title: DeepSpeed utilities
+    title: DeepSpeed المرافق
   - local: package_reference/logging
-    title: Logging
+    title: التسجيل
   - local: package_reference/big_modeling
-    title: Working with large models
+    title: العمل مع النماذج الكبيرة
   - local: package_reference/inference
-    title: Distributed inference with big models
+    title: الاستدلال الموزع مع النماذج الكبيرة
   - local: package_reference/kwargs
-    title: Kwargs handlers
+    title: معالجات kwargs
   - local: package_reference/utilities
-    title: Utility functions and classes
+    title: وظائف وفئات المرافق
   - local: package_reference/megatron_lm
-    title: Megatron-LM Utilities
+    title: Megatron-LM المرافق
   - local: package_reference/fsdp
-    title: Fully Sharded Data Parallelism Utilities
-  title: "Reference"
+    title: التوازي الموزع بالكامل المرافق
+  title: "مرجع"

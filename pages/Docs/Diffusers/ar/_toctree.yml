@@ -1,120 +1,120 @@
 - sections:
   - local: index
-    title: 🧨 Diffusers
+    title: 🧨 الموزعون
   - local: quicktour
-    title: Quicktour
+    title: جولة سريعة
   - local: stable_diffusion
-    title: Effective and efficient diffusion
+    title: الانتشار الفعال والكفء
   - local: installation
-    title: Installation
-  title: Get started
+    title: التثبيت
+  title: البدء
 - sections:
   - local: tutorials/tutorial_overview
-    title: Overview
+    title: نظرة عامة
   - local: using-diffusers/write_own_pipeline
-    title: Understanding pipelines, models and schedulers
+    title: فهم خطوط الأنابيب والنماذج والجداول
   - local: tutorials/autopipeline
     title: AutoPipeline
   - local: tutorials/basic_training
-    title: Train a diffusion model
+    title: تدريب نموذج الانتشار
   - local: tutorials/using_peft_for_inference
-    title: Load LoRAs for inference
+    title: تحميل LoRAs للاستدلال
   - local: tutorials/fast_diffusion
-    title: Accelerate inference of text-to-image diffusion models
-  title: Tutorials
+    title: تسريع الاستدلال لنموذج الانتشار من نص إلى صورة
+  title: البرامج التعليمية
 - sections:
   - local: using-diffusers/loading
-    title: Load pipelines
+    title: تحميل خطوط الأنابيب
   - local: using-diffusers/custom_pipeline_overview
-    title: Load community pipelines and components
+    title: تحميل خطوط الأنابيب والمكونات المجتمعية
   - local: using-diffusers/schedulers
-    title: Load schedulers and models
+    title: تحميل الجداول والنماذج
   - local: using-diffusers/other-formats
-    title: Model files and layouts
+    title: تنسيقات الملفات والنُسَق
   - local: using-diffusers/loading_adapters
-    title: Load adapters
+    title: تحميل المحولات
   - local: using-diffusers/push_to_hub
-    title: Push files to the Hub
-  title: Load pipelines and adapters
+    title: دفع الملفات إلى المركز
+  title: تحميل خطوط الأنابيب والمحولات
 - sections:
   - local: using-diffusers/unconditional_image_generation
-    title: Unconditional image generation
+    title: توليد الصور غير المشروطة
   - local: using-diffusers/conditional_image_generation
-    title: Text-to-image
+    title: نص إلى صورة
   - local: using-diffusers/img2img
-    title: Image-to-image
+    title: صورة إلى صورة
   - local: using-diffusers/inpaint
-    title: Inpainting
+    title: إعادة الرسم
   - local: using-diffusers/text-img2vid
-    title: Text or image-to-video
+    title: نص أو صورة إلى فيديو
   - local: using-diffusers/depth2img
-    title: Depth-to-image
-  title: Generative tasks
+    title: العمق إلى الصورة
+  title: المهام التوليدية
 - sections:
   - local: using-diffusers/overview_techniques
-    title: Overview
+    title: نظرة عامة
   - local: training/distributed_inference
-    title: Distributed inference with multiple GPUs
+    title: الاستدلال الموزع باستخدام وحدات معالجة الرسومات (GPU) متعددة
   - local: using-diffusers/merge_loras
-    title: Merge LoRAs
+    title: دمج LoRAs
   - local: using-diffusers/scheduler_features
-    title: Scheduler features
+    title: ميزات الجدول
   - local: using-diffusers/callback
-    title: Pipeline callbacks
+    title: استدعاءات خط الأنابيب
   - local: using-diffusers/reusing_seeds
-    title: Reproducible pipelines
+    title: خطوط الأنابيب القابلة للتكرار
   - local: using-diffusers/image_quality
-    title: Controlling image quality
+    title: التحكم في جودة الصورة
   - local: using-diffusers/weighted_prompts
-    title: Prompt techniques
-  title: Inference techniques
+    title: تقنيات الاستدعاء
+  title: تقنيات الاستدلال
 - sections:
   - local: advanced_inference/outpaint
-    title: Outpainting
-  title: Advanced inference
+    title: إعادة الرسم
+  title: الاستدلال المتقدم
 - sections:
   - local: using-diffusers/sdxl
-    title: Stable Diffusion XL
+    title: الانتشار المستقر XL
   - local: using-diffusers/sdxl_turbo
     title: SDXL Turbo
   - local: using-diffusers/kandinsky
     title: Kandinsky
   - local: using-diffusers/ip_adapter
-    title: IP-Adapter
+    title: محول IP
   - local: using-diffusers/controlnet
     title: ControlNet
   - local: using-diffusers/t2i_adapter
-    title: T2I-Adapter
+    title: محول T2I
   - local: using-diffusers/inference_with_lcm
-    title: Latent Consistency Model
+    title: نموذج الاتساق الخفي
   - local: using-diffusers/textual_inversion_inference
-    title: Textual inversion
+    title: الانقلاب النصي
   - local: using-diffusers/shap-e
     title: Shap-E
   - local: using-diffusers/diffedit
     title: DiffEdit
   - local: using-diffusers/inference_with_tcd_lora
-    title: Trajectory Consistency Distillation-LoRA
+    title: استدلال اتساق المسار المقطر-LoRA
   - local: using-diffusers/svd
-    title: Stable Video Diffusion
+    title: انتشار الفيديو المستقر
   - local: using-diffusers/marigold_usage
-    title: Marigold Computer Vision
-  title: Specific pipeline examples
+    title: رؤية الكمبيوتر Marigold
+  title: أمثلة محددة لخطوط الأنابيب
 - sections:
   - local: training/overview
-    title: Overview
+    title: نظرة عامة
   - local: training/create_dataset
-    title: Create a dataset for training
+    title: إنشاء مجموعة بيانات للتدريب
   - local: training/adapt_a_model
-    title: Adapt a model to a new task
+    title: تكييف نموذج مع مهمة جديدة
   - isExpanded: false
     sections:
     - local: training/unconditional_training
-      title: Unconditional image generation
+      title: توليد الصور غير المشروطة
     - local: training/text2image
-      title: Text-to-image
+      title: نص إلى صورة
     - local: training/sdxl
-      title: Stable Diffusion XL
+      title: الانتشار المستقر XL
     - local: training/kandinsky
       title: Kandinsky 2.2
     - local: training/wuerstchen
@@ -122,349 +122,67 @@
     - local: training/controlnet
       title: ControlNet
     - local: training/t2i_adapters
-      title: T2I-Adapters
+      title: محولات T2I
     - local: training/instructpix2pix
       title: InstructPix2Pix
-    title: Models
+    title: النماذج
   - isExpanded: false
     sections:
     - local: training/text_inversion
-      title: Textual Inversion
+      title: الانقلاب النصي
     - local: training/dreambooth
       title: DreamBooth
     - local: training/lora
       title: LoRA
     - local: training/custom_diffusion
-      title: Custom Diffusion
+      title: انتشار مخصص
     - local: training/lcm_distill
-      title: Latent Consistency Distillation
+      title: تقطير الاتساق الخفي
     - local: training/ddpo
-      title: Reinforcement learning training with DDPO
-    title: Methods
-  title: Training
+      title: التدريب على التعلم التعزيزي باستخدام DDPO
+    title: الأساليب
+  title: التدريب
 - sections:
   - local: optimization/fp16
-    title: Speed up inference
+    title: تسريع الاستدلال
   - local: optimization/memory
-    title: Reduce memory usage
+    title: تقليل استخدام الذاكرة
   - local: optimization/torch2.0
     title: PyTorch 2.0
   - local: optimization/xformers
     title: xFormers
   - local: optimization/tome
-    title: Token merging
+    title: دمج الرموز
   - local: optimization/deepcache
     title: DeepCache
   - local: optimization/tgate
     title: TGATE
   - sections:
     - local: using-diffusers/stable_diffusion_jax_how_to
-      title: JAX/Flax
+      title: جاك/فلاكس
     - local: optimization/onnx
       title: ONNX
     - local: optimization/open_vino
       title: OpenVINO
     - local: optimization/coreml
       title: Core ML
-    title: Optimized model formats
+    title: تنسيقات النماذج المحُللة
   - sections:
     - local: optimization/mps
-      title: Metal Performance Shaders (MPS)
+      title: شظايا المعادن (MPS)
     - local: optimization/habana
-      title: Habana Gaudi
-    title: Optimized hardware
-  title: Accelerate inference and reduce memory
+      title: هابانا جودي
+    title: الأجهزة المحُللة
+  title: تسريع الاستدلال وتقليل الذاكرة
 - sections:
   - local: conceptual/philosophy
-    title: Philosophy
+    title: الفلسفة
   - local: using-diffusers/controlling_generation
-    title: Controlled generation
+    title: التوليد الخاضع للرقابة
   - local: conceptual/contribution
-    title: How to contribute?
+    title: كيفية المساهمة؟
   - local: conceptual/ethical_guidelines
-    title: Diffusers' Ethical Guidelines
+    title: المبادئ التوجيهية الأخلاقية للمُوزِعات
   - local: conceptual/evaluation
-    title: Evaluating Diffusion Models
-  title: Conceptual Guides
-- sections:
-  - isExpanded: false
-    sections:
-    - local: api/configuration
-      title: Configuration
-    - local: api/logging
-      title: Logging
-    - local: api/outputs
-      title: Outputs
-    title: Main Classes
-  - isExpanded: false
-    sections:
-    - local: api/loaders/ip_adapter
-      title: IP-Adapter
-    - local: api/loaders/lora
-      title: LoRA
-    - local: api/loaders/single_file
-      title: Single files
-    - local: api/loaders/textual_inversion
-      title: Textual Inversion
-    - local: api/loaders/unet
-      title: UNet
-    - local: api/loaders/peft
-      title: PEFT
-    title: Loaders
-  - isExpanded: false
-    sections:
-    - local: api/models/overview
-      title: Overview
-    - local: api/models/unet
-      title: UNet1DModel
-    - local: api/models/unet2d
-      title: UNet2DModel
-    - local: api/models/unet2d-cond
-      title: UNet2DConditionModel
-    - local: api/models/unet3d-cond
-      title: UNet3DConditionModel
-    - local: api/models/unet-motion
-      title: UNetMotionModel
-    - local: api/models/uvit2d
-      title: UViT2DModel
-    - local: api/models/vq
-      title: VQModel
-    - local: api/models/autoencoderkl
-      title: AutoencoderKL
-    - local: api/models/asymmetricautoencoderkl
-      title: AsymmetricAutoencoderKL
-    - local: api/models/autoencoder_tiny
-      title: Tiny AutoEncoder
-    - local: api/models/consistency_decoder_vae
-      title: ConsistencyDecoderVAE
-    - local: api/models/transformer2d
-      title: Transformer2DModel
-    - local: api/models/pixart_transformer2d
-      title: PixArtTransformer2DModel
-    - local: api/models/dit_transformer2d
-      title: DiTTransformer2DModel
-    - local: api/models/hunyuan_transformer2d
-      title: HunyuanDiT2DModel
-    - local: api/models/transformer_temporal
-      title: TransformerTemporalModel
-    - local: api/models/sd3_transformer2d
-      title: SD3Transformer2DModel
-    - local: api/models/prior_transformer
-      title: PriorTransformer
-    - local: api/models/controlnet
-      title: ControlNetModel
-    title: Models
-  - isExpanded: false
-    sections:
-    - local: api/pipelines/overview
-      title: Overview
-    - local: api/pipelines/amused
-      title: aMUSEd
-    - local: api/pipelines/animatediff
-      title: AnimateDiff
-    - local: api/pipelines/attend_and_excite
-      title: Attend-and-Excite
-    - local: api/pipelines/audioldm
-      title: AudioLDM
-    - local: api/pipelines/audioldm2
-      title: AudioLDM 2
-    - local: api/pipelines/auto_pipeline
-      title: AutoPipeline
-    - local: api/pipelines/blip_diffusion
-      title: BLIP-Diffusion
-    - local: api/pipelines/consistency_models
-      title: Consistency Models
-    - local: api/pipelines/controlnet
-      title: ControlNet
-    - local: api/pipelines/controlnet_sdxl
-      title: ControlNet with Stable Diffusion XL
-    - local: api/pipelines/controlnetxs
-      title: ControlNet-XS
-    - local: api/pipelines/controlnetxs_sdxl
-      title: ControlNet-XS with Stable Diffusion XL
-    - local: api/pipelines/dance_diffusion
-      title: Dance Diffusion
-    - local: api/pipelines/ddim
-      title: DDIM
-    - local: api/pipelines/ddpm
-      title: DDPM
-    - local: api/pipelines/deepfloyd_if
-      title: DeepFloyd IF
-    - local: api/pipelines/diffedit
-      title: DiffEdit
-    - local: api/pipelines/dit
-      title: DiT
-    - local: api/pipelines/hunyuandit
-      title: Hunyuan-DiT
-    - local: api/pipelines/i2vgenxl
-      title: I2VGen-XL
-    - local: api/pipelines/pix2pix
-      title: InstructPix2Pix
-    - local: api/pipelines/kandinsky
-      title: Kandinsky 2.1
-    - local: api/pipelines/kandinsky_v22
-      title: Kandinsky 2.2
-    - local: api/pipelines/kandinsky3
-      title: Kandinsky 3
-    - local: api/pipelines/latent_consistency_models
-      title: Latent Consistency Models
-    - local: api/pipelines/latent_diffusion
-      title: Latent Diffusion
-    - local: api/pipelines/ledits_pp
-      title: LEDITS++
-    - local: api/pipelines/marigold
-      title: Marigold
-    - local: api/pipelines/panorama
-      title: MultiDiffusion
-    - local: api/pipelines/musicldm
-      title: MusicLDM
-    - local: api/pipelines/paint_by_example
-      title: Paint by Example
-    - local: api/pipelines/pia
-      title: Personalized Image Animator (PIA)
-    - local: api/pipelines/pixart
-      title: PixArt-α
-    - local: api/pipelines/pixart_sigma
-      title: PixArt-Σ
-    - local: api/pipelines/self_attention_guidance
-      title: Self-Attention Guidance
-    - local: api/pipelines/semantic_stable_diffusion
-      title: Semantic Guidance
-    - local: api/pipelines/shap_e
-      title: Shap-E
-    - local: api/pipelines/stable_cascade
-      title: Stable Cascade
-    - sections:
-      - local: api/pipelines/stable_diffusion/overview
-        title: Overview
-      - local: api/pipelines/stable_diffusion/text2img
-        title: Text-to-image
-      - local: api/pipelines/stable_diffusion/img2img
-        title: Image-to-image
-      - local: api/pipelines/stable_diffusion/svd
-        title: Image-to-video
-      - local: api/pipelines/stable_diffusion/inpaint
-        title: Inpainting
-      - local: api/pipelines/stable_diffusion/depth2img
-        title: Depth-to-image
-      - local: api/pipelines/stable_diffusion/image_variation
-        title: Image variation
-      - local: api/pipelines/stable_diffusion/stable_diffusion_safe
-        title: Safe Stable Diffusion
-      - local: api/pipelines/stable_diffusion/stable_diffusion_2
-        title: Stable Diffusion 2
-      - local: api/pipelines/stable_diffusion/stable_diffusion_3
-        title: Stable Diffusion 3
-      - local: api/pipelines/stable_diffusion/stable_diffusion_xl
-        title: Stable Diffusion XL
-      - local: api/pipelines/stable_diffusion/sdxl_turbo
-        title: SDXL Turbo
-      - local: api/pipelines/stable_diffusion/latent_upscale
-        title: Latent upscaler
-      - local: api/pipelines/stable_diffusion/upscale
-        title: Super-resolution
-      - local: api/pipelines/stable_diffusion/k_diffusion
-        title: K-Diffusion
-      - local: api/pipelines/stable_diffusion/ldm3d_diffusion
-        title: LDM3D Text-to-(RGB, Depth), Text-to-(RGB-pano, Depth-pano), LDM3D Upscaler
-      - local: api/pipelines/stable_diffusion/adapter
-        title: T2I-Adapter
-      - local: api/pipelines/stable_diffusion/gligen
-        title: GLIGEN (Grounded Language-to-Image Generation)
-      title: Stable Diffusion
-    - local: api/pipelines/stable_unclip
-      title: Stable unCLIP
-    - local: api/pipelines/text_to_video
-      title: Text-to-video
-    - local: api/pipelines/text_to_video_zero
-      title: Text2Video-Zero
-    - local: api/pipelines/unclip
-      title: unCLIP
-    - local: api/pipelines/unidiffuser
-      title: UniDiffuser
-    - local: api/pipelines/value_guided_sampling
-      title: Value-guided sampling
-    - local: api/pipelines/wuerstchen
-      title: Wuerstchen
-    title: Pipelines
-  - isExpanded: false
-    sections:
-    - local: api/schedulers/overview
-      title: Overview
-    - local: api/schedulers/cm_stochastic_iterative
-      title: CMStochasticIterativeScheduler
-    - local: api/schedulers/consistency_decoder
-      title: ConsistencyDecoderScheduler
-    - local: api/schedulers/ddim_inverse
-      title: DDIMInverseScheduler
-    - local: api/schedulers/ddim
-      title: DDIMScheduler
-    - local: api/schedulers/ddpm
-      title: DDPMScheduler
-    - local: api/schedulers/deis
-      title: DEISMultistepScheduler
-    - local: api/schedulers/multistep_dpm_solver_inverse
-      title: DPMSolverMultistepInverse
-    - local: api/schedulers/multistep_dpm_solver
-      title: DPMSolverMultistepScheduler
-    - local: api/schedulers/dpm_sde
-      title: DPMSolverSDEScheduler
-    - local: api/schedulers/singlestep_dpm_solver
-      title: DPMSolverSinglestepScheduler
-    - local: api/schedulers/edm_multistep_dpm_solver
-      title: EDMDPMSolverMultistepScheduler
-    - local: api/schedulers/edm_euler
-      title: EDMEulerScheduler
-    - local: api/schedulers/euler_ancestral
-      title: EulerAncestralDiscreteScheduler
-    - local: api/schedulers/euler
-      title: EulerDiscreteScheduler
-    - local: api/schedulers/flow_match_euler_discrete
-      title: FlowMatchEulerDiscreteScheduler
-    - local: api/schedulers/heun
-      title: HeunDiscreteScheduler
-    - local: api/schedulers/ipndm
-      title: IPNDMScheduler
-    - local: api/schedulers/stochastic_karras_ve
-      title: KarrasVeScheduler
-    - local: api/schedulers/dpm_discrete_ancestral
-      title: KDPM2AncestralDiscreteScheduler
-    - local: api/schedulers/dpm_discrete
-      title: KDPM2DiscreteScheduler
-    - local: api/schedulers/lcm
-      title: LCMScheduler
-    - local: api/schedulers/lms_discrete
-      title: LMSDiscreteScheduler
-    - local: api/schedulers/pndm
-      title: PNDMScheduler
-    - local: api/schedulers/repaint
-      title: RePaintScheduler
-    - local: api/schedulers/score_sde_ve
-      title: ScoreSdeVeScheduler
-    - local: api/schedulers/score_sde_vp
-      title: ScoreSdeVpScheduler
-    - local: api/schedulers/tcd
-      title: TCDScheduler
-    - local: api/schedulers/unipc
-      title: UniPCMultistepScheduler
-    - local: api/schedulers/vq_diffusion
-      title: VQDiffusionScheduler
-    title: Schedulers
-  - isExpanded: false
-    sections:
-    - local: api/internal_classes_overview
-      title: Overview
-    - local: api/attnprocessor
-      title: Attention Processor
-    - local: api/activations
-      title: Custom activation functions
-    - local: api/normalization
-      title: Custom normalization layers
-    - local: api/utilities
-      title: Utilities
-    - local: api/image_processor
-      title: VAE Image Processor
-    - local: api/video_processor
-      title: Video Processor
-    title: Internal classes
-  title: API
+    title: تقييم نماذج الانتشار
+  title: أدلة مفاهيمية
