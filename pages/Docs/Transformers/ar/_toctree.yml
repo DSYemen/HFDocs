@@ -1,146 +1,146 @@
 - sections:
   - local: index
-    title: 🤗 Transformers
+    title: 🤗 المحولات
   - local: quicktour
-    title: Quick tour
+    title: جولة سريعة
   - local: installation
-    title: Installation
-  title: Get started
+    title: التثبيت
+  title: البدء
 - sections:
   - local: pipeline_tutorial
-    title: Run inference with pipelines
+    title: تشغيل الاستنتاج باستخدام خطوط الأنابيب
   - local: autoclass_tutorial
-    title: Write portable code with AutoClass
+    title: كتابة التعليمات البرمجية المحمولة باستخدام AutoClass
   - local: preprocessing
-    title: Preprocess data
+    title: معالجة البيانات مسبقًا
   - local: training
-    title: Fine-tune a pretrained model
+    title: ضبط نموذج مسبق التدريب
   - local: run_scripts
-    title: Train with a script
+    title: التدريب باستخدام برنامج نصي
   - local: accelerate
-    title: Set up distributed training with 🤗 Accelerate
+    title: إعداد التدريب الموزع باستخدام 🤗 Accelerate
   - local: peft
-    title: Load and train adapters with 🤗 PEFT
+    title: تحميل النماذج المخصصة وتدريبها باستخدام 🤗 PEFT
   - local: model_sharing
-    title: Share your model
+    title: مشاركة نموذجك
   - local: agents
-    title: Agents
+    title: الوكلاء
   - local: llm_tutorial
-    title: Generation with LLMs
+    title: التوليد باستخدام LLMs
   - local: conversations
-    title: Chatting with Transformers
-  title: Tutorials
+    title: الدردشة مع المحولات
+  title: البرامج التعليمية
 - sections:
   - isExpanded: false
     sections:
     - local: tasks/sequence_classification
-      title: Text classification
+      title: تصنيف النصوص
     - local: tasks/token_classification
-      title: Token classification
+      title: تصنيف الرموز
     - local: tasks/question_answering
-      title: Question answering
+      title: الإجابة على الأسئلة
     - local: tasks/language_modeling
-      title: Causal language modeling
+      title: نمذجة اللغة السببية
     - local: tasks/masked_language_modeling
-      title: Masked language modeling
+      title: نمذجة اللغة المقنعة
     - local: tasks/translation
-      title: Translation
+      title: الترجمة
     - local: tasks/summarization
-      title: Summarization
+      title: تلخيص
     - local: tasks/multiple_choice
-      title: Multiple choice
-    title: Natural Language Processing
+      title: الاختيار المتعدد
+    title: معالجة اللغات الطبيعية
   - isExpanded: false
     sections:
     - local: tasks/audio_classification
-      title: Audio classification
+      title: تصنيف الصوت
     - local: tasks/asr
-      title: Automatic speech recognition
-    title: Audio
+      title: التعرف التلقائي على الكلام
+    title: صوتي
   - isExpanded: false
     sections:
     - local: tasks/image_classification
-      title: Image classification
+      title: تصنيف الصور
     - local: tasks/semantic_segmentation
-      title: Image segmentation
+      title: تجزئة الصور
     - local: tasks/video_classification
-      title: Video classification
+      title: تصنيف الفيديو
     - local: tasks/object_detection
-      title: Object detection
+      title: اكتشاف الأشياء
     - local: tasks/zero_shot_object_detection
-      title: Zero-shot object detection
+      title: اكتشاف الأشياء بدون تدريب
     - local: tasks/zero_shot_image_classification
-      title: Zero-shot image classification
+      title: تصنيف الصور بدون تدريب
     - local: tasks/monocular_depth_estimation
-      title: Depth estimation
+      title: تقدير العمق
     - local: tasks/image_to_image
-      title: Image-to-Image
+      title: صورة إلى صورة
     - local: tasks/image_feature_extraction
-      title: Image Feature Extraction
+      title: استخراج ميزات الصورة
     - local: tasks/mask_generation
-      title: Mask Generation
+      title: توليد القناع
     - local: tasks/knowledge_distillation_for_image_classification
-      title: Knowledge Distillation for Computer Vision
-    title: Computer Vision
+      title: تقطير المعرفة للرؤية الحاسوبية
+    title: رؤية حاسوبية
   - isExpanded: false
     sections:
     - local: tasks/image_captioning
-      title: Image captioning
+      title: تعليق الصور
     - local: tasks/document_question_answering
-      title: Document Question Answering
+      title: الإجابة على الأسئلة الوثائقية
     - local: tasks/visual_question_answering
-      title: Visual Question Answering
+      title: الإجابة على الأسئلة المرئية
     - local: tasks/text-to-speech
-      title: Text to speech
-    title: Multimodal
+      title: تحويل النص إلى كلام
+    title: متعدد الوسائط
   - isExpanded: false
     sections:
     - local: generation_strategies
-      title: Customize the generation strategy
-    title: Generation
+      title: تخصيص استراتيجية التوليد
+    title: التوليد
   - isExpanded: false
     sections:
     - local: tasks/idefics
-      title: Image tasks with IDEFICS
+      title: مهام الصور مع IDEFICS
     - local: tasks/prompting
-      title: LLM prompting guide
-    title: Prompting
-  title: Task Guides
+      title: دليل إرشادي للنماذج اللغوية الكبيرة
+    title: الإرشاد
+title: أدلة المهام
 - sections:
   - local: fast_tokenizers
-    title: Use fast tokenizers from 🤗 Tokenizers
+    title: استخدم برامج التجزئة السريعة من 🤗 Tokenizers
   - local: multilingual
-    title: Run inference with multilingual models
+    title: تشغيل الاستنتاج باستخدام نماذج متعددة اللغات
   - local: create_a_model
-    title: Use model-specific APIs
+    title: استخدام واجهات برمجة التطبيقات الخاصة بالنموذج
   - local: custom_models
-    title: Share a custom model
+    title: مشاركة نموذج مخصص
   - local: chat_templating
-    title: Templates for chat models
+    title: قوالب للنماذج الدردشة
   - local: trainer
-    title: Trainer
+    title: المدرب
   - local: sagemaker
-    title: Run training on Amazon SageMaker
+    title: تشغيل التدريب على Amazon SageMaker
   - local: serialization
-    title: Export to ONNX
+    title: التصدير إلى ONNX
   - local: tflite
-    title: Export to TFLite
+    title: التصدير إلى TFLite
   - local: torchscript
-    title: Export to TorchScript
+    title: التصدير إلى TorchScript
   - local: benchmarks
-    title: Benchmarks
+    title: المعايير
   - local: notebooks
-    title: Notebooks with examples
+    title: دفاتر الملاحظات مع الأمثلة
   - local: community
-    title: Community resources
+    title: موارد المجتمع
   - local: troubleshooting
-    title: Troubleshoot
+    title: استكشاف الأخطاء وإصلاحها
   - local: gguf
-    title: Interoperability with GGUF files
-  title: Developer guides
+    title: قابلية التشغيل البيني مع ملفات GGUF
+  title: أدلة المطورين
 - sections:
   - local: quantization/overview
-    title: Getting started
+    title: البدء
   - local: quantization/bitsandbytes
     title: bitsandbytes
   - local: quantization/gptq
@@ -156,137 +156,137 @@
   - local: quantization/hqq
     title: HQQ
   - local: quantization/optimum
-    title: Optimum
+    title: الأمثل
   - local: quantization/contribute
-    title: Contribute new quantization method
-  title: Quantization Methods
+    title: المساهمة بطريقة جديدة لضغط الكميات
+  title: أساليب الضغط الكمي
 - sections:
   - local: performance
-    title: Overview
+    title: نظرة عامة
   - local: llm_optims
-    title: LLM inference optimization
+    title: تحسين الاستدلال LLM
   - sections:
     - local: perf_train_gpu_one
-      title: Methods and tools for efficient training on a single GPU
+      title: الأساليب والأدوات للتدريب الفعال على وحدة معالجة الرسومات (GPU) واحدة
     - local: perf_train_gpu_many
-      title: Multiple GPUs and parallelism
+      title: وحدات معالجة الرسومات (GPU) متعددة والتوازي
     - local: fsdp
       title: Fully Sharded Data Parallel
     - local: deepspeed
       title: DeepSpeed
     - local: perf_train_cpu
-      title: Efficient training on CPU
+      title: التدريب الفعال على وحدة المعالجة المركزية (CPU)
     - local: perf_train_cpu_many
-      title: Distributed CPU training
+      title: التدريب الموزع لوحدة المعالجة المركزية (CPU)
     - local: perf_train_tpu_tf
-      title: Training on TPU with TensorFlow
+      title: التدريب على وحدة معالجة الدقة (TPU) باستخدام TensorFlow
     - local: perf_train_special
-      title: PyTorch training on Apple silicon
+      title: تدريب PyTorch على Apple silicon
     - local: perf_hardware
-      title: Custom hardware for training
+      title: الأجهزة المخصصة للتدريب
     - local: hpo_train
-      title: Hyperparameter Search using Trainer API
-    title: Efficient training techniques
+      title: البحث عن أفضل المعلمات باستخدام واجهة برمجة تطبيقات المدرب
+  title: تقنيات التدريب الفعال
   - sections:
     - local: perf_infer_cpu
-      title: CPU inference
+      title: استدلال وحدة المعالجة المركزية (CPU)
     - local: perf_infer_gpu_one
-      title: GPU inference
-    title: Optimizing inference
-  - local: big_models
-    title: Instantiate a big model
-  - local: debugging
-    title: Debugging
-  - local: tf_xla
-    title: XLA Integration for TensorFlow Models
-  - local: perf_torch_compile
-    title: Optimize inference using `torch.compile()`
-  title: Performance and scalability
+      title: استدلال وحدة معالجة الرسومات (GPU)
+    title: تحسين الاستدلال
+- local: big_models
+    title: إنشاء نموذج كبير
+- local: debugging
+    title: التصحيح
+- local: tf_xla
+    title: تكامل XLA لنماذج TensorFlow
+- local: perf_torch_compile
+    title: تحسين الاستدلال باستخدام `torch.compile()`
+  title: الأداء وقابلية التوسع
 - sections:
   - local: contributing
-    title: How to contribute to 🤗 Transformers?
+    title: كيفية المساهمة في 🤗 المحولات؟
   - local: add_new_model
-    title: How to add a model to 🤗 Transformers?
+    title: كيفية إضافة نموذج إلى 🤗 المحولات؟
   - local: add_new_pipeline
-    title: How to add a pipeline to 🤗 Transformers?
+    title: كيفية إضافة خط أنابيب إلى 🤗 المحولات؟
   - local: testing
-    title: Testing
+    title: الاختبار
   - local: pr_checks
-    title: Checks on a Pull Request
-  title: Contribute
+    title: التحقق من طلب السحب
+  title: المساهمة
 - sections:
   - local: philosophy
-    title: Philosophy
+    title: الفلسفة
   - local: glossary
-    title: Glossary
+    title: مسرد المصطلحات
   - local: task_summary
-    title: What 🤗 Transformers can do
+    title: ما الذي يمكن أن تفعله 🤗 المحولات
   - local: tasks_explained
-    title: How 🤗 Transformers solve tasks
+    title: كيف تحل المحولات المهام
   - local: model_summary
-    title: The Transformer model family
+    title: عائلة نماذج المحول
   - local: tokenizer_summary
-    title: Summary of the tokenizers
+    title: ملخص برامج التجزئة
   - local: attention
-    title: Attention mechanisms
+    title: آليات الاهتمام
   - local: pad_truncation
-    title: Padding and truncation
+    title: الحشو والتقليم
   - local: bertology
     title: BERTology
   - local: perplexity
-    title: Perplexity of fixed-length models
+    title: غموض النماذج ذات الطول الثابت
   - local: pipeline_webserver
-    title: Pipelines for webserver inference
+    title: خطوط الأنابيب لاستدلال الخادم
   - local: model_memory_anatomy
-    title: Model training anatomy
+    title: تشريح تدريب النموذج
   - local: llm_tutorial_optimization
-    title: Getting the most out of LLMs
-  title: Conceptual guides
+    title:الاستفادة القصوى من LLMs
+  title: أدلة مفاهيمية
 - sections:
   - sections:
     - local: main_classes/agent
-      title: Agents and Tools
+      title: الوكلاء والأدوات
     - local: model_doc/auto
-      title: Auto Classes
+      title: الفئات التلقائية
     - local: main_classes/backbones
-      title: Backbones
+      title: العمود الفقري
     - local: main_classes/callback
-      title: Callbacks
+      title: الاستدعاءات
     - local: main_classes/configuration
-      title: Configuration
+      title: التكوين
     - local: main_classes/data_collator
-      title: Data Collator
+      title: مجمع البيانات
     - local: main_classes/keras_callbacks
-      title: Keras callbacks
+      title: استدعاءات Keras
     - local: main_classes/logging
-      title: Logging
+      title: التسجيل
     - local: main_classes/model
-      title: Models
+      title: النماذج
     - local: main_classes/text_generation
-      title: Text Generation
+      title: توليد النصوص
     - local: main_classes/onnx
       title: ONNX
     - local: main_classes/optimizer_schedules
-      title: Optimization
+      title: التحسين
     - local: main_classes/output
-      title: Model outputs
+      title: مخرجات النموذج
     - local: main_classes/pipelines
-      title: Pipelines
+      title: خطوط الأنابيب
     - local: main_classes/processors
-      title: Processors
+      title: المعالجات
     - local: main_classes/quantization
-      title: Quantization
+      title: الضغط الكمي
     - local: main_classes/tokenizer
-      title: Tokenizer
+      title: برنامج التجزئة
     - local: main_classes/trainer
-      title: Trainer
+      title: المدرب
     - local: main_classes/deepspeed
       title: DeepSpeed
     - local: main_classes/feature_extractor
-      title: Feature Extractor
+      title: مستخرج الميزات
     - local: main_classes/image_processor
-      title: Image Processor
-    title: Main Classes
+      title: معالج الصور
+    title: الفئات الرئيسية
   - sections:
     - isExpanded: false
       sections:
@@ -842,49 +842,50 @@
         title: X-CLIP
       title: Multimodal models
     - isExpanded: false
-      sections:
-      - local: model_doc/decision_transformer
-        title: Decision Transformer
-      - local: model_doc/trajectory_transformer
-        title: Trajectory Transformer
-      title: Reinforcement learning models
-    - isExpanded: false
-      sections:
-      - local: model_doc/autoformer
-        title: Autoformer
-      - local: model_doc/informer
-        title: Informer
-      - local: model_doc/patchtsmixer
-        title: PatchTSMixer
-      - local: model_doc/patchtst
-        title: PatchTST
-      - local: model_doc/time_series_transformer
-        title: Time Series Transformer
-      title: Time series models
-    - isExpanded: false
-      sections:
-      - local: model_doc/graphormer
-        title: Graphormer
-      title: Graph models
-    title: Models
+sections:
   - sections:
-    - local: internal/modeling_utils
-      title: Custom Layers and Utilities
-    - local: internal/pipelines_utils
-      title: Utilities for pipelines
-    - local: internal/tokenization_utils
-      title: Utilities for Tokenizers
-    - local: internal/trainer_utils
-      title: Utilities for Trainer
-    - local: internal/generation_utils
-      title: Utilities for Generation
-    - local: internal/image_processing_utils
-      title: Utilities for Image Processors
-    - local: internal/audio_utils
-      title: Utilities for Audio processing
-    - local: internal/file_utils
-      title: General Utilities
-    - local: internal/time_series_utils
-      title: Utilities for Time Series
-    title: Internal Helpers
+    - local: model_doc/decision_transformer
+      title: محول القرار
+    - local: model_doc/trajectory_transformer
+      title: محول المسار
+    title: نماذج التعلم التعزيزي
+  - isExpanded: false
+    sections:
+    - local: model_doc/autoformer
+      title: Autoformer
+    - local: model_doc/informer
+      title: المبلغ
+    - local: model_doc/patchtsmixer
+      title: PatchTSMixer
+    - local: model_doc/patchtst
+      title: PatchTST
+    - local: model_doc/time_series_transformer
+      title: محول السلسلة الزمنية
+    title: نماذج السلسلة الزمنية
+  - isExpanded: false
+    sections:
+    - local: model_doc/graphormer
+      title: Graphormer
+    title: نماذج الرسم البياني
+  title: النماذج
+- sections:
+  - local: internal/modeling_utils
+    title: الطبقات المخصصة والمرافق
+  - local: internal/pipelines_utils
+    title: المرافق لخطوط الأنابيب
+  - local: internal/tokenization_utils
+    title: المرافق لبرامج التجزئة
+  - local: internal/trainer_utils
+    title: المرافق للمدرب
+  - local: internal/generation_utils
+    title: المرافق للتوليد
+  - local: internal/image_processing_utils
+    title: المرافق لمعالجات الصور
+  - local: internal/audio_utils
+    title: المرافق لمعالجة الصوت
+  - local: internal/file_utils
+    title: المرافق العامة
+  - local: internal/time_series_utils
+    title: المرافق لسلسلة الوقت
+  title: مساعدون داخليون
   title: API

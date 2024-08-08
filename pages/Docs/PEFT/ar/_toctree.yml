@@ -1,66 +1,66 @@
-- title: Get started
+- title: البدء
   sections:
   - local: index
     title: 🤗 PEFT
   - local: quicktour
-    title: Quicktour
+    title: جولة سريعة
   - local: install
-    title: Installation
+    title: التثبيت
 
-- title: Tutorial
+- title: البرنامج التعليمي
   sections:
   - local: tutorial/peft_model_config
-    title: Configurations and models
+    title: التكوينات والنماذج
   - local: tutorial/peft_integrations
-    title: Integrations
+    title: التكاملات
 
-- title: PEFT method guides
+- title: أدلة طريقة PEFT
   sections:
   - local: task_guides/prompt_based_methods
-    title: Prompt-based methods
+    title: الأساليب القائمة على الاستدعاء
   - local: task_guides/lora_based_methods
-    title: LoRA methods
+    title: أساليب LoRA
   - local: task_guides/ia3
     title: IA3
 
-- title: Developer guides
+- title: أدلة المطور
   sections:
   - local: developer_guides/model_merging
-    title: Model merging
+    title: دمج النماذج
   - local: developer_guides/quantization
-    title: Quantization
+    title: الضغط الكمي
   - local: developer_guides/lora
     title: LoRA
   - local: developer_guides/custom_models
-    title: Custom models
+    title: النماذج المخصصة
   - local: developer_guides/low_level_api
-    title: Adapter injection
+    title: حقن المحول
   - local: developer_guides/mixed_models
-    title: Mixed adapter types
+    title: أنواع المحولات المختلطة
   - local: developer_guides/torch_compile
     title: torch.compile
   - local: developer_guides/contributing
-    title: Contribute to PEFT
+    title: المساهمة في PEFT
   - local: developer_guides/troubleshooting
-    title: Troubleshooting
+    title: استكشاف الأخطاء وإصلاحها
   - local: developer_guides/checkpoint
-    title: PEFT checkpoint format
+    title: تنسيق نقطة المراقبة PEFT
   - local: package_reference/helpers
-    title: Helpers
+    title: مساعدون
 
-- title: 🤗 Accelerate integrations
+- title: 🤗 تسريع التكاملات
   sections:
   - local: accelerate/deepspeed
     title: DeepSpeed
   - local: accelerate/fsdp
-    title: Fully Sharded Data Parallel
+    title: التوازي الموزع بالكامل
 
-- title: Conceptual guides
+- title: أدلة مفاهيمية
   sections:
   - local: conceptual_guides/adapter
-    title: Adapters
+    title: المحولات
   - local: conceptual_guides/prompting
-    title: Soft prompts
+    title: المطالبات الناعمة
   - local: conceptual_guides/ia3
     title: IA3
   - local: conceptual_guides/oft
@@ -71,21 +71,21 @@
     - local: package_reference/auto_class
       title: AutoPeftModel
     - local: package_reference/peft_model
-      title: PEFT model
+      title: نموذج PEFT
     - local: package_reference/peft_types
-      title: PEFT types
+      title: أنواع PEFT
     - local: package_reference/config
-      title: Configuration
+      title: التكوين
     - local: package_reference/tuners
-      title: Tuner
-    title: Main classes
+      title: الضابط
+    title: الفئات الرئيسية
   - sections:
     - local: package_reference/adalora
       title: AdaLoRA
     - local: package_reference/ia3
       title: IA3
     - local: package_reference/llama_adapter
-      title: Llama-Adapter
+      title: محول Llama
     - local: package_reference/loha
       title: LoHa
     - local: package_reference/lokr
@@ -95,7 +95,7 @@
     - local: package_reference/adapter_utils
       title: LyCORIS
     - local: package_reference/multitask_prompt_tuning
-      title: Multitask Prompt Tuning
+      title: ضبط المطالبة متعددة المهام
     - local: package_reference/oft
       title: OFT
     - local: package_reference/boft
@@ -103,19 +103,18 @@
     - local: package_reference/poly
       title: Polytropon
     - local: package_reference/p_tuning
-      title: P-tuning
+      title: الضبط P
     - local: package_reference/prefix_tuning
-      title: Prefix tuning
+      title: ضبط البادئة
     - local: package_reference/prompt_tuning
-      title: Prompt tuning
+      title: ضبط المطالبة
     - local: package_reference/layernorm_tuning
-      title: Layernorm tuning
+      title: ضبط LayerNorm
     - local: package_reference/vera
       title: VeRA
-    title: Adapters
+    title: المحولات
   - sections:
     - local: package_reference/merge_utils
-      title: Model merge
-    title: Utilities
-  title: API reference
-
+      title: دمج النماذج
+    title: المرافق
+  title: مرجع API

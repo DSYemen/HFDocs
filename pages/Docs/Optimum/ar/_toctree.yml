@@ -1,146 +1,146 @@
 - sections:
   - local: index
-    title: 🤗 Optimum
+    title: 🤗 الأمثل
   - local: installation
-    title: Installation
+    title: التثبيت
   - local: quicktour
-    title: Quick tour
+    title: جولة سريعة
   - local: notebooks
-    title: Notebooks
+    title: دفاتر الملاحظات
   - sections:
     - local: concept_guides/quantization
-      title: Quantization
-    title: Conceptual guides
-  title: Overview
+      title: الضغط الكمي
+    title: أدلة مفاهيمية
+  title: نظرة عامة
 - sections:
   - local: nvidia_overview
-    title: 🤗 Optimum Nvidia
+    title: 🤗 الأمثل Nvidia
   title: Nvidia
   isExpanded: false
 - sections:
   - local: onnxruntime/overview
-    title: Overview
+    title: نظرة عامة
   - local: onnxruntime/quickstart
-    title: Quick tour
+    title: جولة سريعة
   - sections:
     - local: onnxruntime/usage_guides/pipelines
-      title: Inference pipelines
+      title: خطوط أنابيب الاستدلال
     - local: onnxruntime/usage_guides/models
-      title: Models for inference
+      title: نماذج الاستدلال
     - local: onnxruntime/usage_guides/optimization
-      title: How to apply graph optimization
+      title: كيفية تطبيق تحسين الرسم البياني
     - local: onnxruntime/usage_guides/quantization
-      title: How to apply dynamic and static quantization
+      title: كيفية تطبيق الضغط الديناميكي والثابت
     - local: onnxruntime/usage_guides/trainer
-      title: How to accelerate training
+      title: كيفية تسريع التدريب
     - local: onnxruntime/usage_guides/gpu
-      title: Accelerated inference on NVIDIA GPUs
+      title: الاستدلال المعجل على وحدات معالجة الرسومات (GPU) من NVIDIA
     - local: onnxruntime/usage_guides/amdgpu
-      title: Accelerated inference on AMD GPUs
-    title: How-to guides
+      title: الاستدلال المعجل على وحدات معالجة الرسومات (GPU) من AMD
+    title: أدلة الاستخدام
     isExpanded: false
   - sections:
     - local: onnxruntime/concept_guides/onnx
-      title: ONNX 🤝 ONNX Runtime
-    title: Conceptual guides
+      title: ONNX 🤝 وقت التشغيل ONNX
+    title: أدلة مفاهيمية
     isExpanded: false
   - sections:
     - local: onnxruntime/package_reference/modeling_ort
-      title: ONNX Runtime Models
+      title: نماذج وقت التشغيل ONNX
     - local: onnxruntime/package_reference/configuration
-      title: Configuration
+      title: التكوين
     - local: onnxruntime/package_reference/optimization
-      title: Optimization
+      title: التحسين
     - local: onnxruntime/package_reference/quantization
-      title: Quantization
+      title: الضغط الكمي
     - local: onnxruntime/package_reference/trainer
-      title: Trainer
-    title: Reference
+      title: المدرب
+    title: مرجع
     isExpanded: false
-  title: ONNX Runtime
+  title: وقت التشغيل ONNX
   isExpanded: false
 - sections:
   - local: exporters/overview
-    title: Overview
+    title: نظرة عامة
   - local: exporters/task_manager
-    title: The TasksManager
+    title: مدير المهام
   - sections:
     - local: exporters/onnx/overview
-      title: Overview
+      title: نظرة عامة
     - sections:
       - local: exporters/onnx/usage_guides/export_a_model
-        title: Export a model to ONNX
+        title: تصدير نموذج إلى ONNX
       - local: exporters/onnx/usage_guides/contribute
-        title: Add support for exporting an architecture to ONNX
-      title: How-to guides
+        title: إضافة دعم لتصدير هندسة إلى ONNX
+      title: أدلة الاستخدام
     - sections:
       - local: exporters/onnx/package_reference/configuration
-        title: ONNX configurations
+        title: تكوينات ONNX
       - local: exporters/onnx/package_reference/export
-        title: Export functions
-      title: Reference
+        title: وظائف التصدير
+      title: مرجع
       isExpanded: false
     title: "ONNX"
   - sections:
     - local: exporters/tflite/overview
-      title: Overview
+      title: نظرة عامة
     - sections:
       - local: exporters/tflite/usage_guides/export_a_model
-        title: Export a model to TFLite
+        title: تصدير نموذج إلى TFLite
       - local: exporters/tflite/usage_guides/contribute
-        title: Add support for exporting an architecture to TFLite
-      title: How-to guides
+        title: إضافة دعم لتصدير هندسة إلى TFLite
+      title: أدلة الاستخدام
     - sections:
       - local: exporters/tflite/package_reference/configuration
-        title: TFLite configurations
+        title: تكوينات TFLite
       - local: exporters/tflite/package_reference/export
-        title: Export functions
-      title: Reference
+        title: وظائف التصدير
+      title: مرجع
       isExpanded: false
     title: "TFLite"
-  title: Exporters
+  title: المصدرون
   isExpanded: false
 - sections:
   - local: bettertransformer/overview
-    title: Overview
+    title: نظرة عامة
   - sections:
     - local: bettertransformer/tutorials/convert
-      title: Convert Transformers models to use BetterTransformer
+      title: تحويل نماذج المحولات لاستخدام BetterTransformer
     - local: bettertransformer/tutorials/contribute
-      title: How to add support for new architectures?
-    title: Tutorials
+      title: كيفية إضافة دعم للعمارة الجديدة؟
+    title: البرامج التعليمية
     isExpanded: false
   title: BetterTransformer
   isExpanded: false
 - sections:
   - local: torch_fx/overview
-    title: Overview
+    title: نظرة عامة
   - sections:
     - local: torch_fx/usage_guides/optimization
-      title: Optimization
-    title: How-to guides
+      title: التحسين
+    title: أدلة الاستخدام
     isExpanded: false
   - sections:
     - local: torch_fx/concept_guides/symbolic_tracer
-      title: Symbolic tracer
-    title: Conceptual guides
+      title: المقتفي الرمزي
+    title: أدلة مفاهيمية
     isExpanded: false
   - sections:
     - local: torch_fx/package_reference/optimization
-      title: Optimization
-    title: Reference
+      title: التحسين
+    title: مرجع
     isExpanded: false
   title: Torch FX
   isExpanded: false
 - sections:
   - local: llm_quantization/usage_guides/quantization
-    title: GPTQ quantization
-  title: LLM quantization
+    title: ضغط GPTQ
+  title: ضغط LLM
   isExpanded: false
 - sections:
   - local: utils/dummy_input_generators
-    title: Dummy input generators
+    title: مولدات الإدخال الوهمية
   - local: utils/normalized_config
-    title: Normalized configurations
-  title: Utilities
+    title: التكوينات الموحدة
+  title: المرافق
   isExpanded: false
