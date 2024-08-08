@@ -8,6 +8,7 @@
 
 سيستخدم هذا المثال حلقة تدريب PyTorch مبسطة للغاية تقوم بتجميع الخرج كل دفعتين:
 
+
 ```python
 device = "cuda"
 model.to(device)
@@ -99,13 +100,16 @@ from accelerate import Accelerator
 
 <Tip warning={true}>
 يتم مزامنة [`state.GradientState`] مع محمل البيانات النشط الذي يتم التنقل خلاله. وبالتالي، يفترض بشكل بسيط أنه عند الوصول إلى نهاية محمل البيانات، سيتم مزامنة كل شيء وسيتم تنفيذ خطوة. لإيقاف هذا، قم بتعيين `sync_with_dataloader` على `False` في [`GradientAccumulationPlugin`]:
-```python
+
+
+```py
 from accelerate import Accelerator
 from accelerate.utils import GradientAccumulationPlugin
 
 plugin = GradientAccumulationPlugin(sync_with_dataloader=False)
 accelerator = Accelerator(..., gradient_accumulation_plugin=plugin)
 ```
+
 </Tip>
 
 ## الكود النهائي
