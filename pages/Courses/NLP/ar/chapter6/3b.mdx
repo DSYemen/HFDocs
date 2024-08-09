@@ -1,517 +1,0 @@
-لم يتم ترجمة الأجزاء المحددة من النص بناء على طلبك.
-
-# معالجات سريعة في خط أنابيب QA
-
-سنغوص الآن في خط أنابيب "الأسئلة والأجوبة" ونرى كيف يمكننا الاستفادة من التعويضات لالتقاط إجابة السؤال المطروح من السياق، تمامًا كما فعلنا مع الكيانات المجمعة في القسم السابق. بعد ذلك، سنرى كيف يمكننا التعامل مع السياقات الطويلة جدًا التي يتم اقتطاعها في النهاية. يمكنك تخطي هذا القسم إذا لم تكن مهتمًا بمهمة الأسئلة والأجوبة.
-
-## استخدام خط أنابيب "الأسئلة والأجوبة"
-
-كما رأينا في [الفصل 1](/course/chapter1)، يمكننا استخدام خط أنابيب "الأسئلة والأجوبة" مثل هذا للحصول على إجابة لسؤال ما:
-
-```py
-from transformers import pipeline
-
-question_answerer = pipeline("question-answering")
-context = """
-🤗 Transformers is backed by the three most popular deep learning libraries — Jax, PyTorch, and TensorFlow — with a seamless integration
-between them. It's straightforward to train your models with one before loading them for inference with the other.
-"""
-question = "Which deep learning libraries back 🤗 Transformers?"
-question_answerer(question=question, context=context)
-```
-
-```python out
-{'score': 0.97773,
-'start': 78,
-'end': 105,
-'answer': 'Jax, PyTorch and TensorFlow'}
-```
-
-على عكس خطوط الأنابيب الأخرى، التي لا يمكنها اقتطاع وتقسيم النصوص التي يتجاوز طولها الحد الأقصى الذي يقبله النموذج (وبالتالي قد تفقد المعلومات في نهاية المستند)، يمكن لهذا الخط أن يتعامل مع السياقات الطويلة جدًا وسيقدم الإجابة على السؤال حتى لو كانت في النهاية:
-
-```py
-long_context = """
-🤗 Transformers: State of the Art NLP
-
-🤗 Transformers provides thousands of pretrained models to perform tasks on texts such as classification, information extraction,
-question answering, summarization, translation, text generation and more in over 100 languages.
-Its aim is to make cutting-edge NLP easier to use for everyone.
-
-🤗 Transformers provides APIs to quickly download and use those pretrained models on a given text, fine-tune them on your own datasets and
-then share them with the community on our model hub. At the same time, each python module defining an architecture is fully standalone and
-can be modified to enable quick research experiments.
-
-Why should I use transformers?
-
-1. Easy-to-use state-of-the-art models:
-- High performance on NLU and NLG tasks.
-- Low barrier to entry for educators and practitioners.
-- Few user-facing abstractions with just three classes to learn.
-- A unified API for using all our pretrained models.
-- Lower compute costs, smaller carbon footprint:
-
-2. Researchers can share trained models instead of always retraining.
-- Practitioners can reduce compute time and production costs.
-- Dozens of architectures with over 10,000 pretrained models, some in more than 100 languages.
-
-3. Choose the right framework for every part of a model's lifetime:
-- Train state-of-the-art models in 3 lines of code.
-- Move a single model between TF2.0/PyTorch frameworks at will.
-- Seamlessly pick the right framework for training, evaluation and production.
-
-4. Easily customize a model or an example to your needs:
-- We provide examples for each architecture to reproduce the results published by its original authors.
-- Model internals are exposed as consistently as possible.
-- Model files can be used independently of the library for quick experiments.
-
-🤗 Transformers is backed by the three most popular deep learning libraries — Jax, PyTorch and TensorFlow — with a seamless integration
-between them. It's straightforward to train your models with one before loading them for inference with the other.
-"""
-question_answerer(question=question, context=long_context)
-```
-
-```python out
-{'score': 0.97149,
-'start': 1892,
-'end': 1919,
-'answer': 'Jax, PyTorch and TensorFlow'}
-```
-
-دعونا نرى كيف يفعل كل هذا!
-
-## استخدام نموذج للإجابة على الأسئلة
-
-كما هو الحال مع أي خط أنابيب آخر، نبدأ بتوكيل مدخلاتنا ثم إرسالها عبر النموذج. نقطة التفتيش المستخدمة بشكل افتراضي لخط أنابيب "الأسئلة والأجوبة" هي [`distilbert-base-cased-distilled-squad`](https://huggingface.co/distilbert-base-cased-distilled-squad) ("squad" في الاسم يأتي من مجموعة البيانات التي تم ضبط دقة النموذج عليها؛ سنتحدث أكثر عن مجموعة بيانات SQuAD في [الفصل 7](/course/chapter7/7)):
-
-```py
-from transformers import AutoTokenizer, AutoModelForQuestionAnswering
-
-model_checkpoint = "distilbert-base-cased-distilled-squad"
-tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
-model = AutoModelForQuestionAnswering.from_pretrained(model_checkpoint)
-
-inputs = tokenizer(question, context, return_tensors="pt")
-outputs = model(**inputs)
-```
-
-لاحظ أننا نقوم بتوكيل السؤال والسياق كزوج، مع وضع السؤال أولاً.
-
-<div class="flex justify-center">
-<img class="block dark:hidden" src="https://huggingface.co/datasets/huggingface-course/documentation-images/resolve/main/en/chapter6/question_tokens.svg" alt="مثال على توكيل السؤال والسياق"/>
-<img class="hidden dark:block" src="https://huggingface.co/datasets/huggingface-course/documentation-images/resolve/main/en/chapter6/question_tokens-dark.svg" alt="مثال على توكيل السؤال والسياق"/>
-</div>
-
-تعمل نماذج الإجابة على الأسئلة بشكل مختلف قليلاً عن النماذج التي رأيناها حتى الآن. باستخدام الصورة أعلاه كمثال، تم تدريب النموذج للتنبؤ بفهرس الرمز الذي يبدأ منه الجواب (هنا 21) وفهرس الرمز الذي ينتهي منه الجواب (هنا 24). لهذا السبب، لا تقوم هذه النماذج بإرجاع موتر واحد من logits ولكن اثنين: واحد لل logits المقابلة للرمز start للإجابة، وواحد لل logits المقابلة للرمز end للإجابة. نظرًا لأنه يوجد في هذه الحالة إدخال واحد يحتوي على 66 رمزًا، نحصل على:
-
-```py
-start_logits = outputs.start_logits
-end_logits = outputs.end_logits
-print(start_logits.shape, end_logits.shape)
-```
-
-```python out
-torch.Size([1, 66]) torch.Size([1, 66])
-```
-
-لتحويل هذه القيم إلى احتمالات، سنطبق دالة softmax - ولكن قبل ذلك، نحتاج إلى التأكد من قناع الفهارس التي ليست جزءًا من السياق. إدخالنا هو `[CLS] السؤال [SEP] السياق [SEP]`، لذلك نحتاج إلى قناع الرموز الخاصة بالسؤال وكذلك الرمز `[SEP]`. سنحتفظ برمز `[CLS]`، ومع ذلك، نظرًا لأن بعض النماذج تستخدمه للإشارة إلى أن الإجابة غير موجودة في السياق.
-
-نظرًا لأننا سنطبق softmax لاحقًا، فكل ما نحتاج إلى فعله هو استبدال القيم التي نريد قناعها برقم سلبي كبير. هنا، نستخدم `-10000`:
-
-```py
-import torch
-
-sequence_ids = inputs.sequence_ids()
-# قناع كل شيء باستثناء رموز السياق
-mask = [i != 1 for i in sequence_ids]
-# إلغاء قناع الرمز [CLS]
-mask[0] = False
-mask = torch.tensor(mask)[None]
-
-start_logits[mask] = -10000
-end_logits[mask] = -10000
-```
-
-الآن بعد أن قمنا بقناع logits المقابلة للمواضع التي لا نريد التنبؤ بها بشكل صحيح، يمكننا تطبيق softmax:
-
-```py
-start_probabilities = torch.nn.functional.softmax(start_logits, dim=-1)[0]
-end_probabilities = torch.nn.functional.softmax(end_logits, dim=-1)[0]
-```
-
-في هذه المرحلة، يمكننا أخذ argmax من الاحتمالات start و end - ولكن قد ينتهي بنا الأمر بفهرس start أكبر من فهرس end، لذلك نحتاج إلى اتخاذ بعض الاحتياطات الإضافية. سنقوم بحساب احتمالات كل `start_index` و` end_index` حيث `start_index <= end_index`، ثم خذ الزوج `(start_index، end_index)` مع أعلى احتمال.
-
-بافتراض أن الأحداث "يبدأ الجواب في` start_index `" و" ينتهي الجواب في `end_index` "مستقلة، فإن احتمال أن يبدأ الجواب في` start_index `وينتهي في` end_index `هو:
-
-$$\mathrm{start\_probabilities}[\mathrm{start\_index}] \times \mathrm{end\_probabilities}[\mathrm{end\_index}]$$
-
-لذلك، لحساب جميع النتائج، كل ما نحتاج إلى حسابه هو جميع المنتجات \\ (\mathrm{start\_probabilities} [\mathrm{start\_index}] \ times \ mathrm{end\_probabilities} [\ mathrm{end\_index}] \\) حيث `start_index <= end_index`.
-
-أولاً، دعونا نحسب جميع المنتجات الممكنة:
-
-```py
-النتائج = start_probabilities [:، None] * end_probabilities [None:،:]
-```
-
-ثم سنقوم بقناع القيم حيث `start_index > end_index` عن طريق تعيينها إلى `0` (الاحتمالات الأخرى جميعها أرقام موجبة). ستقوم دالة `torch.triu()` بإرجاع الجزء المثلث العلوي من موتر 2D الذي تم تمريره كحجة، لذا فستقوم بالقناع نيابة عنا:
-
-```py
-النتائج = torch.triu(النتائج)
-```
-
-الآن كل ما علينا فعله هو الحصول على فهرس الحد الأقصى. نظرًا لأن PyTorch سيعيد الفهرس في الموتر المسطح، فنحن بحاجة إلى استخدام عمليات القسمة الكاملة `//` والباقي `%` للحصول على `start_index` و` end_index`:
-
-```py
-max_index = scores.argmax().item()
-start_index = max_index // scores.shape[1]
-end_index = max_index % scores.shape[1]
-print(scores[start_index, end_index])
-```
-
-لسنا مستعدين تمامًا بعد، ولكن على الأقل لدينا النتيجة الصحيحة للإجابة (يمكنك التحقق من ذلك عن طريق مقارنتها بالنتيجة الأولى في القسم السابق):
-
-```python out
-0.97773
-```
-
-<Tip>
-
-✏️ **جربه!** احسب فهارس البداية والنهاية للإجابات الخمس الأكثر احتمالًا.
-
-</Tip>
-
-لدينا `start_index` و` end_index` للإجابة من حيث الرموز، لذلك كل ما نحتاج إلى فعله الآن هو تحويلها إلى فهارس الأحرف في السياق. هذا هو المكان الذي ستكون فيه التعويضات مفيدة للغاية. يمكننا الاستيلاء عليها واستخدامها كما فعلنا في مهمة تصنيف الرمز:
-
-```py
-inputs_with_offsets = tokenizer(question, context, return_offsets_mapping=True)
-offsets = inputs_with_offsets["offset_mapping"]
-
-start_char, _ = offsets[start_index]
-_, end_char = offsets[end_index]
-answer = context[start_char:end_char]
-```
-
-الآن كل ما علينا فعله هو تنسيق كل شيء للحصول على النتيجة:
-
-```py
-result = {
-"answer": answer,
-"start": start_char,
-"end": end_char,
-"score": scores[start_index, end_index],
-}
-print(result)
-```
-
-```python out
-{'answer': 'Jax, PyTorch and TensorFlow',
-'start': 78,
-'end': 105,
-'score': 0.97773}
-```
-
-رائع! هذا هو نفسه في مثالنا الأول!
-
-<Tip>
-
-✏️ **جربه!** استخدم أفضل النتائج التي حسبتها سابقًا لعرض الإجابات الخمس الأكثر احتمالًا. للتحقق من نتائجك، عد إلى خط الأنابيب الأول ومرر `top_k=5` عند استدعائه.
-
-</Tip>
-## التعامل مع السياقات الطويلة
-
-إذا حاولنا تمييز السؤال وسياق النص الطويل الذي استخدمناه كمثال سابقًا، فسنحصل على عدد من الرموز أكبر من الطول الأقصى المستخدم في خط أنابيب "الأسئلة والأجوبة" (والذي يبلغ 384):
-
-```py
-inputs = tokenizer(question, long_context)
-print(len(inputs["input_ids"]))
-```
-
-```python out
-461
-```
-
-لذلك، سيتعين علينا تقليص مدخلاتنا عند هذا الطول الأقصى. هناك عدة طرق يمكننا القيام بذلك، ولكننا لا نريد تقليص السؤال، بل السياق فقط. نظرًا لأن السياق هو الجملة الثانية، فسنستخدم استراتيجية "only_second" للتقليص. المشكلة التي تنشأ بعد ذلك هي أن إجابة السؤال قد لا تكون في السياق المقلص. هنا، على سبيل المثال، اخترنا سؤالًا تكون الإجابة عليه في نهاية السياق، وعند تقليصه لا تكون هذه الإجابة موجودة:
-
-```py
-inputs = tokenizer(question, long_context, max_length=384, truncation="only_second")
-print(tokenizer.decode(inputs["input_ids"]))
-```
-
-```python out
-"""
-[CLS] Which deep learning libraries back [UNK] Transformers? [SEP] [UNK] Transformers : State of the Art NLP
-
-[UNK] Transformers provides thousands of pretrained models to perform tasks on texts such as classification, information extraction,
-question answering, summarization, translation, text generation and more in over 100 languages.
-Its aim is to make cutting-edge NLP easier to use for everyone.
-
-[UNK] Transformers provides APIs to quickly download and use those pretrained models on a given text, fine-tune them on your own datasets and
-then share them with the community on our model hub. At the same time, each python module defining an architecture is fully standalone and
-can be modified to enable quick research experiments.
-"""
-```
-
-هذا يعني أن النموذج سيواجه صعوبة في اختيار الإجابة الصحيحة. لإصلاح هذا، يسمح خط أنابيب "الأسئلة والأجوبة" لنا بتقسيم السياق إلى أجزاء أصغر، مع تحديد الطول الأقصى. للتأكد من أننا لا نقسم السياق في المكان الخطأ تمامًا لجعل من الممكن العثور على الإجابة، فإنه يتضمن أيضًا بعض التداخل بين الأجزاء.
-
-يمكننا أن نجعل المميز (سريعًا أو بطيئًا) يقوم بذلك من أجلنا عن طريق إضافة `return_overflowing_tokens=True`، ويمكننا تحديد التداخل الذي نريده باستخدام وسيط `stride`. إليك مثال على ذلك، باستخدام جملة أصغر:
-
-```py
-sentence = "This sentence is not too long but we are going to split it anyway."
-inputs = tokenizer(
-sentence, truncation=True, return_overflowing_tokens=True, max_length=6, stride=2
-)
-
-for ids in inputs["input_ids"]:
-print(tokenizer.decode(ids))
-```
-
-```python out
-'[CLS] This sentence is not [SEP]'
-'[CLS] is not too long [SEP]'
-'[CLS] too long but we [SEP]'
-'[CLS] but we are going [SEP]'
-'[CLS] are going to split [SEP]'
-'[CLS] to split it anyway [SEP]'
-'[CLS] it anyway. [SEP]'
-```
-
-كما نرى، تم تقسيم الجملة إلى أجزاء بحيث يحتوي كل إدخال في "input_ids" على ستة رموز كحد أقصى (سنحتاج إلى إضافة الحشو لجعل الإدخال الأخير بنفس حجم الإدخالات الأخرى) وهناك تداخل بمقدار رمزين بين كل إدخال.
-
-دعونا نلقي نظرة فاحصة على نتيجة التمييز:
-
-```py
-print(inputs.keys())
-```
-
-```python out
-dict_keys(['input_ids', 'attention_mask', 'overflow_to_sample_mapping'])
-```
-
-كما هو متوقع، نحصل على معرفات الإدخال وقناع الاهتمام. المفتاح الأخير، "overflow_to_sample_mapping"، هو خريطة تخبرنا بأي جملة ينتمي إليها كل نتيجة - هنا لدينا 7 نتائج تأتي جميعها من الجملة (الوحيدة) التي مررناها إلى المميز:
-
-```py
-print(inputs["overflow_to_sample_mapping"])
-```
-
-```python out
-[0, 0, 0, 0, 0, 0, 0]
-```
-
-هذا مفيد أكثر عندما نميز عدة جمل معًا. على سبيل المثال، هذا:
-
-```py
-sentences = [
-"This sentence is not too long but we are going to split it anyway.",
-"This sentence is shorter but will still get split.",
-]
-inputs = tokenizer(
-sentences, truncation=True, return_overflowing_tokens=True, max_length=6, stride=2
-)
-
-print(inputs["overflow_to_sample_mapping"])
-```
-
-يحصل لنا على:
-
-```python out
-[0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1]
-```
-
-مما يعني أن الجملة الأولى مقسمة إلى 7 أجزاء كما هو الحال من قبل، والأربعة التالية تأتي من الجملة الثانية.
-
-الآن دعونا نعود إلى سياقنا الطويل. بشكل افتراضي، يستخدم خط أنابيب "الأسئلة والأجوبة" طولًا أقصى يبلغ 384، كما ذكرنا سابقًا، وخطوة قدرها 128، والتي تتوافق مع الطريقة التي تم ضبط نموذجها الدقيق (يمكنك ضبط هذه المعلمات عن طريق تمرير وسيطي "max_seq_len" و "stride" عند استدعاء خط الأنابيب). وبالتالي، سنستخدم هذه المعلمات عند التمييز. سنضيف أيضًا الحشو (للحصول على عينات بنفس الطول، حتى نتمكن من بناء tensers) بالإضافة إلى طلب التعويضات:
-
-```py
-inputs = tokenizer(
-question,
-long_context,
-stride=128,
-max_length=384,
-padding="longest"،
-truncation="only_second"،
-return_overflowing_tokens=True,
-return_offsets_mapping=True,
-)
-```
-
-ستحتوي هذه المدخلات على معرفات الإدخال وأقنعة الاهتمام التي يتوقعها النموذج، بالإضافة إلى التعويضات و"overflow_to_sample_mapping" التي تحدثنا عنها للتو. نظرًا لأن هذين الوسيطين غير مستخدمين من قبل النموذج، فسنقوم بتفريغهما من المدخلات (ولن نخزن الخريطة، نظرًا لأنها غير مفيدة هنا) قبل تحويلها إلى tensor:
-
-{#if fw === 'pt'}
-
-```py
-_ = inputs.pop("overflow_to_sample_mapping")
-offsets = inputs.pop("offset_mapping")
-
-inputs = inputs.convert_to_tensors("pt")
-print(inputs["input_ids"].shape)
-```
-
-```python out
-torch.Size([2, 384])
-```
-
-{:else}
-
-```py
-_ = inputs.pop("overflow_to_sample_mapping")
-offsets = inputs.pop("offset_mapping")
-
-inputs = inputs.convert_to_tensors("tf")
-print(inputs["input_ids"].shape)
-```
-
-```python out
-(2, 384)
-```
-
-{/if}
-
-تم تقسيم سياقنا الطويل إلى قسمين، مما يعني أنه بعد مروره عبر نموذجنا، سيكون لدينا مجموعتان من الرموز الاحتمالية الأولية والنهائية:
-
-```py
-outputs = model(**inputs)
-
-start_logits = outputs.start_logits
-end_logits = outputs.end_logits
-print(start_logits.shape, end_logits.shape)
-```
-
-{#if fw === 'pt'}
-
-```python out
-torch.Size([2, 384]) torch.Size([2, 384])
-```
-
-{:else}
-
-```python out
-(2, 384) (2, 384)
-```
-
-{/if}
-
-كما هو الحال من قبل، نقوم أولاً بقناع الرموز التي ليست جزءًا من السياق قبل أخذ softmax. نقوم أيضًا بقناع جميع رموز الحشو (كما هو محدد بواسطة قناع الاهتمام):
-
-{#if fw === 'pt'}
-
-```py
-sequence_ids = inputs.sequence_ids()
-# Mask everything apart from the tokens of the context
-mask = [i != 1 for i in sequence_ids]
-# Unmask the [CLS] token
-mask[0] = False
-# Mask all the [PAD] tokens
-mask = torch.logical_or(torch.tensor(mask)[None], (inputs["attention_mask"] == 0))
-
-start_logits[mask] = -10000
-end_logits[mask] = -10000
-```
-
-{:else}
-
-```py
-sequence_ids = inputs.sequence_ids()
-# Mask everything apart from the tokens of the context
-mask = [i != 1 for i in sequence_ids]
-# Unmask the [CLS] token
-mask[0] = False
-# Mask all the [PAD] tokens
-mask = tf.math.logical_or(tf.constant(mask)[None], inputs["attention_mask"] == 0)
-
-start_logits = tf.where(mask, -10000, start_logits)
-end_logits = tf.where(mask, -10000, end_logits)
-```
-
-{/if}
-
-بعد ذلك، يمكننا استخدام softmax لتحويل احتمالاتنا إلى احتمالات:
-
-{#if fw === 'pt'}
-
-```py
-start_probabilities = torch.nn.functional.softmax(start_logits, dim=-1)
-end_probabilities = torch.nn.functional.softmax(end_logits, dim=-1)
-```
-
-{:else}
-
-```py
-start_probabilities = tf.math.softmax(start_logits, axis=-1).numpy()
-end_probabilities = tf.math.softmax(end_logits, axis=-1).numpy()
-```
-
-{/if}
-
-الخطوة التالية مماثلة لما فعلناه للسياق الصغير، ولكننا نكررها لكل من جزأينا. نعزو درجة إلى جميع النطاقات المحتملة للإجابة، ثم نأخذ النطاق ذو الدرجة الأفضل:
-
-{#if fw === 'pt'}
-
-```py
-candidates = []
-for start_probs, end_probs in zip(start_probabilities, end_probabilities):
-scores = start_probs[:, None] * end_probs[None, :]
-idx = torch.triu(scores).argmax().item()
-
-start_idx = idx // scores.shape[1]
-end_idx = idx % scores.shape[1]
-score = scores[start_idx, end_idx].item()
-candidates.append((start_idx, end_idx, score))
-
-print(candidates)
-```
-
-{:else}
-
-```py
-candidates = []
-for start_probs, end_probs in zip(start_probabilities, end_probabilities):
-scores = start_probs[:, None] * end_probs[None, :]
-idx = np.triu(scores).argmax().item()
-
-start_idx = idx // scores.shape[1]
-end_idx = idx % scores.shape[1]
-score = scores[start_idx, end_idx].item()
-candidates.append((start_idx, end_idx, score))
-
-print(candidates)
-```
-
-{/if}
-
-```python out
-[(0, 18, 0.33867)، (173، 184، 0.97149)]
-```
-
-يرتبط هذان المرشحان بأفضل إجابات تمكن النموذج من العثور عليها في كل جزء. النموذج أكثر ثقة بكثير من أن الإجابة الصحيحة موجودة في الجزء الثاني (وهي علامة جيدة!). الآن كل ما علينا فعله هو رسم هذه النطاقات الرمزية إلى نطاقات من الأحرف في السياق (نحتاج فقط إلى رسم النطاق الثاني للحصول على إجابتنا، ولكن من المثير للاهتمام أن نرى ما اختاره النموذج في الجزء الأول).
-
-<Tip>
-
-✏️ **جربه!** قم بتعديل الكود أعلاه لإرجاع الدرجات والنطاقات للإجابات الخمس الأكثر احتمالًا (في المجموع، وليس لكل جزء).
-
-</Tip>
-
-إن "التعويضات" التي حصلنا عليها سابقًا هي في الواقع قائمة من التعويضات، مع قائمة واحدة لكل جزء من النص:
-
-```py
-for candidate, offset in zip(candidates, offsets):
-start_token, end_token, score = candidate
-start_char, _ = offset[start_token]
-_, end_char = offset[end_token]
-answer = long_context[start_char:end_char]
-result = {"answer": answer, "start": start_char, "end": end_char, "score": score}
-print(result)
-```
-
-```python out
-{'answer': '\n🤗 Transformers: State of the Art NLP', 'start': 0, 'end': 37, 'score': 0.33867}
-{'answer': 'Jax, PyTorch and TensorFlow', 'start': 1892, 'end': 1919, 'score': 0.97149}
-```
-
-إذا تجاهلنا النتيجة الأولى، فسنحصل على نفس النتيجة التي حصلنا عليها من خط الأنابيب لهذا السياق الطويل - رائع!
-
-<Tip>
-
-✏️ **جربه!** استخدم أفضل الدرجات التي حسبتها سابقًا لعرض الإجابات الخمس الأكثر احتمالًا (للنص بأكمله، وليس لكل جزء). للتحقق من نتائجك، عد إلى خط الأنابيب الأول ومرر "top_k=5" عند استدعائه.
-
-</Tip>
-
-هذا يختتم غوصنا العميق في قدرات المميز. سنضع كل هذا موضع التنفيذ مرة أخرى في الفصل التالي، عندما نوضح لك كيفية ضبط نموذج بدقة على مجموعة من مهام NLP الشائعة.

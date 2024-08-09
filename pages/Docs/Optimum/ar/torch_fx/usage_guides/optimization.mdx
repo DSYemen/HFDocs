@@ -1,78 +1,0 @@
-# التحسين
-
-يوفر وحدة `optimum.fx.optimization` مجموعة من تحويلات مخطط torch.fx، جنبًا إلى جنب مع الفئات والوظائف لكتابة تحويلاتك الخاصة وتكوينها.
-
-## دليل التحويل
-
-في 🤗 Optimum، هناك نوعان من التحويلات: التحويلات القابلة للتراجع وغير القابلة للتراجع.
-
-### كتابة تحويل غير قابل للتراجع
-
-أبسط حالات التحويلات هي التحويلات غير القابلة للتراجع. لا يمكن عكس هذه التحويلات، مما يعني أنه بعد تطبيقها على وحدة نمطية للرسم، لا توجد طريقة لاستعادة النموذج الأصلي. لتنفيذ مثل هذه التحويلات في 🤗 Optimum، الأمر سهل للغاية: ما عليك سوى إنشاء فئة فرعية من [`~optimum.fx.optimization.Transformation`] وتنفيذ طريقة [`~optimum.fx.optimization.Transformation.transform`].
-
-على سبيل المثال، يقوم التحويل التالي بتغيير جميع عمليات الضرب إلى عمليات جمع:
-
-```python
->>> import operator
->>> from optimum.fx.optimization import Transformation
-
->>> class ChangeMulToAdd(Transformation):
-...     def transform(self, graph_module):
-...         for node in graph_module.graph.nodes:
-...             if node.op == "call_function" and node.target == operator.mul:
-...                 node.target = operator.add
-...         return graph_module
-```
-
-بعد تنفيذه، يمكن استخدام تحويلك كدالة عادية:
-
-```python
->>> from transformers import BertModel
->>> from transformers.utils.fx import symbolic_trace
-
->>> model = BertModel.from_pretrained("bert-base-uncased")
->>> traced = symbolic_trace(
-...     model,
-...     input_names=["input_ids", "attention_mask", "token_type_ids"],
-... )
-
->>> transformation = ChangeMulToAdd()
->>> transformed_model = transformation(traced)
-```
-
-### كتابة تحويل قابل للتراجع
-
-ينفذ التحويل القابل للتراجع كل من التحويل وعكسه، مما يسمح باسترداد النموذج الأصلي من المحول. لتنفيذ مثل هذا التحويل، تحتاج إلى إنشاء فئة فرعية من [`~optimum.fx.optimization.ReversibleTransformation`] وتنفيذ طرق [`~optimum.fx.optimization.ReversibleTransformation.transform`] و [`~optimum.fx.optimization.ReversibleTransformation.reverse`].
-
-على سبيل المثال، التحويل التالي قابل للتراجع:
-
-```python
->>> import operator
->>> from optimum.fx.optimization import ReversibleTransformation
-
->>> class MulToMulTimesTwo(ReversibleTransformation):
-...     def transform(self, graph_module):
-...         for node in graph_module.graph.nodes:
-...             if node.op == "call_function" and node.target == operator.mul:
-...                 x, y = node.args
-...                 node.args = (2 * x, y)
-...         return graph_module
-...
-...     def reverse(self, graph_module):
-...         for node in graph_module.graph.nodes:
-...             if node.op == "call_function" and node.target == operator.mul:
-...                 x, y = node.args
-...                 node.args = (x / 2, y)
-...         return graph_module
-```
-
-### تكوين التحويلات معًا
-
-نظرًا لأن تطبيق تحويلات متعددة في السلسلة مطلوب في كثير من الأحيان، يتم توفير [`~optimum.fx.optimization.compose`]. إنها دالة مساعدة تسمح لك بإنشاء تحويل عن طريق تسلسل تحويلات متعددة أخرى.
-
-```python
->>> from optimum.fx.optimization import compose
->>> composition = compose(MulToMulTimesTwo(), ChangeMulToAdd())
-```
-
-هل هذه الترجمة واضحة ومفهومة؟ لا تتردد في إخباري إذا كنت تريد مني توضيح أي شيء أو تقديم المزيد من التفاصيل.
