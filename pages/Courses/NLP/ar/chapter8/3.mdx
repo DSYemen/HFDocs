@@ -1,163 +1,0 @@
-# طلب المساعدة في المنتديات [[asking-for-help-on-the-forums]]
-
-<CourseFloatingBanner chapter={8}
-classNames="absolute z-10 right-0 top-0"
-notebooks={[
-{label: "Google Colab", value: "https://colab.research.google.com/github.com/huggingface/notebooks/blob/master/course/en/chapter8/section3.ipynb"},
-{label: "Aws Studio", value: "https://studiolab.sagemaker.aws/import/github/huggingface/notebooks/blob/master/course/en/chapter8/section3.ipynb"},
-]} />
-
-<Youtube id="S2EEG3JIt2A"/>
-
-منتديات [Hugging Face](https://discuss.huggingface.co) هي مكان رائع للحصول على المساعدة من فريق المصادر المفتوحة ومجتمع Hugging Face الأوسع. هكذا تبدو الصفحة الرئيسية في أي يوم:
-
-<div class="flex justify-center">
-<img src="https://huggingface.co/datasets/huggingface-course/documentation-images/resolve/main/en/chapter8/forums.png" alt="منتديات Hugging Face." width="100%"/>
-</div>
-
-على الجانب الأيسر، يمكنك رؤية جميع الفئات التي يتم تصنيف الموضوعات المختلفة فيها، بينما يُظهر الجانب الأيمن أحدث الموضوعات. الموضوع هو منشور يحتوي على عنوان وفئة ووصف؛ وهو مشابه جدًا لتنسيق GitHub الذي رأيناه عند إنشاء مجموعة البيانات الخاصة بنا في [الفصل 5](/course/chapter5). كما يوحي الاسم، فإن فئة [المبتدئين](https://discuss.huggingface.co/c/beginners/5) مخصصة بشكل أساسي للأشخاص الذين بدأوا للتو في استخدام مكتبات Hugging Face والنظام البيئي. أي سؤال عن أي من المكتبات هو موضع ترحيب هناك، سواء أكان الغرض منه تصحيح بعض الأكواد أو طلب المساعدة بشأن كيفية القيام بشيء ما. (ومع ذلك، إذا كان سؤالك يتعلق بمكتبة واحدة على وجه الخصوص، فيجب عليك التوجه إلى فئة المكتبة المقابلة في المنتدى.)
-
-وبالمثل، فإن الفئتان [المتوسطة](https://discuss.huggingface.co/c/intermediate/6) و [البحثية](https://discuss.huggingface.co/c/research/7) مخصصتان للأسئلة الأكثر تقدمًا، على سبيل المثال حول المكتبات أو بعض أبحاث NLP الجديدة التي ترغب في مناقشتها.
-
-وبالطبع، يجب أن نذكر أيضًا فئة [الدورة التدريبية](https://discuss.huggingface.co/c/course/20)، حيث يمكنك طرح أي أسئلة لديك تتعلق بدورة Hugging Face التدريبية!
-
-بمجرد اختيار فئة، ستتمكن من كتابة موضوعك الأول. يمكنك العثور على بعض [الإرشادات](https://discuss.huggingface.co/t/how-to-request-support/3128) في المنتدى حول كيفية القيام بذلك، وفي هذا القسم سنلقي نظرة على بعض الميزات التي تجعل الموضوع جيدًا.
-
-## كتابة منشور جيد في المنتدى [[writing-a-good-forum-post]]
-
-لنفترض، كمثال عملي، أننا نحاول إنشاء تمثيلات من مقالات Wikipedia لإنشاء محرك بحث مخصص. كما هو معتاد، نقوم بتحميل الرموز ونموذج المحولات على النحو التالي:
-
-```python
-from transformers import AutoTokenizer, AutoModel
-
-model_checkpoint = "distilbert-base-uncased"
-tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
-model = AutoModel.from_pretrained(model_checkpoint)
-```
-
-والآن، دعونا نفترض أننا نحاول تضمين قسم كامل من [مقالة ويكيبيديا](https://en.wikipedia.org/wiki/Transformers) حول المحولات (الامتياز، وليس المكتبة!):
-
-```python
-text = """
-Generation One is a retroactive term for the Transformers characters that
-appeared between 1984 and 1993. The Transformers began with the 1980s Japanese
-toy lines Micro Change and Diaclone. They presented robots able to transform
-into everyday vehicles, electronic items or weapons. Hasbro bought the Micro
-Change and Diaclone toys, and partnered with Takara. Marvel Comics was hired by
-Hasbro to create the backstory; editor-in-chief Jim Shooter wrote an overall
-story, and gave the task of creating the characthers to writer Dennis O'Neil.
-Unhappy with O'Neil's work (although O'Neil created the name "Optimus Prime"),
-Shooter chose Bob Budiansky to create the characters.
-
-The Transformers mecha were largely designed by Shōji Kawamori, the creator of
-the Japanese mecha anime franchise Macross (which was adapted into the Robotech
-franchise in North America). Kawamori came up with the idea of transforming
-mechs while working on the Diaclone and Macross franchises in the early 1980s
-(such as the VF-1 Valkyrie in Macross and Robotech), with his Diaclone mechs
-later providing the basis for Transformers.
-
-The primary concept of Generation One is that the heroic Optimus Prime, the
-villainous Megatron, and their finest soldiers crash land on pre-historic Earth
-in the Ark and the Nemesis before awakening in 1985, Cybertron hurtling through
-the Neutral zone as an effect of the war. The Marvel comic was originally part
-of the main Marvel Universe, with appearances from Spider-Man and Nick Fury,
-plus some cameos, as well as a visit to the Savage Land.
-
-The Transformers TV series began around the same time. Produced by Sunbow
-Productions and Marvel Productions, later Hasbro Productions, from the start it
-contradicted Budiansky's backstories. The TV series shows the Autobots looking
-for new energy sources, and crash landing as the Decepticons attack. Marvel
-interpreted the Autobots as destroying a rogue asteroid approaching Cybertron.
-Shockwave is loyal to Megatron in the TV series, keeping Cybertron in a
-stalemate during his absence, but in the comic book he attempts to take command
-of the Decepticons. The TV series would also differ wildly from the origins
-Budiansky had created for the Dinobots, the Decepticon turned Autobot Jetfire
-(known as Skyfire on TV), the Constructicons (who combine to form
-Devastator),[19][20] and Omega Supreme. The Marvel comic establishes early on
-that Prime wields the Creation Matrix, which gives life to machines. In the
-second season, the two-part episode The Key to Vector Sigma introduced the
-ancient Vector Sigma computer, which served the same original purpose as the
-Creation Matrix (giving life to Transformers), and its guardian Alpha Trion.
-"""
-
-inputs = tokenizer(text, return_tensors="pt")
-logits = model(**inputs).logits
-```
-
-```python output
-IndexError: index out of range in self
-```
-
-يا إلهي! لقد واجهنا مشكلة - ورسالة الخطأ أكثر غموضًا من تلك التي رأيناها في [القسم 2](/course/chapter8/section2)! لا يمكننا فهم أي شيء من تتبع الأخطاء، لذلك قررنا اللجوء إلى منتديات Hugging Face للحصول على المساعدة. كيف يمكننا صياغة الموضوع؟
-
-للبدء، نحتاج إلى النقر فوق الزر "موضوع جديد" في الركن العلوي الأيمن (لاحظ أنه لإنشاء موضوع، يجب أن تكون مسجلاً الدخول):
-
-<div class="flex justify-center">
-<img src="https://huggingface.co/datasets/huggingface-course/documentation-images/resolve/main/en/chapter8/forums-new-topic.png" alt="إنشاء موضوع منتدى جديد." width="100%"/>
-</div>
-
-سيؤدي ذلك إلى ظهور واجهة كتابة حيث يمكننا إدخال عنوان موضوعنا واختيار فئة وصياغة المحتوى:
-
-<div class="flex justify-center">
-<img src="https://huggingface.co/datasets/huggingface-course/documentation-images/resolve/main/en/chapter8/forum-topic01.png" alt="واجهة إنشاء موضوع منتدى." width="100%"/>
-</div>
-
-نظرًا لأن الخطأ يبدو أنه يتعلق حصريًا بـ 🤗 Transformers، فسنختار هذه الفئة. قد تبدو محاولتنا الأولى لشرح المشكلة على النحو التالي:
-
-<div class="flex justify-center">
-<img src="https://huggingface.co/datasets/huggingface-course/documentation-images/resolve/main/en/chapter8/forum-topic02.png" alt="صياغة محتوى موضوع منتدى جديد." width="100%"/>
-</div>
-
-على الرغم من أن هذا الموضوع يحتوي على رسالة الخطأ التي نحتاج إلى المساعدة بشأنها، إلا أن هناك بعض المشكلات في طريقة كتابته:
-
-1. العنوان ليس وصفيًا جدًا، لذا لن يتمكن أي شخص يتصفح المنتدى من معرفة ما يتعلق به الموضوع دون قراءة الجسم أيضًا.
-2. لا يوفر الجسم معلومات كافية حول _أين_ يأتي الخطأ _وكيف_ يمكن إعادة إنتاجه.
-3. يضع الموضوع علامة على بعض الأشخاص مباشرة بنبرة متطلبة إلى حد ما.
-
-من غير المرجح أن تحصل الموضوعات مثل هذا على إجابة سريعة (إذا حصلت على إجابة على الإطلاق)، لذلك دعونا نلقي نظرة على كيفية تحسينها. سنبدأ بالقضية الأولى المتمثلة في اختيار عنوان وصفي.
-
-### اختيار عنوان وصفي [[choosing-a-descriptive-title]]
-
-إذا كنت تحاول الحصول على مساعدة بشأن خطأ في كودك، فإن قاعدة جيدة هي تضمين معلومات كافية في العنوان حتى يتمكن الآخرون من تحديد ما إذا كانوا يعتقدون أن بإمكانهم الإجابة على سؤالك أم لا. في مثالنا العملي، نعرف اسم الاستثناء الذي يتم إثارته ولدينا بعض التلميحات بأنه يتم تشغيله في تمرير النموذج الأمامي، حيث نستدعي `model(**inputs)`. لنقل ذلك، قد يكون أحد العناوين المحتملة:
-
-> مصدر IndexError في تمرير AutoModel الأمامي؟
-
-يخبر هذا العنوان القارئ _أين_ تعتقد أن الخطأ يأتي منه، وإذا صادفوا `IndexError` من قبل، فمن المحتمل أن يعرفوا كيفية تصحيحه. بالطبع، يمكن أن يكون العنوان أي شيء تريده، وقد تكون المتغيرات الأخرى مثل:
-
-> لماذا ينتج نموذجي IndexError؟
-
-جيدًا أيضًا. الآن بعد أن حصلنا على عنوان وصفي، دعنا نلقي نظرة على تحسين الجسم.
-
-### تنسيق مقتطفات الكود الخاصة بك [[formatting-your-code-snippets]]
-
-قراءة الكود المصدري أمر صعب بما فيه الكفاية في IDE، ولكنه أصعب عندما يتم نسخ الكود ولصقه كنص عادي! لحسن الحظ، تدعم منتديات Hugging Face استخدام Markdown، لذا يجب عليك دائمًا وضع كتل الكود الخاصة بك بين ثلاثة علامات اقتباس خلفية (```) حتى تكون أكثر قابلية للقراءة. دعنا نفعل ذلك لتحسين رسالة الخطأ - وبينما نفعل ذلك، دعنا نجعل الجسم أكثر تهذيبًا من إصدارنا الأصلي:
-
-<div class="flex justify-center">
-<img src="https://huggingface.co/datasets/huggingface-course/documentation-images/resolve/main/en/chapter8/forum-topic03.png" alt="موضوع المنتدى المنقح الخاص بنا، بتنسيق كود مناسب." width="100%"/>
-</div>
-
-كما هو موضح في لقطة الشاشة، يؤدي وضع كتل الكود بين علامات الاقتباس الخلفية إلى تحويل النص العادي إلى كود بتنسيق مناسب، مع تظليل الألوان! لاحظ أيضًا أنه يمكن استخدام علامات الاقتباس الفردية لتنسيق المتغيرات المضمنة، مثل ما فعلناه لـ `distilbert-base-uncased`. يبدو هذا الموضوع أفضل، ومع بعض الحظ، قد نجد شخصًا في المجتمع يمكنه تخمين ما يتعلق به الخطأ. ومع ذلك، بدلاً من الاعتماد على الحظ، دعنا نجعل الحياة أسهل من خلال تضمين تتبع المكدس بتفاصيله الكاملة القبيحة!
-
-### تضمين تتبع المكدس الكامل [[including-the-full-traceback]]
-
-نظرًا لأن السطر الأخير من تتبع المكدس غالبًا ما يكون كافيًا لتصحيح كودك، فقد يكون من المغري تقديم ذلك فقط في موضوعك "لتوفير المساحة". على الرغم من حسن النية، إلا أن هذا يجعل الأمر _أكثر صعوبة_ بالنسبة للآخرين لتصحيح المشكلة لأن المعلومات الموجودة في الجزء العلوي من تتبع المكدس يمكن أن تكون مفيدة جدًا أيضًا. لذلك، من الجيد نسخ ولصق _كامل_ تتبع المكدس، مع التأكد من تنسيقه بشكل جميل. نظرًا لأن هذه التتبع يمكن أن تكون طويلة جدًا، يفضل بعض الأشخاص عرضها بعد أن يوضحوا كود المصدر. دعنا نفعل ذلك. الآن، يبدو موضوع المنتدى الخاص بنا كما يلي:
-
-<div class="flex justify-center">
-<img src="https://huggingface.co/datasets/huggingface-course/documentation-images/resolve/main/en/chapter8/forum-topic04.png" alt="موضوع المنتدى التوضيحي الخاص بنا، مع تتبع المكدس الكامل." width="100%"/>
-</div>
-
-هذا أكثر إفادة، وقد يتمكن القارئ الدقيق من الإشارة إلى أن المشكلة تبدو بسبب تمرير إدخال طويل بسبب هذا السطر في تتبع المكدس:
-
-> طول تسلسل فهرس الرمز أكبر من طول التسلسل الأقصى المحدد لهذا النموذج (583 > 512).
-
-ومع ذلك، يمكننا جعل الأمور أسهل عليهم من خلال توفير الكود الفعلي الذي تسبب في الخطأ. دعنا نفعل ذلك الآن.
-
-### تقديم مثال قابل للتكرار [[providing-a-reproducible-example]]
-
-إذا حاولت من قبل تصحيح كود شخص آخر، فمن المحتمل أنك حاولت أولاً إعادة إنشاء المشكلة التي أبلغوا عنها حتى تتمكن من البدء في العمل في تتبع المكدس لتحديد الخطأ. الأمر لا يختلف عندما يتعلق الأمر بالحصول على (أو إعطاء) المساعدة في المنتديات، لذا فمن المفيد حقًا إذا تمكنت من توفير مثال صغير يعيد إنتاج الخطأ. نصف الوقت، فإن مجرد القيام بهذه العملية سوف يساعدك في معرفة ما هو الخطأ. في أي حال، فإن الجزء المفقود من مثالنا هو إظهار _الإدخالات_ التي قدمناها إلى النموذج. القيام بذلك يعطينا شيئًا مثل المثال المكتمل التالي:
-
-<div class="flex justify-center">
-<img src="https://huggingface.co/datasets/huggingface-course/documentation-images/resolve/main/en/chapter8/forum-topic05.png" alt="النسخة النهائية من موضوع المنتدى الخاص بنا." width="100%"/>
-</div>
-
-يحتوي هذا الموضوع الآن على الكثير من المعلومات، وقد تمت كتابته بطريقة من المرجح أن تجذب انتباه المجتمع والحصول على إجابة مفيدة. باستخدام هذه الإرشادات الأساسية، يمكنك الآن إنشاء موضوعات رائعة للعثور على إجابات لأسئلتك حول 🤗 Transformers!
