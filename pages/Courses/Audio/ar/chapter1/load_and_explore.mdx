@@ -1,136 +1,0 @@
-لم يتم ترجمة الأجزاء المطلوبة حسب تنسيق Markdown:
-
-# تحميل واستكشاف مجموعة بيانات صوتية
-
-```py
-from datasets import load_dataset
-
-minds = load_dataset("PolyAI/minds14", "en-AU", "train")
-minds
-```
-
-**الإخراج:**
-
-```
-Dataset(
-{
-features: [
-"path",
-"audio",
-"transcription",
-"english_transcription",
-"intent_class",
-"lang_id",
-],
-num_rows: 654,
-}
-)
-```
-
-تحتوي مجموعة البيانات على 654 ملف صوتي، يرافق كل منها نسخة مكتوبة، وترجمة باللغة الإنجليزية، وتصنيف يشير إلى نية استفسار الشخص. يحتوي عمود "الصوت" على بيانات صوتية خام. دعونا نلقي نظرة فاحصة على أحد الأمثلة:
-
-```py
-example = minds[0]
-example
-```
-
-**الإخراج:**
-
-```
-{
-"path": "/root/.cache/huggingface/datasets/downloads/extracted/f14948e0e84be638dd7943ac36518a4cf3324e8b7aa331c5ab11541518e9368c/en-AU~PAY_BILL/response_4.wav",
-"audio": {
-"path": "/root/.cache/huggingface/datasets/downloads/extracted/f14948e0e84be638dd7943ac36518a4cf3324e8b7aa331c5ab11541518e9368c/en-AU~PAY_BILL/response_4.wav",
-"array": array(
-[0.0, 0.00024414, -0.00024414, ..., -0.00024414, 0.00024414, 0.0012207],
-dtype=float32
-),
-"sampling_rate": 8000,
-},
-"transcription": "I would like to pay my electricity bill using my card, can you please assist",
-"english_transcription": "I would like to pay my electricity bill using my card, can you please assist",
-"intent_class": 13,
-"lang_id": 2,
-}
-```
-
-قد تلاحظ أن عمود "الصوت" يحتوي على عدة ميزات. فيما يلي شرح لها:
-
-- `path`: المسار إلى ملف الصوت (`*.wav` في هذه الحالة).
-- `array`: بيانات الصوت المشفرة، ممثلة كمصفوفة NumPy أحادية البعد.
-- `sampling_rate`: معدل أخذ العينات لملف الصوت (8,000 هرتز في هذا المثال).
-
-`intent_class` هو فئة تصنيف التسجيل الصوتي. لتحويل هذا الرقم إلى سلسلة ذات معنى، يمكننا استخدام طريقة `int2str()`:
-
-```py
-id2label = minds.features["intent_class"].int2str
-id2label(example["intent_class"])
-```
-
-**الإخراج:**
-
-```
-"pay_bill"
-```
-
-إذا نظرت إلى ميزة النسخ، يمكنك أن ترى أن ملف الصوت قد سجل بالفعل شخصًا يسأل عن سداد فاتورة.
-
-إذا كنت تخطط لتدريب مصنف صوتي على هذه المجموعة الفرعية من البيانات، فقد لا تحتاج بالضرورة إلى جميع الميزات. على سبيل المثال، سيكون لدى `lang_id` نفس القيمة لجميع الأمثلة، ولن يكون مفيدًا. من المحتمل أن `english_transcription` سيكون نسخة مكررة من `transcription` في هذه المجموعة الفرعية، لذا يمكننا إزالته بأمان.
-
-يمكنك بسهولة إزالة الميزات غير ذات الصلة باستخدام طريقة `remove_columns` في مكتبة 🤗 Datasets:
-
-```py
-columns_to_remove = ["lang_id", "english_transcription"]
-minds = minds.remove_columns(columns_to_remove)
-minds
-```
-
-**الإخراج:**
-
-```
-Dataset({features: ["path", "audio", "transcription", "intent_class"], num_rows: 654})
-```
-
-الآن بعد أن قمنا بتحميل وفحص المحتويات الخام لمجموعة البيانات، دعونا نستمع إلى بعض الأمثلة! سنستخدم ميزة `Blocks` و`Audio` من `Gradio` لتشفير بعض العينات العشوائية من مجموعة البيانات:
-
-```py
-import gradio as gr
-
-
-def generate_audio():
-    example = minds.shuffle()[0]
-    audio = example["audio"]
-    return (
-        audio["sampling_rate"],
-        audio["array"],
-    ), id2label(example["intent_class"])
-
-
-with gr.Blocks() as demo:
-    with gr.Column():
-        for _ in range(4):
-            audio, label = generate_audio()
-            output = gr.Audio(audio, label=label)
-
-    demo.launch(debug=True)
-```
-
-إذا كنت ترغب في ذلك، يمكنك أيضًا تصور بعض الأمثلة. دعونا نرسم مخطط موجة المثال الأول.
-
-```py
-import librosa
-import matplotlib.pyplot as plt
-import librosa.display
-
-array = example["audio"]["array"]
-sampling_rate = example["audio"]["sampling_rate"]
-
-plt.figure().set_figwidth(12)
-librosa.display.waveshow(array، sr=sampling_rate)
-```
-
-<div class="flex justify-center">
-<img src="https://huggingface.co/datasets/huggingface-course/audio-course-images/resolve/main/waveform_unit1.png" alt="مخطط الموجة">
-</div>
-
-جربه! قم بتنزيل لهجة أو لغة أخرى من مجموعة بيانات MINDS-14، واستمع إلى بعض الأمثلة وقم بتصورها للحصول على فكرة عن التنوع في مجموعة البيانات بأكملها. يمكنك العثور على القائمة الكاملة للغات المتاحة [هنا](https://huggingface.co/datasets/PolyAI/minds14).

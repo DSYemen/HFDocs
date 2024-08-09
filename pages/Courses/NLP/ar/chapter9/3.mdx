@@ -1,158 +1,0 @@
-# فهم فئة الواجهة
-
-في هذا القسم، سنلقي نظرة فاحصة على فئة "الواجهة" (Interface)، وسنستوعب المعلمات الرئيسية المستخدمة لإنشاء واحدة.
-
-## كيفية إنشاء واجهة
-
-ستلاحظ أن لفئة "الواجهة" (Interface) ثلاثة معلمات مطلوبة:
-
-`Interface(fn, inputs, outputs, ...)`
-
-هذه المعلمات هي:
-
-- `fn`: دالة التنبؤ التي تغلفها واجهة Gradio. يمكن لهذه الدالة أن تأخذ معلمة واحدة أو أكثر، وأن تعيد قيمة واحدة أو أكثر.
-
-- `inputs`: نوع (أنواع) مكون الإدخال. يوفر Gradio العديد من المكونات الجاهزة مثل "image" أو "mic".
-
-- `outputs`: نوع (أنواع) مكون الإخراج. مرة أخرى، يوفر Gradio العديد من المكونات الجاهزة مثل "image" أو "label".
-
-للاطلاع على القائمة الكاملة للمكونات، راجع [وثائق Gradio](https://gradio.app/docs). يمكن تخصيص كل مكون جاهز عن طريق إنشاء مثيل للفئة المقابلة للمكون.
-
-على سبيل المثال، كما رأينا في [القسم السابق](/course/chapter9/2)، بدلاً من تمرير "textbox" إلى معلمة "inputs"، يمكنك تمرير مكون "Textbox(lines=7, label="Prompt")" لإنشاء مربع نصي بـ 7 أسطر وملصق.
-
-لنلقِ نظرة على مثال آخر، ولكن هذه المرة مع مكون "Audio".
-
-## مثال بسيط مع الصوت
-
-كما ذكرنا سابقًا، يوفر Gradio العديد من المدخلات والمخرجات المختلفة. لذلك دعونا نبني واجهة "Interface" تعمل مع الصوت.
-
-في هذا المثال، سنبني دالة تحويل الصوت إلى صوت تأخذ ملف صوتي وتعكسه ببساطة.
-
-سنستخدم لمُدخل مكون "Audio". عند استخدام مكون "Audio"، يمكنك تحديد ما إذا كنت تريد أن يكون مصدر الصوت ملفًا يقوم المستخدم بتحميله أو ميكروفونًا يسجل المستخدم صوته من خلاله. في هذه الحالة، دعونا نجعلها "microphone". لمجرد المتعة، سنضيف ملصقًا إلى "Audio" الخاص بنا يقول "Speak here...".
-
-بالإضافة إلى ذلك، نود تلقي الصوت كصفيف numpy حتى نتمكن من "عكسه" بسهولة. لذلك سنحدد "النوع" ليكون "numpy"، والذي يمرر البيانات المدخلة كزوج مرتب (معدل العينة، البيانات) إلى دالتنا.
-
-كما سنستخدم مكون الإخراج "Audio" الذي يمكنه تلقائيًا تقديم زوج مرتب بمعدل عينة وصفيف numpy من البيانات كملف صوتي قابل للتشغيل. في هذه الحالة، لا نحتاج إلى إجراء أي تخصيص، لذا سنستخدم الاختصار النصي "audio".
-
-```py
-import numpy as np
-import gradio as gr
-
-
-def reverse_audio(audio):
-    sr, data = audio
-    reversed_audio = (sr, np.flipud(data))
-    return reversed_audio
-
-
-mic = gr.Audio(source="microphone", type="numpy", label="Speak here...")
-gr.Interface(reverse_audio, mic, "audio").launch()
-```
-
-سينتج الكود أعلاه واجهة مثل تلك الموجودة أدناه (إذا لم يطلب متصفحك أذونات الميكروفون، <a href="https://huggingface.co/spaces/course-demos/audio-reverse" target="_blank">افتح العرض التوضيحي في علامة تبويب منفصلة</a>.)
-
-<iframe src="https://course-demos-audio-reverse.hf.space" frameBorder="0" height="250" title="Gradio app" class="container p-0 flex-grow space-iframe" allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; document-domain; encrypted-media; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; vr ; wake-lock; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe>
-
-الآن يجب أن تكون قادرًا على تسجيل صوتك والاستماع إلى نفسك تتحدث بالعكس - مخيف 👻!
-
-## التعامل مع مدخلات ومخرجات متعددة
-
-لنفترض أن لدينا دالة أكثر تعقيدًا، بمدخلات ومخرجات متعددة. في المثال أدناه، لدينا دالة تأخذ فهرس القائمة المنسدلة، وقيمة شريط التمرير، والعدد، وتعيد عينة صوتية لنغمة موسيقية.
-
-الق نظرة على كيفية تمرير قائمة بمكونات الإدخال والإخراج، وانظر إذا كنت تستطيع متابعة ما يحدث.
-
-المفتاح هنا هو أنه عند تمرير:
-
-* قائمة بمكونات الإدخال، يتوافق كل مكون مع معلمة بالترتيب.
-
-* قائمة بمكونات الإخراج، يتوافق كل مكون مع قيمة مرتجعة.
-
-توضح شفرة المقتطف أدناه كيف تتوافق مكونات الإدخال الثلاثة مع الحجج الثلاثة لدالة `generate_tone()`:
-
-```py
-import numpy as np
-import gradio as gr
-
-notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
-
-
-def generate_tone(note, octave, duration):
-    sr = 48000
-    a4_freq, tones_from_a4 = 440, 12 * (octave - 4) + (note - 9)
-    frequency = a4_freq * 2 ** (tones_from_a4 / 12)
-    duration = int(duration)
-    audio = np.linspace(0, duration, duration * sr)
-    audio = (20000 * np.sin(audio * (2 * np.pi * frequency))).astype(np.int16)
-    return (sr, audio)
-
-
-gr.Interface(
-    generate_tone,
-    [
-        gr.Dropdown(notes, type="index"),
-        gr.Slider(minimum=4, maximum=6, step=1),
-        gr.Textbox(type="number", value=1, label="Duration in seconds"),
-    ],
-    "audio",
-).launch()
-```
-
-<iframe src="https://course-demos-generate-tone.hf.space" frameBorder="0" height="450" title="Gradio app" class="container p-0 flex-grow space-iframe" allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; document-domain; encrypted-media; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; vr ; wake-lock; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe>
-
-### طريقة `launch()`
-
-حتى الآن، استخدمنا طريقة `launch()` لإطلاق الواجهة، لكننا لم نناقش حقًا ما تفعله.
-
-تقوم طريقة `launch()` بشكل افتراضي بتشغيل العرض التوضيحي على خادم ويب يعمل محليًا. إذا كنت تشغل الكود الخاص بك في دفتر Jupyter أو Colab، فسيقوم Gradio بتضمين العرض التوضيحي GUI في الدفتر حتى تتمكن من استخدامه بسهولة.
-
-يمكنك تخصيص سلوك `launch()` من خلال معلمات مختلفة:
-
-- `inline` - ما إذا كان سيتم عرض الواجهة في صفحات Python.
-
-- `inbrowser` - ما إذا كان سيتم تشغيل الواجهة تلقائيًا في علامة تبويب جديدة في المتصفح الافتراضي.
-
-- `share` - ما إذا كان سيتم إنشاء رابط يمكن مشاركته بشكل عام من جهاز الكمبيوتر الخاص بك للواجهة. يشبه إلى حد ما رابط Google Drive!
-
-سنغطي معلمة `share` بمزيد من التفاصيل في القسم التالي!
-
-## ✏️ دعونا نطبقها!
-
-دعونا نبني واجهة تسمح لك بتجربة نموذج **التعرف على الكلام**. لجعلها مثيرة للاهتمام، سنقبل إما إدخال الميكروفون أو الملف المحمل.
-
-كما هو معتاد، سنقوم بتحميل نموذج التعرف على الكلام الخاص بنا باستخدام دالة `pipeline()` من 🤗 Transformers. إذا كنت بحاجة إلى تذكير سريع، فيمكنك العودة إلى [هذا القسم في الفصل 1](/course/chapter1/3). بعد ذلك، سننفذ دالة `transcribe_audio()` التي تقوم بمعالجة الصوت وإرجاع النسخ النصي. أخيرًا، سنغلف هذه الدالة في واجهة باستخدام مكونات "Audio" للإدخالات والنص فقط للإخراج. في المجمل، فإن الكود الخاص بهذا التطبيق هو كما يلي:
-
-```py
-from transformers import pipeline
-import gradio as gr
-
-model = pipeline("automatic-speech-recognition")
-
-
-def transcribe_audio(mic=None, file=None):
-    if mic is not None:
-        audio = mic
-    elif file is not None:
-        audio = file
-    else:
-        return "You must either provide a mic recording or a file"
-    transcription = model(audio)["text"]
-    return transcription
-
-
-gr.Interface(
-    fn=transcribe_audio,
-    inputs=[
-        gr.Audio(source="microphone", type="filepath", optional=True),
-        gr.Audio(source="upload", type="filepath", optional=True),
-    ],
-    outputs="text",
-).launch()
-```
-
-إذا لم يطلب متصفحك أذونات الميكروفون، <a href="https://huggingface.co/spaces/course-demos/audio-reverse" target="_blank">افتح العرض التوضيحي في علامة تبويب منفصلة</a>.
-
-<iframe src="https://course-demos-asr.hf.space" frameBorder="0" height="550" title="Gradio app" class="container p-0 flex-grow space-iframe" allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; document-domain; encrypted-media; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; vr ; wake-lock; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe>
-
-هذا كل شيء! الآن يمكنك استخدام هذه الواجهة لنسخ الصوت. لاحظ هنا أنه عن طريق تمرير المعلمة `optional` كـ `True`، فإننا نسمح للمستخدم بتوفير إما ميكروفون أو ملف صوتي (أو لا شيء، ولكن سيؤدي ذلك إلى إرجاع رسالة خطأ).
-
-استمر في التعرف على كيفية مشاركة واجهتك مع الآخرين!

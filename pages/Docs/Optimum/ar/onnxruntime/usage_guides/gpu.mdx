@@ -1,449 +1,0 @@
-# الاستدلال المعجل على وحدات معالجة الرسوميات NVIDIA
-
-بشكل افتراضي، يقوم ONNX Runtime بتشغيل الاستدلال على أجهزة CPU. ومع ذلك، من الممكن وضع العمليات المدعومة على وحدة معالجة الرسوميات (GPU) من NVIDIA، مع ترك العمليات غير المدعومة على وحدة المعالجة المركزية (CPU). في معظم الحالات، يسمح ذلك بوضع العمليات المكلفة على وحدة معالجة الرسوميات (GPU) وتسريع الاستدلال بشكل كبير.
-
-سيوضح هذا الدليل كيفية تشغيل الاستدلال على موفرين للتنفيذ يدعمهما ONNX Runtime لوحدات معالجة الرسوميات NVIDIA:
-
-- `CUDAExecutionProvider`: تسريع عام على وحدات معالجة الرسوميات NVIDIA الممكّنة من CUDA.
-- `TensorrtExecutionProvider`: يستخدم محرك الاستدلال TensorRT من NVIDIA ويوفر بشكل عام أفضل أداء في وقت التشغيل.
-
-<Tip warning={true}>
-بسبب قيود ONNX Runtime، لا يمكن تشغيل النماذج الكمية على `CUDAExecutionProvider`، ولا يمكن تشغيل سوى النماذج ذات الكميات الثابتة على `TensorrtExecutionProvider`.
-</Tip>
-
-## CUDAExecutionProvider
-
-### تثبيت CUDA
-
-قم بتثبيت التبعيات الإضافية عن طريق تشغيل ما يلي، بشرط أن تكون متطلبات CUDA وcuDNN [متوفرة](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#requirements):
-
-```bash
-pip install optimum[onnxruntime-gpu]
-```
-
-لتجنب حدوث تعارضات بين `onnxruntime` و`onnxruntime-gpu`، تأكد من عدم تثبيت حزمة `onnxruntime` عن طريق تشغيل `pip uninstall onnxruntime` قبل تثبيت Optimum.
-
-### التحقق من نجاح تثبيت CUDA
-
-قبل المتابعة، قم بتشغيل كود العينة التالي للتحقق مما إذا كان التثبيت ناجحًا:
-
-```python
->>> from optimum.onnxruntime import ORTModelForSequenceClassification
->>> from transformers import AutoTokenizer
-
->>> ort_model = ORTModelForSequenceClassification.from_pretrained(
-...   "philschmid/tiny-bert-sst2-distilled",
-...   export=True,
-...   provider="CUDAExecutionProvider",
-... )
-
->>> tokenizer = AutoTokenizer.from_pretrained("philschmid/tiny-bert-sst2-distilled")
->>> inputs = tokenizer("expectations were low, actual enjoyment was high", return_tensors="pt", padding=True)
-
->>> outputs = ort_model(**inputs)
->>> assert ort_model.providers == ["CUDAExecutionProvider", "CPUExecutionProvider"]
-```
-
-إذا تم تشغيل هذا الكود بسلاسة، تهانينا! لقد كان التثبيت ناجحًا. إذا واجهت الخطأ التالي أو ما شابه ذلك، فهناك خطأ ما في تثبيت CUDA أو ONNX Runtime:
-
-```
-ValueError: Asked to use CUDAExecutionProvider as an ONNX Runtime execution provider, but the available execution providers are ['CPUExecutionProvider'].
-```
-
-### استخدام موفر التنفيذ CUDA مع النماذج ذات الفاصلة العائمة
-
-بالنسبة للنماذج غير الكمية، يكون الاستخدام مباشرًا. ما عليك سوى تحديد وسيط `provider` في طريقة `ORTModel.from_pretrained()`. إليك مثال:
-
-```python
->>> from optimum.onnxruntime import ORTModelForSequenceClassification
-
->>> ort_model = ORTModelForSequenceClassification.from_pretrained(
-...   "distilbert-base-uncased-finetuned-sst-2-english",
-...   export=True,
-...   provider="CUDAExecutionProvider",
-... )
-```
-
-بعد ذلك، يمكن استخدام النموذج مع واجهة برمجة التطبيقات (API) الشائعة لـ 🤗 Transformers للاستدلال والتقييم، مثل [pipelines](https://huggingface.co/docs/optimum/onnxruntime/usage_guides/pipelines).
-
-عند استخدام خط أنابيب Transformers، لاحظ أنه يجب تعيين وسيط `device` للقيام بالمعالجة الأولية والنهائية على وحدة معالجة الرسوميات (GPU)، كما هو موضح في المثال التالي:
-
-```python
->>> from optimum.pipelines import pipeline
->>> from transformers import AutoTokenizer
-
->>> tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased-finetuned-sst-2-english")
-
->>> pipe = pipeline(task="text-classification", model=ort_model, tokenizer=tokenizer, device="cuda:0")
->>> result = pipe("Both the music and visual were astounding, not to mention the actors performance.")
->>> print(result)  # doctest: +IGNORE_RESULT
-# printing: [{'label': 'POSITIVE', 'score': 0.9997727274894714}]
-```
-
-بالإضافة إلى ذلك، يمكنك تمرير خيار الجلسة `log_severity_level = 0` (verbose) للتحقق مما إذا كانت جميع العقد موجودة بالفعل على موفر التنفيذ CUDA أم لا:
-
-```python
->>> import onnxruntime
-
->>> session_options = onnxruntime.SessionOptions()
->>> session_options.log_severity_level = 0
-
->>> ort_model = ORTModelForSequenceClassification.from_pretrained(
-...     "distilbert-base-uncased-finetuned-sst-2-english",
-...     export=True,
-...     provider="CUDAExecutionProvider",
-...     session_options=session_options
-... )
-```
-
-يجب أن تشاهد السجلات التالية:
-
-```
-2022-10-18 14:59:13.728886041 [V:onnxruntime:, session_state.cc:1193 VerifyEachN
-odeIsAssignedToAnEp] Provider: [CPUExecutionProvider]: [Gather (Gather_76), Uns
-queeze (Unsqueeze_78), Gather (Gather_97), Gather (Gather_100), Concat (Concat_1
-10), Unsqueeze (Unsqueeze_125), ...]
-2022-10-18 14:59:13.728906431 [V:onnxruntime:, session_state.cc:1193 VerifyEachN
-odeIsAssignedToAnEp] Provider: [CUDAExecutionProvider]: [Shape (Shape_74), Slic
-e (Slice_80), Gather (Gather_81), Gather (Gather_82), Add (Add_83), Shape (Shape
-_95), MatMul (MatMul_101), ...]
-```
-
-في هذا المثال، يمكننا أن نرى أن جميع عمليات الضرب المكلفة في المصفوفة موجودة على موفر التنفيذ CUDA.
-
-### استخدام موفر التنفيذ CUDA مع النماذج الكمية
-
-بسبب القيود الحالية في ONNX Runtime، لا يمكن استخدام النماذج الكمية مع `CUDAExecutionProvider`. والأسباب هي كما يلي:
-
-- عند استخدام الكم الديناميكي لـ 🤗 Optimum، قد يتم إدراج عقد مثل [`MatMulInteger`](https://github.com/onnx/onnx/blob/v1.12.0/docs/Operators.md#MatMulInteger) و [`DynamicQuantizeLinear`](https://github.com/onnx/onnx/blob/v1.12.0/docs/Operators.md#DynamicQuantizeLinear) في رسم ONNX البياني، والتي لا يمكن لموفر التنفيذ CUDA استهلاكها.
-- عند استخدام الكم الثابت، سيتضمن رسم الحساب ONNX عمليات الضرب في المصفوفة والضربات الانزلاقية في الحساب العائم، إلى جانب عمليات التكميم وإلغاء التكميم لمحاكاة التكميم. في هذه الحالة، على الرغم من أن عمليات الضرب في المصفوفة والضربات الانزلاقية المكلفة ستعمل على وحدة معالجة الرسوميات (GPU)، إلا أنها ستستخدم الحساب العائم حيث لا يمكن لموفر التنفيذ CUDA استهلاك عقد التكميم وإلغاء التكميم لاستبدالها بالعمليات التي تستخدم الحساب الصحيح.
-
-### تقليل البصمة الذاكرية باستخدام IOBinding
-
-[IOBinding](https://onnxruntime.ai/docs/api/python/api_summary.html#iobinding) هي طريقة فعالة لتجنب نسخ البيانات المكلف عند استخدام وحدات معالجة الرسوميات (GPU). بشكل افتراضي، سينسخ ONNX Runtime الإدخال من وحدة المعالجة المركزية (CPU) (حتى إذا تم نسخ المنسوجات بالفعل إلى الجهاز المستهدف)، ويفترض أن الإخراج يحتاج أيضًا إلى نسخه مرة أخرى إلى وحدة المعالجة المركزية (CPU) من وحدات معالجة الرسوميات (GPU) بعد التشغيل. تعتبر عمليات نسخ البيانات هذه بين المضيف والأجهزة مكلفة، ويمكن أن تؤدي إلى زيادة وقت الاستدلال عن PyTorch العادي، خاصة لعملية فك التشفير.
-
-لتجنب التباطؤ، يعتمد 🤗 Optimum IOBinding لنسخ الإدخالات إلى وحدات معالجة الرسوميات (GPU) وتحديد مساحة ذاكرة الإخراج مسبقًا قبل الاستدلال. عند إنشاء مثيل لـ `ORTModel`، قم بتعيين قيمة وسيط `use_io_binding` لاختيار ما إذا كان سيتم تشغيل IOBinding أثناء الاستدلال أم لا. يتم تعيين `use_io_binding` إلى `True` بشكل افتراضي، إذا اخترت CUDA كموفر للتنفيذ.
-
-وإذا كنت تريد إيقاف تشغيل IOBinding:
-
-```python
->>> from transformers import AutoTokenizer, pipeline
->>> from optimum.onnxruntime import ORTModelForSeq2SeqLM
-
-# تحميل النموذج من المركز وتصديره إلى تنسيق ONNX
->>> model = ORTModelForSeq2SeqLM.from_pretrained("t5-small", export=True, use_io_binding=False)
->>> tokenizer = AutoTokenizer.from_pretrained("t5-small")
-
-# إنشاء خط أنابيب
->>> onnx_translation = pipeline("translation_en_to_fr", model=model, tokenizer=tokenizer, device="cuda:0")
-```
-
-في الوقت الحالي، يتم دعم IOBinding للنماذج المحددة للمهمة، وإذا كنت تريد منا إضافة دعم للنماذج المخصصة، فقم بإنشاء مشكلة في مستودع Optimum.
-
-### المكاسب الزمنية الملحوظة
-
-لقد اختبرنا ثلاثة نماذج شائعة مع عملية فك تشفير: `GPT2` / `T5-small` / `M2M100-418M`، وتم تشغيل المعيار على وحدة معالجة الرسوميات Tesla T4 متعددة الاستخدامات (توجد تفاصيل بيئية أكثر في نهاية هذا القسم).
-
-فيما يلي بعض نتائج الأداء عند التشغيل مع `CUDAExecutionProvider` عندما تم تشغيل IOBinding. لقد اختبرنا أطوال تسلسل الإدخال من 8 إلى 512، وقمنا بتوليد الإخراج باستخدام كل من البحث الشره والبحث الشعاعي (`num_beam=5`):
-
-<table><tr>
-<td>
-<p align="center">
-<img alt="GPT2" src="https://huggingface.co/datasets/optimum/documentation-images/resolve/main/onnxruntime/t4_res_ort_gpt2.png" width="450">
-<br>
-<em style="color: grey">GPT2</em>
-</p>
-</td>
-<td>
-<p align="center">
-<img alt="T5-small" src="https://huggingface.co/datasets/optimum/documentation-images/resolve/main/onnxruntime/t4_res_ort_t5_s.png" width="450">
-<br>
-<em style="color: grey">T5-small</em>
-</p>
-</td></tr>
-<tr><td>
-<p align="center">
-<img alt="M2M100-418M" src="https://huggingface.co/datasets/optimum/documentation-images/resolveMzMz/onnxruntime/t4_res_ort_m2m100_418m.png" width="450">
-<br>
-<em style="color: grey">M2M100-418M</em>
-</p>
-</td>
-</tr></table>
-
-وهنا ملخص لوقت التوفير مع أطوال تسلسل مختلفة (32 / 128) وأوضاع التوليد (البحث الشره / البحث الشعاعي) أثناء استخدام ONNX Runtime مقارنة بـ PyTorch:
-
-<table><tr>
-<td>
-<p align="center">
-<img alt="seq32" src="https://huggingface.co/datasets/optimum/documentation-images/resolve/main/onnxruntime/inference_models_32.png" width="800">
-<br>
-<em style="color: grey">طول التسلسل: 32</em>
-</p>
-</td></tr>
-<tr><td>
-<p align="center">
-<img alt="seq128" src="https://huggingface.co/datasets/optimum/documentation-images/resolve/main/onnxruntime/inference_models_128.png" width="800">
-<br>
-<em style="color: grey">طول التسلسل: 128</em>
-</p>
-</td>
-</tr></table>
-
-البيئة:
-
-```
-+-----------------------------------------------------------------------------+
-| NVIDIA-SMI 440.33.01    Driver Version: 440.33.01    CUDA Version: 11.3     |
-|-------------------------------+----------------------+----------------------+
-| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
-| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
-|===============================+======================+======================|
-|   0  Tesla T4            On   | 00000000:00:1E.0 Off |                    0 |
-| N/A   28C    P8     8W /  70W |      0MiB / 15109MiB |      0%      Default |
-+-------------------------------+----------------------+----------------------+
-
-- المنصة: Linux-5.4.0-1089-aws-x86_64-with-glibc2.29
-- إصدار Python: 3.8.10
-- إصدار `transformers`: 4.24.0
-- إصدار `optimum`: 1.5.0
-- إصدار PyTorch: 1.12.0+cu113
-```
-
-لاحظ أن التجارب السابقة تعمل مع نماذج ONNX العادية المصدرة مباشرة من المصدر. إذا كنت مهتمًا بالتسريع الإضافي، فيمكنك، باستخدام `ORTOptimizer`، تحسين الرسم البياني وتحويل نموذجك إلى FP16 إذا كان لديك وحدة معالجة رسوميات (GPU) بقدرات الدقة المختلطة.
-
-## TensorrtExecutionProvider
-
-يستخدم TensorRT مجموعة التعديلات الخاصة به، و**لا يدعم بشكل عام التعديلات من [`~onnxruntime.ORTOptimizer`]**. لذلك، نوصي باستخدام النماذج الأصلية لـ ONNX عند استخدام TensorrtExecutionProvider ([reference](https://github.com/microsoft/onnxruntime/issues/10905#issuecomment-1072649358)).
-
-### تثبيت TensorRT
-
-أسهل طريقة لاستخدام TensorRT كموفر للتنفيذ للنماذج المحسنة من خلال 🤗 Optimum هي استخدام موفر التنفيذ `TensorrtExecutionProvider` المتاح في ONNX Runtime.
-
-لاستخدام 🤗 Optimum مع TensorRT في بيئة محلية، نوصي باتباع أدلة التثبيت الخاصة بـ NVIDIA:
-
-- CUDA toolkit: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html
-- cuDNN: https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html
-- TensorRT: https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html
-
-بالنسبة إلى TensorRT، نوصي بطريقة تثبيت ملف TAR. أو يمكن تثبيت TensorRT باستخدام `pip` باتباع [هذه التعليمات](https://github.com/microsoft/onnxruntime/issues/9986).
-
-بمجرد تثبيت الحزم المطلوبة، يجب تعيين متغيرات البيئة التالية باستخدام المسارات المناسبة حتى يتمكن ONNX Runtime من اكتشاف تثبيت TensorRT:
-
-```bash
-export CUDA_PATH=/usr/local/cuda
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-x.x/lib64:/path/to/TensorRT-8.x.x/lib
-```
-### التحقق من نجاح تثبيت TensorRT
-
-قبل المتابعة، قم بتشغيل كود المثال التالي للتحقق مما إذا كان التثبيت ناجحًا:
-
-```python
->>> from optimum.onnxruntime import ORTModelForSequenceClassification
->>> from transformers import AutoTokenizer
-
->>> ort_model = ORTModelForSequenceClassification.from_pretrained(
-...     "philschmid/tiny-bert-sst2-distilled",
-...     export=True,
-...     provider="TensorrtExecutionProvider",
-... )
-
->>> tokenizer = AutoTokenizer.from_pretrained("philschmid/tiny-bert-sst2-distilled")
->>> inp = tokenizer("expectations were low, actual enjoyment was high", return_tensors="pt", padding=True)
-
->>> result = ort_model(**inp)
->>> assert ort_model.providers == ["TensorrtExecutionProvider", "CUDAExecutionProvider", "CPUExecutionProvider"]
-```
-
-إذا تم تشغيل هذا الكود بسلاسة، تهانينا! لقد كان التثبيت ناجحًا.
-
-إذا فشل التأكيد أعلاه، أو إذا واجهت التحذير التالي:
-
-```
-Failed to create TensorrtExecutionProvider. Please reference https://onnxruntime.ai/docs/execution-providers/TensorRT-ExecutionProvider.html#requirements to ensure all dependencies are met.
-```
-
-فقد حدث خطأ ما في تثبيت TensorRT أو ONNX Runtime.
-
-### بناء محرك TensorRT والإحماء
-
-يتطلب TensorRT بناء [محرك الاستدلال](https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#build-phase) مسبقًا قبل الاستدلال، الأمر الذي يستغرق بعض الوقت بسبب تحسين النموذج ودمج العقد. لتجنب إعادة بناء المحرك في كل مرة يتم فيها تحميل النموذج، يوفر ONNX Runtime زوجًا من الخيارات لحفظ المحرك: `trt_engine_cache_enable` و`trt_engine_cache_path`.
-
-نوصي بتعيين هذين الخيارين عند استخدام موفر التنفيذ TensorRT. فيما يلي مثال على الاستخدام، حيث [`optimum/gpt2`](https://huggingface.co/optimum/gpt2) هو نموذج ONNX محول من PyTorch باستخدام [مصدر ONNX Optimum](https://huggingface.co/docs/optimum/main/en/exporters/onnx/usage_guides/export_a_model):
-
-```python
->>> from optimum.onnxruntime import ORTModelForCausalLM
-
->>> provider_options = {
-...     "trt_engine_cache_enable": True,
-...     "trt_engine_cache_path": "tmp/trt_cache_gpt2_example"
-... }
-
-# لا يتم بناء محرك TensorRT هنا، بل يتم بناؤه أثناء الاستدلال
->>> ort_model = ORTModelForCausalLM.from_pretrained(
-...     "optimum/gpt2",
-...     use_cache=False,
-...     provider="TensorrtExecutionProvider",
-...     provider_options=provider_options
-... )
-```
-
-يبني TensorRT محركه بناءً على أشكال الإدخال المحددة. للأسف، في [التنفيذ الحالي لـ ONNX Runtime](https://github.com/microsoft/onnxruntime/blob/613920d6c5f53a8e5e647c5f1dcdecb0a8beef31/onnxruntime/core/providers/tensorrt/tensorrt_execution_provider.cc#L1677-L1688) (المراجع: [1](https://github.com/microsoft/onnxruntime/issues/13559)، [2](https://github.com/microsoft/onnxruntime/issues/13851))، يتم إعادة بناء المحرك في كل مرة يكون فيها الإدخال أصغر من أصغر شكل تم مواجهته سابقًا، والعكس صحيح إذا كان الإدخال أكبر من أكبر شكل تم مواجهته سابقًا. على سبيل المثال، إذا كان النموذج يأخذ `(batch_size، input_ids)` كإدخالات، ويأخذ النموذج على التوالي الإدخالات التالية:
-
-1. `input.shape: (4، 5) --> يتم بناء المحرك (أول إدخال)`
-2. `input.shape: (4، 10) --> إعادة بناء المحرك (10 أكبر من 5)`
-3. `input.shape: (4، 7) --> لا إعادة بناء (5 <= 7 <= 10)`
-4. `input.shape: (4، 12) --> إعادة بناء المحرك (10 <= 12)`
-5. `input.shape: (4، 3) --> إعادة بناء المحرك (3 <= 5)`
-
-تتمثل إحدى المشكلات الكبيرة في أن بناء المحرك قد يستغرق وقتًا طويلاً، خاصة بالنسبة للنماذج الكبيرة. لذلك، كحل بديل، تتمثل إحدى التوصيات في **بناء محرك TensorRT أولاً بإدخال شكل صغير، ثم بإدخال شكل كبير ليكون لديك محرك صالح لجميع الأشكال المتوسطة**. يسمح ذلك بتجنب إعادة بناء المحرك لأشكال جديدة صغيرة وكبيرة، وهو أمر غير مرغوب فيه بمجرد نشر النموذج للاستدلال.
-
-من خلال تمرير مسار ذاكرة التخزين المؤقت للمحرك في خيارات الموفر، يمكن بناء المحرك مرة واحدة لجميعها واستخدامه بالكامل للاستدلال بعد ذلك.
-
-على سبيل المثال، بالنسبة لتوليد النص، يمكن بناء المحرك باستخدام:
-
-```python
->>> import os
->>> from transformers import AutoTokenizer
->>> from optimum.onnxruntime import ORTModelForCausalLM
-
->>> os.makedirs("tmp/trt_cache_gpt2_example", exist_ok=True)
->>> provider_options = {
-...     "trt_engine_cache_enable": True,
-...     "trt_engine_cache_path": "tmp/trt_cache_gpt2_example"
-... }
-
->>> ort_model = ORTModelForCausalLM.from_pretrained(
-...     "optimum/gpt2",
-...     use_cache=False,
-...     provider="TensorrtExecutionProvider",
-...     provider_options=provider_options,
-... )
->>> tokenizer = AutoTokenizer.from_pretrained("optimum/gpt2")
-
->>> print("Building engine for a short sequence...")  # doctest: +IGNORE_RESULT
->>> text = ["short"]
->>> encoded_input = tokenizer(text, return_tensors="pt").to("cuda")
->>> output = ort_model(**encoded_input)
-
->>> print("Building engine for a long sequence...")  # doctest: +IGNORE_RESULT
->>> text = ["a very long input just for demo purpose, this is very long" * 10]
->>> encoded_input = tokenizer(text, return_tensors="pt").to("cuda")
->>> output = ort_model(**encoded_input)
-```
-
-يتم تخزين المحرك على النحو التالي:
-
-![مجلد ذاكرة التخزين المؤقت لمحرك TensorRT](https://huggingface.co/datasets/optimum/documentation-images/resolve/main/onnxruntime/tensorrt_cache.png)
-
-بمجرد بناء المحرك، يمكن إعادة تحميل الذاكرة المؤقتة ولا تحتاج التوليد إلى إعادة بناء المحرك:
-
-```python
->>> from transformers import AutoTokenizer
->>> from optimum.onnxruntime import ORTModelForCausalLM
-
->>> provider_options = {
-...     "trt_engine_cache_enable": True,
-...     "trt_engine_cache_path": "tmp/trt_cache_gpt2_example"
-... }
-
->>> ort_model = ORTModelForCausalLM.from_pretrained(
-...     "optimum/gpt2",
-...     use_cache=False,
-...     provider="TensorrtExecutionProvider",
-...     provider_options=provider_options,
-... )
->>> tokenizer = AutoTokenizer.from_pretrained("optimum/gpt2")
-
->>> text = ["استبدلني بأي نص تريد."]
->>> encoded_input = tokenizer(text، return_tensors="pt").to("cuda")
-
->>> for i in range(3):
-...     output = ort_model.generate(**encoded_input)
-...     print(tokenizer.decode(output[0]))  # doctest: +IGNORE_RESULT
-```
-
-#### الإحماء
-
-بمجرد بناء المحرك، يوصى بالقيام بخطوة أو خطوات إحماء قبل الاستدلال، حيث أن تشغيلات الاستدلال الأولى بها [بعض النفقات العامة](https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#trtexec-flags).
-
-### استخدام موفر التنفيذ TensorRT مع النماذج ذات النقطة العائمة
-
-بالنسبة للنماذج غير الكمية، يكون الاستخدام مباشرًا، وذلك ببساطة باستخدام وسيط `provider` في `ORTModel.from_pretrained()`. على سبيل المثال:
-
-```python
->>> from optimum.onnxruntime import ORTModelForSequenceClassification
-
->>> ort_model = ORTModelForSequenceClassification.from_pretrained(
-...     "distilbert-base-uncased-finetuned-sst-2-english"،
-...     export=True,
-...     provider="TensorrtExecutionProvider"،
-... )
-```
-
-[كما هو موضح سابقًا لـ `CUDAExecutionProvider`](#use-cuda-execution-provider-with-floatingpoint-models)، من خلال تمرير خيار الجلسة `log_severity_level = 0` (verbose)، يمكننا التحقق في السجلات مما إذا كانت جميع العقد موضوعة على موفر التنفيذ TensorRT أم لا:
-
-```
-2022-09-22 14:12:48.371513741 [V:onnxruntime:, session_state.cc:1188 VerifyEachNodeIsAssignedToAnEp] All nodes have been placed on [TensorrtExecutionProvider]
-```
-
-بعد ذلك، يمكن استخدام النموذج مع واجهة برمجة تطبيقات Transformers الشائعة للاستدلال والتقييم، مثل [pipelines](https://huggingface.co/docs/optimum/onnxruntime/usage_guides/pipelines).
-
-### استخدام موفر التنفيذ TensorRT مع النماذج الكمية
-
-عندما يتعلق الأمر بالنماذج الكمية، يدعم TensorRT فقط النماذج التي تستخدم [**الكمية الثابتة**](https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#enable_int8_c) مع [**الكمية المتماثلة** للوزن والتنشيط](https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#intro-quantization).
-
-يوفر Optimum تكوين كمية جاهزًا للاستخدام مع [`~onnxruntime.ORTQuantizer`] مع قيود الكمية TensorRT:
-
-```python
->>> from optimum.onnxruntime import AutoQuantizationConfig
-
->>> qconfig = AutoQuantizationConfig.tensorrt(per_channel=False)
-```
-
-باستخدام هذا `qconfig`، يمكن إجراء الكمية الثابتة كما هو موضح في [دليل الكمية الثابتة](quantization#static-quantization-example).
-
-في عينة الكود أدناه، بعد إجراء الكمية الثابتة، يتم تحميل النموذج الناتج في فئة [`~onnxruntime.ORTModel`] باستخدام TensorRT كموفر التنفيذ. يجب تعطيل تحسين الرسم البياني لـ ONNX Runtime للنموذج ليتم استهلاكه وتحسينه بواسطة TensorRT، ويجب تحديد حقيقة أن عمليات INT8 تستخدم ل TensorRT.
-
-```python
->>> import onnxruntime
->>> from transformers import AutoTokenizer
->>> from optimum.onnxruntime import ORTModelForSequenceClassification
-
->>> session_options = onnxruntime.SessionOptions()
->>> session_options.graph_optimization_level = onnxruntime.GraphOptimizationLevel.ORT_DISABLE_ALL
-
->>> tokenizer = AutoTokenizer.from_pretrained("fxmarty/distilbert-base-uncased-sst2-onnx-int8-for-tensorrt")
->>> ort_model = ORTModelForSequenceClassification.from_pretrained(
-...     "fxmarty/distilbert-base-uncased-sst2-onnx-int8-for-tensorrt"،
-...     provider="TensorrtExecutionProvider"،
-...     session_options=session_options,
-...     provider_options={"trt_int8_enable": True}،
-... )
-
->>> inp = tokenizer("TensorRT هو أمر مؤلم بعض الشيء للاستخدام، ولكن في نهاية اليوم، يعمل بسلاسة وبسرعة فائقة!"، return_tensors="np")
-
->>> res = ort_model(**inp)
-
->>> print(res)
->>> print(ort_model.config.id2label[res.logits[0].argmax()])
->>> # SequenceClassifierOutput(loss=None, logits=array([[-0.545066, 0.5609764]], dtype=float32), hidden_states=None, attentions=None)
->>> # إيجابي
-```
-
-بعد ذلك، يمكن استخدام النموذج مع واجهة برمجة تطبيقات Transformers الشائعة للاستدلال والتقييم، مثل [pipelines](https://huggingface.co/docs/optimum/onnxruntime/usage_guides/pipelines).
-
-### قيود TensorRT للنماذج الكمية
-
-كما تم تسليط الضوء عليه في القسم السابق، يدعم TensorRT فقط مجموعة محدودة من النماذج الكمية:
-
-- الكمية الثابتة فقط
-- نطاقات الكمية للوزن والتنشيط متماثلة
-- يجب تخزين الأوزان في float32 في نموذج ONNX، وبالتالي لا يوجد توفير مساحة التخزين من الكمية. في الواقع، يتطلب TensorRT إدراج أزواج الكمية الكاملة وإلغاء الكمية. عادة، سيتم تخزين الأوزان بتنسيق النقطة الثابتة 8 بت ولن يتم تطبيق سوى `DequantizeLinear` على الأوزان.
-
-في حالة تمرير `provider="TensorrtExecutionProvider"` ولم يتم تكمية النموذج بدقة وفقًا لهذه القيود، فقد يتم رفع استثناءات مختلفة، وقد تكون رسائل الخطأ غير واضحة.
-
-### المكاسب الزمنية الملحوظة
-
-يمكن استخدام أداة Nvidia Nsight Systems لتصنيف وقت التنفيذ على GPU. قبل التوصيف أو قياس الكمون/السرعة، من الجيد إجراء بضع **خطوات إحماء**.
-
-قريبا!

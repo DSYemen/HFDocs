@@ -1,329 +1,0 @@
-## ما الذي يجب فعله عند حدوث خطأ
-
-في هذا القسم، سنلقي نظرة على بعض الأخطاء الشائعة التي قد تحدث عند محاولة توليد تنبؤات من نموذج Transformer الذي قمت بضبطه للتو. سيُعدك هذا للقسم 4، حيث سنستكشف كيفية تصحيح مرحلة التدريب نفسها.
-
-لقد أعددنا [مستودع نموذج قالب](https://huggingface.co/lewtun/distilbert-base-uncased-finetuned-squad-d5716d28) لهذا القسم، وإذا كنت تريد تشغيل الكود في هذا الفصل، فأنت بحاجة أولاً إلى نسخ النموذج إلى حسابك على [Hub Hugging Face](https://huggingface.co). للقيام بذلك، قم بتسجيل الدخول أولاً عن طريق تشغيل أي مما يلي في دفتر Jupyter:
-
-```python
-from huggingface_hub import notebook_login
-
-notebook_login()
-```
-
-أو التالي في المحطة الطرفية المفضلة لديك:
-
-```bash
-huggingface-cli login
-```
-
-سيُطلب منك إدخال اسم المستخدم وكلمة المرور، وسيتم حفظ رمز في */~/.cache/huggingface/*. بمجرد تسجيل الدخول، يمكنك نسخ مستودع القالب باستخدام الدالة التالية:
-
-```python
-from distutils.dir_util import copy_tree
-from huggingface_hub import Repository, snapshot_download, create_repo, get_full_repo_name
-
-
-def copy_repository_template():
-    # استنساخ المستودع واستخراج المسار المحلي
-    template_repo_id = "lewtun/distilbert-base-uncased-finetuned-squad-d5716d28"
-    commit_hash = "be3eaffc28669d7932492681cd5f3e8905e358b4"
-    template_repo_dir = snapshot_download(template_repo_id, revision=commit_hash)
-    # إنشاء مستودع فارغ على Hub
-    model_name = template_repo_id.split("/")[1]
-    create_repo(model_name, exist_ok=True)
-    # استنساخ المستودع الفارغ
-    new_repo_id = get_full_repo_name(model_name)
-    new_repo_dir = model_name
-    repo = Repository(local_dir=new_repo_dir, clone_from=new_repo_id)
-    # نسخ الملفات
-    copy_tree(template_repo_dir, new_repo_dir)
-    # إرسال إلى Hub
-    repo.push_to_hub()
-```
-
-الآن عندما تستدعي `copy_repository_template()`، فإنه سيقوم بإنشاء نسخة من مستودع القالب في حسابك.
-
-## تصحيح خط الأنابيب من Transformers
-
-لبدء رحلتنا إلى العالم الرائع لتصحيح نماذج Transformer، ضع في اعتبارك السيناريو التالي: أنت تعمل مع زميل في مشروع للإجابة على الأسئلة لمساعدة عملاء موقع للتجارة الإلكترونية في العثور على إجابات حول المنتجات الاستهلاكية. يرسل إليك زميلك رسالة مثل:
-
-> مرحبًا! لقد أجريت للتو تجربة باستخدام التقنيات الموجودة في الفصل 7 من دورة Hugging Face وحصلت على نتائج رائعة على SQuAD! أعتقد أننا يمكن أن نستخدم هذا النموذج كنقطة انطلاق لمشروعنا. معرف النموذج على Hub هو "lewtun/distillbert-base-uncased-finetuned-squad-d5716d28". لا تتردد في تجربته :)
-
-والشيء الأول الذي تفكر فيه هو تحميل النموذج باستخدام `pipeline` من Transformers:
-
-```python
-from transformers import pipeline
-
-model_checkpoint = get_full_repo_name("distillbert-base-uncased-finetuned-squad-d5716d28")
-reader = pipeline("question-answering", model=model_checkpoint)
-```
-
-```python
-"""
-OSError: لا يمكن تحميل التكوين لـ 'lewtun/distillbert-base-uncased-finetuned-squad-d5716d28'. تأكد من أن:
-
-- 'lewtun/distillbert-base-uncased-finetuned-squad-d5716d28' هو معرف نموذج صحيح مدرج في 'https://huggingface.co/models'
-
-- أو 'lewtun/distillbert-base-uncased-finetuned-squad-d5716d28' هو المسار الصحيح إلى دليل يحتوي على ملف config.json
-"""
-```
-
-يا إلهي، يبدو أن شيئًا ما قد حدث خطأ! إذا كنت جديدًا في البرمجة، فقد تبدو هذه الأنواع من الأخطاء غامضة بعض الشيء في البداية (ما هو `OSError` على أي حال؟!). الخطأ المعروض هنا هو مجرد الجزء الأخير من تقرير خطأ أكبر يسمى _تتبع مكدس بايثون_ (stack trace). على سبيل المثال، إذا كنت تشغل هذا الكود على Google Colab، فيجب أن ترى شيئًا مثل لقطة الشاشة التالية:
-
-يوجد الكثير من المعلومات في هذه التقارير، لذا دعونا نتعرف على الأجزاء الرئيسية معًا. أول شيء يجب ملاحظته هو أنه يجب قراءة تتبع المكدس _من الأسفل إلى الأعلى_. قد يبدو هذا غريبًا إذا كنت معتادًا على قراءة النص الإنجليزي من الأعلى إلى الأسفل، ولكنه يعكس حقيقة أن التتبع المكدس يُظهر تسلسل مكالمات الدالة التي يقوم بها `pipeline` عند تنزيل النموذج والمحلل. (راجع الفصل 2 لمزيد من التفاصيل حول كيفية عمل `pipeline` في الداخل.)
-
-🚨 هل ترى ذلك المربع الأزرق حول "6 أطر" في تتبع المكدس من Google Colab؟ هذه ميزة خاصة بـ Colab، والتي تضغط تتبع المكدس في "أطر". إذا لم تتمكن من العثور على مصدر خطأ، فتأكد من توسيع تتبع المكدس الكامل بالنقر فوق هذين السهمين الصغيرين.
-
-هذا يعني أن السطر الأخير من تتبع المكدس يشير إلى رسالة الخطأ الأخيرة ويعطي اسم الاستثناء الذي تم إثارته. في هذه الحالة، نوع الاستثناء هو `OSError`، مما يشير إلى خطأ متعلق بالنظام. إذا قرأنا رسالة الخطأ المصاحبة، فيمكننا أن نرى أنه يبدو أن هناك مشكلة في ملف *config.json* للنموذج، وقد تم منحنا اقتراحين لإصلاحه:
-
-```python
-"""
-تأكد من أن:
-
-- 'lewtun/distillbert-base-uncased-finetuned-squad-d5716d28' هو معرف نموذج صحيح مدرج في 'https://huggingface.co/models'
-
-- أو 'lewtun/distillbert-base-uncased-finetuned-squad-d5716d28' هو المسار الصحيح إلى دليل يحتوي على ملف config.json
-"""
-```
-
-💡 إذا صادفت رسالة خطأ يصعب فهمها، فما عليك سوى نسخ ولصق الرسالة في شريط بحث Google أو [Stack Overflow](https://stackoverflow.com/) (نعم، بالفعل!). من المحتمل ألا تكون أول شخص يواجه الخطأ، وهذه طريقة جيدة للعثور على الحلول التي نشرها الآخرون في المجتمع. على سبيل المثال، فإن البحث عن `OSError: لا يمكن تحميل التكوين لـ` على Stack Overflow يعطي عدة [نتائج](https://stackoverflow.com/search؟q=OSError٪3A+لا+يمكن+تحميل+التكوين+لـ+) التي يمكن استخدامها كنقطة انطلاق لحل المشكلة.
-
-يقترح الاقتراح الأول علينا التحقق مما إذا كان معرف النموذج صحيحًا، لذا فإن أولوية العمل هي نسخ المعرف ولصقه في شريط بحث Hub:
-
-يبدو الأمر كذلك، يبدو أن نموذج زميلك غير موجود على Hub... آها، ولكن هناك خطأ إملائي في اسم النموذج! يحتوي DistilBERT على "l" واحدة فقط في اسمه، لذا دعنا نصلح ذلك ونبحث عن "lewtun/distilbert-base-uncased-finetuned-squad-d5716d28" بدلاً من ذلك:
-
-حسنًا، لقد حصلنا على نتيجة. الآن دعنا نحاول تنزيل النموذج مرة أخرى بمعرف النموذج الصحيح:
-
-```python
-model_checkpoint = get_full_repo_name("distilbert-base-uncased-finetuned-squad-d5716d28")
-reader = pipeline("question-answering", model=model_checkpoint)
-```
-
-```python
-"""
-OSError: لا يمكن تحميل التكوين لـ 'lewtun/distilbert-base-uncased-finetuned-squad-d5716d28'. تأكد من أن:
-
-- 'lewtun/distilbert-base-uncased-finetuned-squad-d5716d28' هو معرف نموذج صحيح مدرج في 'https://huggingface.co/models'
-
-- أو 'lewtint/distilbert-base-uncased-finetuned-squad-d5716d28' هو المسار الصحيح إلى دليل يحتوي على ملف config.json
-"""
-```
-
-آه، أحبطنا مرة أخرى - مرحبًا بك في الحياة اليومية لمهندس تعلم الآلة! نظرًا لأننا أصلحنا معرف النموذج، فيجب أن تكمن المشكلة في المستودع نفسه. إحدى الطرق السريعة للوصول إلى محتويات مستودع على Hub Hugging Face هي عبر دالة `list_repo_files()` من مكتبة `huggingface_hub`:
-
-```python
-from huggingface_hub import list_repo_files
-
-list_repo_files(repo_id=model_checkpoint)
-```
-
-```python
-['.gitattributes'، 'README.md'، 'pytorch_model.bin'، 'special_tokens_map.json'، 'tokenizer_config.json'، 'training_args.bin'، 'vocab.txt']
-```
-
-من المثير للاهتمام أنه لا يبدو أن هناك ملف *config.json* في المستودع! لا عجب أن `pipeline` لم يتمكن من تحميل النموذج؛ يجب أن يكون زميلك قد نسي إرسال هذا الملف إلى Hub بعد ضبطه. في هذه الحالة، يبدو أن المشكلة بسيطة للغاية: يمكننا أن نطلب منهم إضافة الملف، أو، نظرًا لأننا يمكن أن نرى من معرف النموذج أن النموذج المسبق التدريب المستخدم كان [`distilbert-base-uncased`](https://huggingface.co/distilbert-base-uncased)، فيمكننا تنزيل التكوين لهذا النموذج وإرساله إلى مستودعنا لمعرفة ما إذا كان ذلك يحل المشكلة. دعونا نجرب ذلك. باستخدام التقنيات التي تعلمناها في الفصل 2، يمكننا تنزيل تكوين النموذج باستخدام فئة `AutoConfig`:
-
-```python
-from transformers import AutoConfig
-
-pretrained_checkpoint = "distilbert-base-uncased"
-config = AutoConfig.from_pretrained(pretrained_checkpoint)
-```
-
-🚨 إن النهج الذي نتبعه هنا ليس محصنًا من الفشل، حيث قد يكون زميلك قد عدل تكوين `distilbert-base-uncased` قبل ضبط النموذج. في الواقع، نريد أن نتحقق منهم أولاً، ولكن لأغراض هذا القسم، سنفترض أنهم استخدموا التكوين الافتراضي.
-
-يمكننا بعد ذلك إرسال هذا إلى مستودع نموذجنا باستخدام دالة `push_to_hub()` للتكوين:
-
-```python
-config.push_to_hub(model_checkpoint, commit_message="Add config.json")
-```
-
-الآن يمكننا اختبار ما إذا كان هذا قد نجح عن طريق تحميل النموذج من الالتزام الأخير على الفرع `main`:
-
-```python
-reader = pipeline("question-answering"، model=model_checkpoint، revision="main")
-
-context = r"""
-استخراج الإجابة على السؤال هو مهمة استخراج إجابة من نص
-سؤال معين. أحد الأمثلة على مجموعة بيانات الإجابة على الأسئلة هو مجموعة بيانات SQuAD
-مجموعة البيانات، والتي تستند بالكامل إلى تلك المهمة. إذا كنت ترغب في ضبط نموذج
-على مهمة SQuAD، فيمكنك الاستفادة من البرنامج النصي
-examples/pytorch/question-answering/run_squad.py.
-
-🤗 Transformers متوافق مع أطر عمل PyTorch وTensorFlow وJAX،
-لذا يمكنك استخدام أدواتك المفضلة لمجموعة متنوعة من المهام!
-"""
-
-السؤال = "ما هي الإجابة على السؤال الاستخراجي؟"
-القارئ (سؤال = السؤال، السياق = السياق)
-```
-
-```python
-{'score': 0.38669535517692566،
-'البداية': 34،
-'النهاية': 95،
-'الإجابة': 'مهمة استخراج إجابة من نص معين لسؤال'}
-```
-
-يا لها من متعة، لقد نجحت! دعونا نلخص ما تعلمته للتو:
-
-- رسائل الخطأ في بايثون تسمى _تتبع المكدس_ ويتم قراءتها من الأسفل إلى الأعلى. عادةً ما يحتوي السطر الأخير من رسالة الخطأ على المعلومات التي تحتاجها لتحديد مصدر المشكلة.
-- إذا لم يحتوي السطر الأخير على معلومات كافية، فانتقل لأعلى في تتبع المكدس وانظر ما إذا كان بإمكانك تحديد مكان حدوث الخطأ في كود المصدر.
-- إذا لم تتمكن أي من رسائل الخطأ من مساعدتك في تصحيح المشكلة، فحاول البحث عبر الإنترنت عن حل لمشكلة مماثلة.
-- توفر مكتبة `huggingface_hub`
-// 🤗 Hub؟
-مجموعة من الأدوات التي يمكنك استخدامها للتفاعل مع مستودعات التصحيح على Hub.
-
-الآن بعد أن عرفت كيفية تصحيح خط الأنابيب، دعونا نلقي نظرة على مثال أكثر تعقيدًا في تمرير النموذج للأمام.
-## تصحيح مسار التغذية الأمامية لنموذجك
-على الرغم من أن `pipeline` رائع لمعظم التطبيقات التي تحتاج فيها إلى إنشاء تنبؤات بسرعة، إلا أنه في بعض الأحيان ستحتاج إلى الوصول إلى logits للنموذج (على سبيل المثال، إذا كان لديك بعض ما بعد المعالجة المخصصة التي ترغب في تطبيقها). ولرؤية ما يمكن أن يحدث خطأ في هذه الحالة، دعونا نستخرج أولاً النموذج والمحلل اللغوي من `pipeline`:
-
-```python
-tokenizer = reader.tokenizer
-model = reader.model
-```
-
-بعد ذلك، نحتاج إلى سؤال، لذا دعونا نرى إذا كانت أطر العمل المفضلة لدينا مدعومة:
-
-```python
-question = "Which frameworks can I use?"
-```
-
-كما رأينا في [الفصل 7](/course/chapter7)، فإن الخطوات المعتادة التي نحتاج إلى اتخاذها هي تحويل المدخلات إلى رموز، واستخراج logits للرموز الأولية والنهائية، ثم فك تشفير نطاق الإجابة:
-
-```python
-import torch
-
-inputs = tokenizer(question, context, add_special_tokens=True)
-input_ids = inputs["input_ids"][0]
-outputs = model(**inputs)
-answer_start_scores = outputs.start_logits
-answer_end_scores = outputs.end_logits
-# Get the most likely beginning of answer with the argmax of the score
-answer_start = torch.argmax(answer_start_scores)
-# Get the most likely end of answer with the argmax of the score
-answer_end = torch.argmax(answer_end_scores) + 1
-answer = tokenizer.convert_tokens_to_string(
-tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end])
-)
-print(f"Question: {question}")
-print(f"Answer: {answer}")
-```
-
-```python out
-"""
----------------------------------------------------------------------------
-AttributeError                            Traceback (most recent call last)
-/var/folders/28/k4cy5q7s2hs92xq7_h89_vgm0000gn/T/ipykernel_75743/2725838073.py in <module>
-1 inputs = tokenizer(question, text, add_special_tokens=True)
-2 input_ids = inputs["input_ids"]
-----> 3 outputs = model(**inputs)
-4 answer_start_scores = outputs.start_logits
-5 answer_end_scores = outputs.end_logits
-
-~/miniconda3/envs/huggingface/lib/python3.8/site-packages/torch/nn/modules/module.py in _call_impl(self, *input, **kwargs)
-1049         if not (self._backward_hooks or self._forward_hooks or self._forward_pre_hooks or _global_backward_hooks
-1050                 or _global_forward_hooks or _global_forward_pre_hooks):
--> 1051             return forward_call(*input, **kwargs)
-1052         # Do not call functions when jit is used
-1053         full_backward_hooks, non_full_backward_hooks = [], []
-
-~/miniconda3/envs/huggingface/lib/python3.8/site-packages/transformers/models/distilbert/modeling_distilbert.py in forward(self, input_ids, attention_mask, head_mask, inputs_embeds, start_positions, end_positions, output_attentions, output_hidden_states, return_dict)
-723         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-724
---> 725         distilbert_output = self.distilbert(
-726             input_ids=input_ids,
-727             attention_mask=attention_mask,
-
-~/miniconda3/envs/huggingface/lib/python3.8/site-packages/torch/nn/modules/module.py in _call_impl(self, *input, **kwargs)
-1049         if not (self._backward_hooks or self._forward_hooks or self._forward_pre_hooks or _global_backward_hooks
-1050                 or _global_forward_hooks or _global_forward_pre_hooks):
--> 1051             return forward_call(*input, **kwargs)
-1052         # Do not call functions when jit is used
-1053         full_backward_hooks, non_full_backward_hooks = [], []
-
-~/miniconda3/envs/huggingface/lib/python3.8/site-packages/transformers/models/distilbert/modeling_distilbert.py in forward(self, input_ids, attention_mask, head_mask, inputs_embeds, output_attentions, output_hidden_states, return_dict)
-471             raise ValueError("You cannot specify both input_ids and inputs_embeds at the same time")
-472         elif input_ids is not None:
---> 473             input_shape = input_ids.size()
-474         elif inputs_embeds is not None:
-475             input_shape = inputs_embeds.size()[:-1]
-
-AttributeError: 'list' object has no attribute 'size'
-"""
-```
-
-يا عزيزي، يبدو أن هناك خطأ في الكود الخاص بنا! لكننا لا نخاف من القليل من التصحيح. يمكنك استخدام المصحح Python في دفتر الملاحظات:
-
-<Youtube id="rSPyvPw0p9k"/>
-
-أو في المحطة الطرفية:
-
-<Youtube id="5PkZ4rbHL6c"/>
-
-هنا، تخبرنا رسالة الخطأ أن `'list' object has no attribute 'size'`، ويمكننا أن نرى سهم `-->` يشير إلى السطر الذي تم رفع المشكلة فيه في `model(**inputs)`. يمكنك تصحيح هذا التفاعلي باستخدام مصحح Python، ولكن في الوقت الحالي سنقوم ببساطة بطباعة جزء من `inputs` لمعرفة ما لدينا:
-
-```python
-inputs["input_ids"][:5]
-```
-
-```python out
-[101, 2029, 7705, 2015, 2064]
-```
-
-هذا يشبه بالتأكيد قائمة Python العادية، ولكن دعونا نتحقق من النوع:
-
-```python
-type(inputs["input_ids"])
-```
-
-```python out
-list
-```
-
-نعم، هذه قائمة Python بالتأكيد. ماذا حدث خطأ؟ تذكر من [الفصل 2](/course/chapter2) أن فئات `AutoModelForXxx` في 🤗 Transformers تعمل على _tensors_ (إما في PyTorch أو TensorFlow)، وعملية شائعة هي استخراج أبعاد tensor باستخدام `Tensor.size()` في، على سبيل المثال، PyTorch. دعونا نلقي نظرة أخرى على تتبع المكدس، لمعرفة أي سطر أدى إلى الاستثناء:
-
-```
-~/miniconda3/envs/huggingface/lib/python3.8/site-packages/transformers/models/distilbert/modeling_distilbert.py in forward(self, input_ids, attention_mask, head_mask, inputs_embeds, output_attentions, output_hidden_states, return_dict)
-471             raise ValueError("You cannot specify both input_ids and inputs_embeds at the same time")
-472         elif input_ids is not None:
---> 473             input_shape = input_ids.size()
-474         elif inputs_embeds is not None:
-475             input_shape = inputs_embeds.size()[:-1]
-
-AttributeError: 'list' object has no attribute 'size'
-```
-
-يبدو أن الكود الخاص بنا حاول استدعاء `input_ids.size()`، ولكن من الواضح أن هذا لن ينجح لقائمة Python، والتي هي مجرد حاوية. كيف يمكننا حل هذه المشكلة؟ البحث عن رسالة الخطأ على Stack Overflow يعطي عددًا قليلاً من الإجابات [ذات الصلة](https://stackoverflow.com/search؟q=AttributeError٪3A+٪27list٪27+object+has+no+attribute+٪27size٪27&s=c15ec54c-63cb-481d-a749-408920073e8f). بالنقر على الأول، يتم عرض سؤال مشابه لسؤالنا، مع الإجابة الموضحة في لقطة الشاشة أدناه:
-
-<div class="flex justify-center">
-<img src="https://huggingface.co/datasets/huggingface-course/documentation-images/resolve/main/en/chapter8/stack-overflow.png" alt="An answer from Stack Overflow." width="100%"/>
-</div>
-
-توصي الإجابة بأن نضيف `return_tensors='pt'` إلى المحلل اللغوي، لذا دعونا نرى ما إذا كان ذلك ينجح بالنسبة لنا:
-
-```python out
-inputs = tokenizer(question, context, add_special_tokens=True, return_tensors="pt")
-input_ids = inputs["input_ids"][0]
-outputs = model(**inputs)
-answer_start_scores = outputs.start_logits
-answer_end_scores = outputs.end_logits
-# Get the most likely beginning of answer with the argmax of the score
-answer_start = torch.argmax(answer_start_scores)
-# Get the most likely end of answer with the argmax of the score
-answer_end = torch.argmax(answer_end_scores) + 1
-answer = tokenizer.convert_tokens_to_string(
-tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end])
-)
-print(f"Question: {question}")
-print(f"Answer: {answer}")
-```
-
-```python out
-"""
-Question: Which frameworks can I use?
-Answer: pytorch, tensorflow, and jax
-"""
-```
-
-رائع، لقد نجح الأمر! هذا مثال رائع على مدى فائدة Stack Overflow: من خلال تحديد مشكلة مماثلة، تمكنا من الاستفادة من خبرة الآخرين في المجتمع. ومع ذلك، فإن البحث مثل هذا لن يؤدي دائمًا إلى إجابة ذات صلة، لذلك ماذا تفعل في مثل هذه الحالات؟ لحسن الحظ، هناك مجتمع ودود من المطورين على [منتديات Hugging Face](https://discuss.huggingface.co/) يمكنه مساعدتك! في القسم التالي، سنلقي نظرة على كيفية صياغة أسئلة المنتدى الجيدة التي من المحتمل أن يتم الرد عليها.
