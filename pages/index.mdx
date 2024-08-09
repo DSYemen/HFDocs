@@ -1,38 +1,105 @@
-
-# عربي
-
-## الوثائق
-
-الوثائق المتاحة باللغة العربية لتقنييات Hugginface :
-- [Transformers](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Transformers/ar/index.md).
-- [Diffusers](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Diffusers/ar/index.md).
-- [Accelerate](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Accelerate/ar/index.md).
-- [Datasets](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Dataset/ar/index.mdx).
-- [Optimum](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Optimum/ar/index.mdx).
-- [PEFT](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/PEFT/ar/index.md).
-- [Autotrain Advanced](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Autotrain-advanced/ar/index.mdx).
-
-## الدورات المتاحة:
-- [دورة معالجة اللغة الطبيعية NLP](https://github.com/DSYemen/HFDocs/tree/master/pages/Courses/NLP/ar/).
-- [دورة الصوت Audio](https://github.com/DSYemen/HFDocs/tree/master/pages/Courses/Audio/ar/).
-
- شكراً للمساهمين : [@AhmedAlmaghz](https://github.com/AhmedAlmaghz) [@DSYemen](https://github.com/DSYemen) [@HisabCloud](https://github.com/HisabCloud)
-
----------------
-## Documentation
-
-The documentations is available for Huggingface Tech:
-- [Transformers](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Transformers/ar/index.md).
-- [Diffusers](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Diffusers/ar/index.md).
-- [Accelerate](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Accelerate/ar/index.md).
-- [Datasets](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Dataset/ar/index.mdx).
-- [Optimum](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Optimum/ar/index.mdx).
-- [PEFT](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/PEFT/ar/index.md).
-- [Autotrain Advanced](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Autotrain-advanced/ar/index.mdx).
-
-
-## The Courses is available :
-- [NLP](https://github.com/DSYemen/HFDocs/tree/master/pages/Courses/NLP/ar/).
-- [Audio](https://github.com/DSYemen/HFDocs/tree/master/pages/Courses/Audio/ar/).
-
-Thanks for Contributions: [@AhmedAlmaghz](https://github.com/AhmedAlmaghz) [@DSYemen](https://github.com/DSYemen) [@HisabCloud](https://github.com/HisabCloud)
+@@ -1,76 +1,38 @@
+-عذرًا على الخطأ. يبدو أن المشكلة تكمن في طريقة التعامل مع الملفات في الـ commit. دعنا نعدل الكود لمعالجة هذه المشكلة بشكل أفضل. سنقوم بتحديث الدالة `cherry_pick_and_create_branch` لتتعامل مع الملفات بشكل صحيح:
+ 
+-```python
+-def cherry_pick_and_create_branch(repo, commit):
+-    branch_name = f"cherry-pick-{commit.sha[:7]}"
+-    try:
+-        # إنشاء فرع جديد
+-        base_branch = repo.get_branch(default_branch)
+-        repo.create_git_ref(ref=f'refs/heads/{branch_name}', sha=base_branch.commit.sha)
++# عربي
+ 
+-        # الحصول على الشجرة والـ parent commit
+-        base_tree = repo.get_git_tree(base_branch.commit.sha)
+-        parent = repo.get_git_commit(base_branch.commit.sha)
++## الوثائق
+ 
+-        # إنشاء قائمة من التغييرات
+-        tree_updates = []
+-        for file in commit.files:
+-            if file.status == "added" or file.status == "modified":
+-                blob = repo.create_git_blob(file.patch, "utf-8")
+-                tree_updates.append(github.InputGitTreeElement(
+-                    path=file.filename,
+-                    mode='100644',
+-                    type='blob',
+-                    sha=blob.sha
+-                ))
+-            elif file.status == "removed":
+-                tree_updates.append(github.InputGitTreeElement(
+-                    path=file.filename,
+-                    mode='100644',
+-                    type='blob',
+-                    sha=None
+-                ))
++الوثائق المتاحة باللغة العربية لتقنييات Hugginface :
++- [Transformers](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Transformers/ar/index.md).
++- [Diffusers](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Diffusers/ar/index.md).
++- [Accelerate](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Accelerate/ar/index.md).
++- [Datasets](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Dataset/ar/index.mdx).
++- [Optimum](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Optimum/ar/index.mdx).
++- [PEFT](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/PEFT/ar/index.md).
++- [Autotrain Advanced](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Autotrain-advanced/ar/index.mdx).
+ 
+-        # إنشاء شجرة جديدة مع التغييرات
+-        new_tree = repo.create_git_tree(tree_updates, base_tree)
++## الدورات المتاحة:
++- [دورة معالجة اللغة الطبيعية NLP](https://github.com/DSYemen/HFDocs/tree/master/pages/Courses/NLP/ar/).
++- [دورة الصوت Audio](https://github.com/DSYemen/HFDocs/tree/master/pages/Courses/Audio/ar/).
+ 
+-        # إنشاء commit جديد
+-        new_commit = repo.create_git_commit(commit.commit.message, new_tree, [parent])
+-        
+-        # تحديث الفرع الجديد ليشير إلى الـ commit الجديد
+-        ref = repo.get_git_ref(f'heads/{branch_name}')
+-        ref.edit(sha=new_commit.sha)
++ شكراً للمساهمين : [@AhmedAlmaghz](https://github.com/AhmedAlmaghz) [@DSYemen](https://github.com/DSYemen) [@HisabCloud](https://github.com/HisabCloud)
+ 
+-        return branch_name
+-    except Exception as e:
+-        print(f"Error creating branch for commit {commit.sha}: {e}")
+-        return None
+-```
++---------------
++## Documentation
+ 
+-هذا التعديل يقوم بما يلي:
++The documentations is available for Huggingface Tech:
++- [Transformers](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Transformers/ar/index.md).
++- [Diffusers](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Diffusers/ar/index.md).
++- [Accelerate](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Accelerate/ar/index.md).
++- [Datasets](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Dataset/ar/index.mdx).
++- [Optimum](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Optimum/ar/index.mdx).
++- [PEFT](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/PEFT/ar/index.md).
++- [Autotrain Advanced](https://github.com/DSYemen/HFDocs/tree/master/pages/Docs/Autotrain-advanced/ar/index.mdx).
+ 
+-1. يتعامل مع كل ملف في الـ commit بشكل منفصل.
+-2. للملفات المضافة أو المعدلة، يقوم بإنشاء blob جديد باستخدام الـ patch.
+-3. للملفات المحذوفة، يضيف عنصر شجرة مع sha كـ None لإزالتها.
+-4. يستخدم `create_git_tree` لإنشاء شجرة جديدة مع هذه التغييرات.
+ 
+-بالإضافة إلى ذلك، قد نحتاج إلى تعديل دالة `get_commits_to_cherry_pick` للتأكد من أننا نحصل على التفاصيل الكاملة للـ commits:
++## The Courses is available :
++- [NLP](https://github.com/DSYemen/HFDocs/tree/master/pages/Courses/NLP/ar/).
++- [Audio](https://github.com/DSYemen/HFDocs/tree/master/pages/Courses/Audio/ar/).
+ 
+-```python
+-def get_commits_to_cherry_pick(repo, upstream_repo):
+-    comparison = repo.compare(f'{upstream_owner}:{upstream_default_branch}', default_branch)
+-    return [repo.get_commit(commit.sha) for commit in comparison.commits 
+-            if commit.commit.message.startswith("Add") or commit.commit.message.startswith("Update")]
+-```
+-
+-هذا التغيير يضمن أننا نحصل على كامل تفاصيل الـ commit، بما في ذلك معلومات الملفات.
+-
+-أخيرًا، تأكد من استيراد `github` في بداية الملف:
+-
+-```python
+-from github import Github
+-import github
+-import os
+-```
+-
+-هذه التعديلات يجب أن تحل المشكلة التي واجهتها. الكود الآن يتعامل بشكل أفضل مع تفاصيل الملفات في كل commit ويجب أن يكون قادرًا على إنشاء الفروع وتطبيق التغييرات بشكل صحيح.
++Thanks for Contributions: [@AhmedAlmaghz](https://github.com/AhmedAlmaghz) [@DSYemen](https://github.com/DSYemen) [@HisabCloud](https://github.com/HisabCloud)
