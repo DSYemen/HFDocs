@@ -1,9 +1,0 @@
-# إضافة دعم لبنية غير مدعومة
-
-إذا كنت ترغب في تصدير نموذج تكون بنية معماريته غير مدعومة مسبقًا من قبل المكتبة، فيمكن استخدام طلب السحب [#813 Adds support for ResNet](https://github.com/huggingface/optimum/pull/813) كمرجع.
-
-يمكنك التأكد من نجاح الاختبارات لنوع النموذج الجديد `my_new_modeltype` من خلال تشغيل ما يلي:
-
-```bash
-pytest tests/exporters/tflite/test_*.py -k "my_new_modeltype" -s --exitfirst
-```
