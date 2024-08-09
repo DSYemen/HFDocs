@@ -1,188 +1,0 @@
-# جولة سريعة
-
-تهدف هذه الجولة السريعة إلى المطورين الذين يرغبون في الغوص في الشفرة البرمجية ورؤية أمثلة على كيفية دمج 🤗 Optimum في سير عمل تدريب النماذج والاستدلال.
-
-## تسريع الاستدلال
-
-#### OpenVINO
-
-لتحميل نموذج وتشغيل الاستدلال باستخدام OpenVINO Runtime، يمكنك ببساطة استبدال فئة `AutoModelForXxx` بالفئة المناسبة `OVModelForXxx`. إذا كنت تريد تحميل نقطة تفتيش PyTorch، قم بتعيين `export=True` لتحويل نموذجك إلى OpenVINO IR (تمثيل وسيط).
-
-```diff
-- from transformers import AutoModelForSequenceClassification
-+ from optimum.intel.openvino import OVModelForSequenceClassification
-from transformers import AutoTokenizer, pipeline
-
-# قم بتحميل برنامج tokenizer ونموذج من Hub وتحويله إلى تنسيق OpenVINO
-tokenizer = AutoTokenizer.from_pretrained(model_id)
-model_id = "distilbert-base-uncased-finetuned-sst-2-english"
-- model = AutoModelForSequenceClassification.from_pretrained(model_id)
-+ model = OVModelForSequenceClassification.from_pretrained(model_id, export=True)
-
-# قم بتشغيل الاستدلال!
-classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
-results = classifier("He's a dreadful magician.")
-```
-
-يمكنك العثور على المزيد من الأمثلة في [الوثائق](https://huggingface.co/docs/optimum/intel/inference) وفي [الأمثلة](https://github.com/huggingface/optimum-intel/tree/main/examples/openvino).
-
-#### ONNX Runtime
-
-لتسريع الاستدلال باستخدام ONNX Runtime، يستخدم 🤗 Optimum _أشياء التكوين_ لتحديد المعلمات لتحسين الرسم البياني والكمية. ثم يتم استخدام هذه الأشياء لتهيئة _المحسنات_ و_الكميات_ المخصصة.
-
-قبل تطبيق الكمية أو التحسين، نحتاج أولاً إلى تحميل نموذجنا. لتحميل نموذج وتشغيل الاستدلال باستخدام ONNX Runtime، يمكنك ببساطة استبدال فئة [`AutoModelForXxx`](https://huggingface.co/docs/transformers/model_doc/auto#transformers.AutoModel) القياسية من Transformers بالفئة المناسبة [`ORTModelForXxx`](https://huggingface.co/docs/optimum/onnxruntime/package_reference/modeling_ort#optimum.onnxruntime.ORTModel). إذا كنت تريد التحميل من نقطة تفتيش PyTorch، فقم بتعيين `export=True` لتصدير نموذجك إلى تنسيق ONNX.
-
-```python
->>> from optimum.onnxruntime import ORTModelForSequenceClassification
->>> from transformers import AutoTokenizer
-
->>> model_checkpoint = "distilbert-base-uncased-finetuned-sst-2-english"
->>> save_directory = "tmp/onnx/"
-
->>> # قم بتحميل نموذج من Transformers وتصديره إلى ONNX
->>> tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
->>> ort_model = ORTModelForSequenceClassification.from_pretrained(model_checkpoint, export=True)
-
->>> # احفظ نموذج ONNX وبرنامج tokenizer
->>> ort_model.save_pretrained(save_directory)
->>> tokenizer.save_pretrained(save_directory)  # doctest: +IGNORE_RESULT
-```
-
-دعونا نرى الآن كيف يمكننا تطبيق الكمية الديناميكية مع ONNX Runtime:
-
-```python
->>> from optimum.onnxruntime.configuration import AutoQuantizationConfig
->>> from optimum.onnxruntime import ORTQuantizer
-
->>> # حدد منهجية الكمية
->>> qconfig = AutoQuantizationConfig.arm64(is_static=False, per_channel=False)
->>> quantizer = ORTQuantizer.from_pretrained(ort_model)
-
->>> # تطبيق الكمية الديناميكية على النموذج
->>> quantizer.quantize(save_dir=save_directory, quantization_config=qconfig)  # doctest: +IGNORE_RESULT
-```
-
-في هذا المثال، قمنا بكمية نموذج من Hugging Face Hub، وبنفس الطريقة يمكننا كمية نموذج مستضاف محليًا عن طريق توفير المسار إلى الدليل الذي يحتوي على أوزان النموذج. والنتيجة من تطبيق طريقة `quantize()` هي ملف `model_quantized.onnx` الذي يمكن استخدامه لتشغيل الاستدلال. فيما يلي مثال على كيفية تحميل نموذج ONNX Runtime وتوليد التنبؤات باستخدامه:
-
-```python
->>> from optimum.onnxruntime import ORTModelForSequenceClassification
->>> from transformers import pipeline, AutoTokenizer
-
->>> model = ORTModelForSequenceClassification.from_pretrained(save_directory, file_name="model_quantized.onnx")
->>> tokenizer = AutoTokenizer.from_pretrained(save_directory)
->>> classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
->>> results = classifier("I love burritos!")
-```
-
-يمكنك العثور على المزيد من الأمثلة في [الوثائق](https://huggingface.co/docs/optimum/onnxruntime/quickstart) وفي [الأمثلة](https://github.com/huggingface/optimum/tree/main/examples/onnxruntime).
-
-## تسريع التدريب
-
-#### Habana
-
-لتدريب المحولات على معالجات Gaudi من Habana، يوفر 🤗 Optimum `GaudiTrainer` مشابه جدًا لـ 🤗 Transformers [Trainer](https://huggingface.co/docs/transformers/main_classes/trainer). فيما يلي مثال بسيط:
-
-```diff
-- from transformers import Trainer, TrainingArguments
-+ from optimum.habana import GaudiTrainer, GaudiTrainingArguments
-
-# قم بتنزيل نموذج مُدرب مسبقًا من Hub
-model = AutoModelForXxx.from_pretrained("bert-base-uncased")
-
-# حدد وسائط التدريب
-- training_args = TrainingArguments(
-+ training_args = GaudiTrainingArguments(
-output_dir="path/to/save/folder/",
-+     use_habana=True,
-+     use_lazy_mode=True,
-+     gaudi_config_name="Habana/bert-base-uncased",
-...
-)
-
-# قم بتهيئة المدرب
-- trainer = Trainer(
-+ trainer = GaudiTrainer(
-model=model,
-args=training_args,
-train_dataset=train_dataset,
-...
-)
-
-# استخدم معالج Habana Gaudi للتدريب!
-trainer.train()
-```
-
-يمكنك العثور على المزيد من الأمثلة في [الوثائق](https://huggingface.co/docs/optimum/habana/quickstart) وفي [الأمثلة](https://github.com/huggingface/optimum-habana/tree/main/examples).
-
-#### ONNX Runtime
-
-لتدريب المحولات باستخدام ميزات تسريع ONNX Runtime، يوفر 🤗 Optimum `ORTTrainer` مشابه جدًا لـ 🤗 Transformers [Trainer](https://huggingface.co/docs/transformers/main_classes/trainer). فيما يلي مثال بسيط:
-
-```diff
-- from transformers import Trainer, TrainingArguments
-+ from optimum.onnxruntime import ORTTrainer, ORTTrainingArguments
-
-# قم بتنزيل نموذج مُدرب مسبقًا من Hub
-model = AutoModelForSequenceClassification.from_pretrained("bert-base-uncased")
-
-# حدد وسائط التدريب
-- training_args = TrainingArguments(
-+ training_args = ORTTrainingArguments(
-output_dir="path/to/save/folder/",
-optim="adamw_ort_fused",
-...
-)
-
-# قم بإنشاء مدرب ONNX Runtime
-- trainer = Trainer(
-+ trainer = ORTTrainer(
-model=model,
-args=training_args,
-train_dataset=train_dataset,
-+     feature="text-classification"، # نوع النموذج لتصديره إلى ONNX
-...
-)
-
-# استخدم ONNX Runtime للتدريب!
-trainer.train()
-```
-
-يمكنك العثور على المزيد من الأمثلة في [الوثائق](https://huggingface.co/docs/optimum/onnxruntime/usage_guides/trainer) وفي [الأمثلة](https://github.com/huggingface/optimum/tree/main/examples/onnxruntime/training).
-
-## تصدير ONNX خارج الصندوق
-
-تتعامل مكتبة Optimum خارج الصندوق مع تصدير ONNX لنماذج Transformers وDiffusers!
-
-تصدير نموذج إلى ONNX بسيط مثل
-
-```bash
-optimum-cli export onnx --model gpt2 gpt2_onnx/
-```
-
-تحقق من المساعدة للحصول على خيارات أكثر:
-
-```bash
-optimum-cli export onnx --help
-```
-
-راجع [الوثائق](https://huggingface.co/docs/optimum/exporters/onnx/usage_guides/export_a_model) للحصول على مزيد من المعلومات.
-
-## دعم BetterTransformer من PyTorch
-
-[BetterTransformer](https://pytorch.org/blog/a-better-transformer-for-fast-transformer-encoder-inference/) هو تحسين مجاني لـ PyTorch الأصلي لتحقيق زيادة في السرعة تتراوح من 1.25 إلى 4 مرات في الاستدلال لنماذج المستندة إلى المحول. تم تمييزه على أنه مستقر في [PyTorch 1.13](https://pytorch.org/blog/PyTorch-1.13-release/). لقد قمنا بتكامل BetterTransformer مع أكثر النماذج استخدامًا من مكتبة 🤗 Transformers، واستخدام التكامل بسيط مثل:
-
-```python
->>> from optimum.bettertransformer import BetterTransformer
->>> from transformers import AutoModelForSequenceClassification
-
->>> model = AutoModelForSequenceClassification.from_pretrained("distilbert-base-uncased-finetuned-sst-2-english")
->>> model = BetterTransformer.transform(model)
-```
-
-راجع [الوثائق](https://huggingface.co/docs/optimum/bettertransformer/overview) لمزيد من التفاصيل، و[منشور المدونة على Medium من PyTorch](https://medium.com/pytorch/bettertransformer-out-of-the-box-performance-for-huggingface-transformers-3fbe27d50ab2) لمعرفة المزيد حول التكامل!
-
-## تكامل `torch.fx`
-
-يتكامل Optimum مع `torch.fx`، مما يوفر كخط واحد العديد من تحويلات الرسوم البيانية. نهدف إلى دعم إدارة أفضل لـ [الكمية](https://huggingface.co/docs/optimum/concept_guides/quantization) من خلال `torch.fx`، لكل من التدريب على الوعي بالكمية (QAT) والكمية بعد التدريب (PTQ).
-
-راجع [الوثائق](https://huggingface.co/docs/optimum/torch_fx/usage_guides/optimization) و[المرجع](https://huggingface.co/docs/optimum/torch_fx/package_reference/optimization) للحصول على مزيد من المعلومات!

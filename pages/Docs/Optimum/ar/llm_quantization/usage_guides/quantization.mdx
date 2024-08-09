@@ -1,133 +1,0 @@
-# الضبط الكمي 
-
-## تكامل AutoGPTQ 
-
-تعاون مشروع Optimum مع [مكتبة AutoGPTQ](https://github.com/PanQiWei/AutoGPTQ) لتوفير واجهة برمجة تطبيقات بسيطة لتطبيق الضبط الكمي GPTQ على نماذج اللغة. مع الضبط الكمي GPTQ، يمكنك ضبط نموذج اللغة المفضل لديك إلى 8 أو 4 أو 3 أو حتى 2 بت. يأتي هذا بدون انخفاض كبير في الأداء وبسرعة استدلال أسرع. يدعم هذا معظم أجهزة GPU.
-
-إذا كنت ترغب في ضبط نماذج 🤗 Transformers باستخدام GPTQ، اتبع هذه [الوثائق](https://huggingface.co/docs/transformers/main_classes/quantization).
-
-لمعرفة المزيد عن تقنية الضبط المستخدمة في GPTQ، يرجى الرجوع إلى:
-
-- ورقة [GPTQ](https://arxiv.org/pdf/2210.17323.pdf) 
-- مكتبة [AutoGPTQ](https://github.com/PanQiWei/AutoGPTQ) المستخدمة كخلفية 
-
-لاحظ أن مكتبة AutoGPTQ توفر استخدامًا متقدمًا أكثر (خلفية Triton، والاهتمام المندمج، وMLP المندمج) والتي لا يتم دمجها مع Optimum. في الوقت الحالي، نستفيد فقط من نواة CUDA لـ GPTQ.
-
-### المتطلبات
-
-يجب أن يكون لديك المتطلبات التالية المثبتة لتشغيل الكود أدناه:
-
-- مكتبة AutoGPTQ:
-
-```
-pip install auto-gptq
-```
-
-- مكتبة Optimum:
-
-```
-pip install --upgrade optimum
-```
-
-- قم بتثبيت أحدث مكتبة `transformers` من المصدر:
-
-```
-pip install --upgrade git+https://github.com/huggingface/transformers.git
-```
-
-- قم بتثبيت أحدث مكتبة `accelerate`:
-
-```
-pip install --upgrade accelerate
-```
-
-### تحميل وضبط نموذج
-
-تُستخدم فئة [`~optimum.gptq.GPTQQuantizer`] لضبط نموذجك. لضبط نموذجك، تحتاج إلى توفير بعض الحجج:
-
-- عدد البتات: `bits`
-- مجموعة البيانات المستخدمة لمعايرة الضبط: `dataset`
-- طول تسلسل النموذج المستخدم لمعالجة مجموعة البيانات: `model_seqlen`
-- اسم الكتلة التي سيتم ضبطها: `block_name_to_quantize` 
-
-مع تكامل 🤗 Transformers، لا تحتاج إلى تمرير `block_name_to_quantize` و`model_seqlen` حيث يمكننا استردادها. ومع ذلك، بالنسبة للنموذج المخصص، تحتاج إلى تحديدها. أيضًا، تأكد من تحويل نموذجك إلى `torch.float16` قبل الضبط.
-
-```py
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from optimum.gptq import GPTQQuantizer, load_quantized_model
-import torch
-
-model_name = "facebook/opt-125m"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16)
-
-quantizer = GPTQQuantizer(bits=4, dataset="c4", block_name_to_quantize = "model.decoder.layers", model_seqlen = 2048)
-quantized_model = quantizer.quantize_model(model, tokenizer)
-```
-
-<Tip warning={true}>
-
-يعمل الضبط الكمي GPTQ فقط على نماذج النص في الوقت الحالي. علاوة على ذلك، يمكن أن تستغرق عملية الضبط الكثير من الوقت اعتمادًا على عتاد المستخدم (النموذج 175B = 4 ساعات وحدة معالجة رسومية باستخدام NVIDIA A100). يرجى التحقق على Hugging Face Hub إذا لم يكن هناك بالفعل إصدار مضبوط من GPTQ للنموذج الذي تريد ضبطه.
-
-</Tip>
-
-### حفظ النموذج
-
-لحفظ نموذجك، استخدم طريقة الحفظ من فئة [`~optimum.gptq.GPTQQuantizer`]. سيقوم بإنشاء مجلد مع قاموس حالة نموذجك جنبًا إلى جنب مع تكوين الضبط.
-
-```python
-save_folder = "/path/to/save_folder/"
-quantizer.save(model,save_folder)
-```
-
-### تحميل الأوزان المضبوطة
-
-يمكنك تحميل الأوزان المضبوطة باستخدام دالة [`~optimum.gptq.load_quantized_model`].
-
-من خلال مكتبة Accelerate، يمكن تحميل نموذج أسرع مع استخدام ذاكرة أقل. يجب تهيئة النموذج باستخدام أوزان فارغة، مع تحميل الأوزان كخطوة تالية.
-
-```python
-from accelerate import init_empty_weights
-with init_empty_weights():
-empty_model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16)
-empty_model.tie_weights()
-quantized_model = load_quantized_model(empty_model, save_folder=save_folder, device_map="auto")
-```
-
-### نوى Exllama للاستدلال الأسرع
-
-مع إصدار نوى exllamav2، يمكنك الحصول على سرعة استدلال أسرع مقارنة بنوى exllama لنموذج 4-بت. يتم تنشيطه بشكل افتراضي: `disable_exllamav2=False` في [`~optimum.gptq.load_quantized_model`]. لاستخدام هذه النوى، تحتاج إلى وجود النموذج بالكامل على وحدات معالجة الرسومات.
-
-```py
-from optimum.gptq import GPTQQuantizer, load_quantized_model
-import torch
-
-from accelerate import init_empty_weights
-with init_empty_weights():
-empty_model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16)
-empty_model.tie_weights()
-quantized_model = load_quantized_model(empty_model, save_folder=save_folder, device_map="auto")
-```
-
-إذا كنت ترغب في استخدام نوى exllama، فسيتعين عليك تغيير الإصدار عن طريق تعيين `exllama_config`:
-
-```py
-from optimum.gptq import GPTQQuantizer, load_quantized_model
-import torch
-
-from accelerate import init_empty_weights
-with init_empty_weights():
-empty_model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16)
-empty_model.tie_weights()
-quantized_model = load_quantized_model(empty_model, save_folder=save_folder, device_map="auto", exllama_config = {"version":1})
-```
-
-لاحظ أن النوى exllama/exllamav2 تدعم فقط نماذج 4-بت في الوقت الحالي. علاوة على ذلك، يوصى بتعطيل نوى exllama/exllamav2 عندما تقوم بضبط نموذجك باستخدام peft.
-
-يمكنك العثور على معيار هذه النوى [هنا](https://github.com/huggingface/optimum/tree/main/tests/benchmark#gptq-benchmark) 
-
-#### ضبط نموذج مضبوط بشكل دقيق
-
-مع الدعم الرسمي للوحدات النمطية في نظام Hugging Face البيئي، يمكنك ضبط النماذج التي تم ضبطها باستخدام GPTQ.
-
-يرجى الاطلاع على مكتبة [`peft`](https://github.com/huggingface/peft) لمزيد من التفاصيل.
