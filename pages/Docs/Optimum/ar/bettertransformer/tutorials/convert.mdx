@@ -1,117 +1,0 @@
-# كيفية استخدام `optimum` و`BetterTransformer`؟
-
-## تثبيت التبعيات
-
-يمكنك بسهولة استخدام تكامل `BetterTransformer` مع 🤗 Optimum، قم أولاً بتثبيت التبعيات كما يلي:
-
-```bash
-pip install transformers accelerate optimum
-```
-
-تأكد أيضًا من تثبيت أحدث إصدار من PyTorch باتباع الإرشادات على [الموقع الرسمي لـ PyTorch](https://pytorch.org/get-started/locally/). لاحظ أن واجهة برمجة تطبيقات `BetterTransformer` متوافقة فقط مع `torch>=1.13`، لذلك تأكد من تثبيت هذا الإصدار على بيئتك قبل البدء.
-
-إذا كنت تريد الاستفادة من دالة `scaled_dot_product_attention` (للنماذج المستندة إلى فك التشفير)، تأكد من استخدام `torch>=2.0` على الأقل.
-
-## الخطوة 1: قم بتحميل نموذجك
-
-قم أولاً بتحميل نموذج Hugging Face باستخدام 🤗 Transformers. تأكد من تنزيل أحد النماذج المدعومة من قبل واجهة برمجة تطبيقات `BetterTransformer`:
-
-```python
->>> from transformers import AutoModel
-
->>> model_id = "roberta-base"
->>> model = AutoModel.from_pretrained(model_id)
-```
-
-<Tip>
-في بعض الأحيان، يمكنك تحميل نموذجك مباشرة على أجهزة GPU باستخدام مكتبة `accelerate`، لذلك يمكنك تجربة الأمر التالي بشكل اختياري:
-</Tip>
-
-```python
->>> from transformers import AutoModel
-
->>> model_id = "roberta-base"
->>> model = AutoModel.from_pretrained(model_id, device_map="auto")
-```
-
-## الخطوة 2: قم بتعيين نموذجك على الجهاز المفضل لديك
-
-إذا لم تستخدم `device_map="auto"` لتحميل نموذجك (أو إذا لم يكن نموذجك يدعم `device_map="auto"`)، فيمكنك تعيين نموذجك يدويًا على GPU:
-
-```python
->>> model = model.to(0) # أو model.to("cuda:0")
-```
-
-## الخطوة 3: قم بتحويل نموذجك إلى BetterTransformer!
-
-الآن حان الوقت لتحويل نموذجك باستخدام واجهة برمجة تطبيقات `BetterTransformer`! يمكنك تشغيل الأوامر أدناه:
-
-```python
->>> from optimum.bettertransformer import BetterTransformer
-
->>> model = BetterTransformer.transform(model)
-```
-
-بشكل افتراضي، سيقوم `BetterTransformer.transform` بكتابة نموذجك، مما يعني أنه لن يمكنك استخدام نموذجك الأصلي الأصلي بعد الآن. إذا كنت تريد الاحتفاظ به لأي سبب، فقم فقط بإضافة علامة `keep_original_model=True`!
-
-```python
->>> from optimum.bettertransformer import BetterTransformer
-
->>> model_bt = BetterTransformer.transform(model, keep_original_model=True)
-```
-
-إذا لم يكن نموذجك يدعم واجهة برمجة تطبيقات `BetterTransformer`، فسيتم عرض ذلك في تتبع الخطأ. لاحظ أيضًا أن النماذج المستندة إلى فك التشفير (OPT و BLOOM، إلخ) غير مدعومة حاليًا ولكنها مدرجة في خارطة طريق PyTorch للمستقبل.
-
-## توافق الأنابيب
-
-[أنبوب المحولات](https://huggingface.co/docs/transformers/main_classes/pipelines) متوافق أيضًا مع هذا التكامل ويمكنك استخدام `BetterTransformer` كمسرع لأنابيبك. توضح مقتطفات التعليمات البرمجية أدناه كيفية القيام بذلك:
-
-```python
->>> from optimum.pipelines import pipeline
-
->>> pipe = pipeline("fill-mask", "distilbert-base-uncased", accelerator="bettertransformer")
->>> pipe("I am a student at [MASK] University.")
-```
-
-إذا كنت تريد تشغيل أنبوب على جهاز GPU، فقم بتشغيل:
-
-```python
->>> from optimum.pipelines import pipeline
-
->>> pipe = pipeline("fill-mask", "distilbert-base-uncased", accelerator="bettertransformer", device=0)
->>> ...
-```
-
-يمكنك أيضًا استخدام `transformers.pipeline` كالمعتاد ومرر النموذج المحول مباشرةً:
-
-```python
->>> from transformers import pipeline
-
->>> pipe = pipeline("fill-mask", model=model_bt, tokenizer=tokenizer, device=0)
->>> ...
-```
-
-يرجى الرجوع إلى [الوثائق الرسمية لـ `pipeline`](https://huggingface.co/docs/transformers/main_classes/pipelines) لمزيد من الاستخدام. إذا واجهتك أي مشكلة، لا تتردد في فتح مشكلة على GitHub!
-
-## توافق التدريب
-
-الآن يمكنك الاستفادة من واجهة برمجة تطبيقات `BetterTransformer` لبرامج التدريب الخاصة بك. تأكد فقط من إعادة تحويل نموذجك إلى إصداره الأصلي عن طريق استدعاء `BetterTransformer.reverse` قبل حفظ نموذجك.
-
-توضح مقتطفات التعليمات البرمجية أدناه كيفية القيام بذلك:
-
-```python
-from optimum.bettertransformer import BetterTransformer
-from transformers import AutoModelForCausalLM
-
-with torch.device("cuda"):
-    model = AutoModelForCausalLM.from_pretrained("gpt2-large", torch_dtype=torch.float16)
-
-model = BetterTransformer.transform(model)
-
-# قم بالاستدلال أو التدريب هنا
-
-# إذا كنت تقوم بالتدريب وتريد حفظ النموذج
-model = BetterTransformer.reverse(model)
-model.save_pretrained("fine_tuned_model")
-model.push_to_hub("fine_tuned_model")
-```
