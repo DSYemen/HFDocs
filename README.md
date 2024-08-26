@@ -5,16 +5,16 @@ This is Arabic  documentation for Huggingface Libraries Transformers, Diffusers,
 ## Quick Start
 
 ### Documents
-- Transformers
-- Diffusers
-- Datasets
-- Accelerate
-- PEFT
-- Optimum
+- [Transformers](/pages/Docs/Transformers/ar/index.md)
+- [Diffusers](/pages/Docs/Diffusers/ar/index.md)
+- [Datasets](/pages/Docs/Dataset/ar/index.mdx)
+- [Accelerate](/pages/Docs/Accelerate/ar/index.md)
+- [PEFT](/pages/Docs/PEFT/ar/index.md)
+- [Optimum](/pages/Docs/Optimum/ar/index.mdx)
 
 ### Courses
-- NLP
-- Audio
+- [NLP](/pages/Courses/NLP/ar/chapter0/1.mdx)
+- [Audio](/pages/Courses/Audio/ar/chapter0/introduction.mdx)
 
 ## Local Development
 
