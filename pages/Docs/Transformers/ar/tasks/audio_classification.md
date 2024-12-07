@@ -1,1 +1,318 @@
-PCEtLSDYrdmC2YjZgiDYp9mE2YbYtNixIDIwMjIg2YHYsdmK2YIgSHVnZ2luZ0ZhY2UuINis2YXZiti5INin2YTYrdmC2YjZgiDZhdit2YHZiNi42KkuCgrZhdix2K7YtSDYqNmF2YjYrNioINix2K7YtdipINij2KjYp9iq2LTZitiMINin2YTYpdi12K/Yp9ixIDIuMCAo2KfZhNix2K7YtdipKdibINmE2Kcg2YrYrNmI2LIg2YTZgyDYp9iz2KrYrtiv2KfZhSDZh9iw2Kcg2KfZhNmF2YTZgSDYpdmE2Kcg2YjZgdmC2YvYpyDZhNi02LHZiNi3INin2YTYsdiu2LXYqS4g2YrZhdmD2YbZgyDYp9mE2K3YtdmI2YQg2LnZhNmJINmG2LPYrtipINmF2YYg2KfZhNix2K7YtdipINi52YTZiQoKaHR0cDovL3d3dy5hcGFjaGUub3JnL2xpY2Vuc2VzL0xJQ0VOU0UtMi4wCgrZhdinINmE2YUg2YrYqti32YTYqCDYp9mE2YLYp9mG2YjZhiDYp9mE2YXYudmF2YjZhCDYqNmHINij2Ygg2YrYqtmFINin2YTYp9iq2YHYp9mCINi52YTZitmHINmD2KrYp9io2YrZi9in2Iwg2YrYqtmFINiq2YjYstmK2Lkg2KfZhNio2LHZhtin2YXYrCDYp9mE2YXZiNiy2Lkg2KjZhdmI2KzYqCDYp9mE2LHYrti12Kkg2LnZhNmJINij2LPYp9izICLZg9mF2Kcg2YfZiCIg2KjYr9mI2YYg2LbZhdin2YbYp9iqINij2Ygg2LTYsdmI2Lcg2YXZhiDYo9mKINmG2YjYudiMINiz2YjYp9ihINmD2KfZhtiqINi12LHZitit2Kkg2KPZiCDYttmF2YbZitipLiDYsdin2KzYuSDYp9mE2LHYrti12Kkg2YTZhNit2LXZiNmEINi52YTZiSDYp9mE2YTYutipINin2YTZhdit2K/Yr9ipINin2YTYqtmKINiq2K3Zg9mFINin2YTYo9iw2YjZhtin2Kog2YjYp9mE2YLZitmI2K8g2KjZhdmI2KzYqCDYp9mE2LHYrti12KkuCgrimqDvuI8g2YrYsdis2Ykg2YXZhNin2K3YuNipINij2YYg2YfYsNinINin2YTZhdmE2YEg2YXZg9iq2YjYqCDYqNmE2LrYqSBNYXJrZG93biDZiNmE2YPZhtmHINmK2K3YqtmI2Yog2LnZhNmJINio2YbYp9ihINis2YXZhNipINmF2K3Yr9ivINmE2YXZj9mG2LTYpiDZiNir2KfYptmC2YbYpyAo2YrYtNio2YcgTURYKSDZiNin2YTYsNmKINmC2K8g2YTYpyDZitiq2YUg2LnYsdi22Ycg2KjYtNmD2YQg2LXYrdmK2K0g2YHZiiDYudin2LHYtiBNYXJrZG93biDYp9mE2K7Yp9i1INio2YMuCgotLT4KCiMg2KfZhNiq2LXZhtmK2YEg2KfZhNi12YjYqtmKCgpbW29wZW4taW4tY29sYWJdXQoKPFlvdXR1YmUgaWQ9IktXd3pjbUc5OERzIi8+CgrYp9mE2KrYtdmG2YrZgSDYp9mE2LXZiNiq2YogLSDYqtmF2KfZhdmL2Kcg2YXYq9mEINin2YTZhti1IC0g2YrZgtmI2YUg2KjYqti52YrZitmGINiq2LPZhdmK2Kkg2YHYptipINin2YTYpdiu2LHYp9isINmF2YYg2KjZitin2YbYp9iqINin2YTYpdiv2K7Yp9mELiDZiNin2YTZgdix2YIg2KfZhNmI2K3ZitivINmH2Ygg2KPZhtmDINio2K/ZhNin2Ysg2YXZhiDYpdiv2K7Yp9mEINin2YTZhti12Iwg2YTYr9mK2YMg2KPYtNmD2KfZhCDZhdmI2KzZitipINi12YjYqtmK2Kkg2K7Yp9mFLiDYqNi52LYg2KfZhNiq2LfYqNmK2YLYp9iqINin2YTYudmF2YTZitipINmE2YTYqti12YbZitmBINin2YTYtdmI2KrZiiDYqti02YXZhCDYqtit2K/ZitivINmG2YrYqSDYp9mE2YXYqtit2K/Yq9iMINmI2KrYtdmG2YrZgSDYp9mE2YTYutip2Iwg2YjYrdiq2Ykg2KrYrdiv2YrYryDYo9mG2YjYp9i5INin2YTYrdmK2YjYp9mG2KfYqiDZhdmGINiu2YTYp9mEINij2LXZiNin2KrZh9inLgoK2LPZitmI2LbYrSDZhNmDINmH2LDYpyDYp9mE2K/ZhNmK2YQg2YPZitmB2YrYqToKCjEuINi22KjYtyDZhtmF2YjYsNisIFtXYXYyVmVjMl0oaHR0cHM6Ly9odWdnaW5nZmFjZS5jby9mYWNlYm9vay93YXYydmVjMi1iYXNlKSDYudmE2Ykg2YXYrNmF2YjYudipINio2YrYp9mG2KfYqiBbTUluRFMtMTRdKGh0dHBzOi8vaHVnZ2luZ2ZhY2UuY28vZGF0YXNldHMvUG9seUFJL21pbmRzMTQpINmE2KrYtdmG2YrZgSDZhtmK2Kkg2KfZhNmF2KrYrdiv2KsuCjIuINin2LPYqtiu2K/Yp9mFINmG2YXZiNiw2KzZgyDYp9mE2YXYttio2YjYtyDZhNmE2KrZhtio2KQuCgo8VGlwPgoK2YTYsdik2YrYqSDYrNmF2YrYuSDYp9mE2KjZhtmJINmI2KfZhNmG2YLYp9i3INin2YTZhdix2KzYudmK2Kkg2KfZhNmF2KrZiNin2YHZgtipINmF2Lkg2YfYsNmHINin2YTZhdmH2YXYqdiMINmG2YjYtdmKINio2KfZhNiq2K3ZgtmCINmF2YYgW9i12YHYrdipINin2YTZhdmH2YXYqV0oaHR0cHM6Ly9odWdnaW5nZmFjZS5jby90YXNrcy9hdWRpby1jbGFzc2lmaWNhdGlvbikKCjwvVGlwPgoK2YLYqNmEINin2YTYqNiv2KHYjCDYqtij2YPYryDZhdmGINiq2KvYqNmK2Kog2KzZhdmK2Lkg2KfZhNmF2YPYqtio2KfYqiDYp9mE2LbYsdmI2LHZitipOgoKYGBgYmFzaApwaXAgaW5zdGFsbCB0cmFuc2Zvcm1lcnMgZGF0YXNldHMgZXZhbHVhdGUKYGBgCgrZhtit2YYg2YbYtNis2LnZgyDYudmE2Ykg2KrYs9is2YrZhCDYp9mE2K/YrtmI2YQg2KXZhNmJINit2LPYp9ioIEh1Z2dpbmcgRmFjZSDYp9mE2K7Yp9i1INio2YMg2K3YqtmJINiq2KrZhdmD2YYg2YXZhiDYqtit2YXZitmEINmI2YXYtNin2LHZg9ipINmG2YXZiNiw2KzZgyDZhdi5INin2YTZhdis2KrZhdi5LiDYudmG2K/ZhdinINmK2Y/Yt9mE2Kgg2YXZhtmD2Iwg2KPYr9iu2YQg2LHZhdiy2YMg2YTZhNiv2K7ZiNmEOgoKYGBgcHkKPj4+IGZyb20gaHVnZ2luZ2ZhY2VfaHViIGltcG9ydCBub3RlYm9va19sb2dpbgoKPj4+IG5vdGVib29rX2xvZ2luKCkKYGBgCgojIyDYqtit2YXZitmEINmF2KzZhdmI2LnYqSDYqNmK2KfZhtin2KogTUluRFMtMTQKCtin2KjYr9ijINio2KrYrdmF2YrZhCDZhdis2YXZiNi52Kkg2KjZitin2YbYp9iqIE1JbkRTLTE0INmF2YYg2YXZg9iq2KjYqSDwn6SXIERhdGFzZXRzOgoKYGBgcHkKPj4+IGZyb20gZGF0YXNldHMgaW1wb3J0IGxvYWRfZGF0YXNldCwgQXVkaW8KCj4+PiBtaW5kcyA9IGxvYWRfZGF0YXNldCgiUG9seUFJL21pbmRzMTQiLCBuYW1lPSJlbi1VUyIsIHNwbGl0PSJ0cmFpbiIpCmBgYAoK2YLZhSDYqNiq2YLYs9mK2YUg2YXYrNmF2YjYudipINio2YrYp9mG2KfYqiBgdHJhaW5gINil2YTZiSDZhdis2YXZiNi52Kkg2KjZitin2YbYp9iqINij2LXYutixINmE2YTYqtiv2LHZitioINmI2KfZhNin2K7Yqtio2KfYsSDYqNin2LPYqtiu2K/Yp9mFINi32LHZitmC2KkgW2B+ZGF0YXNldHMuRGF0YXNldC50cmFpbl90ZXN0X3NwbGl0YF0uINiz2YrYudi32YrZgyDZh9iw2Kcg2YHYsdi12Kkg2YTZhNiq2KzYsdio2Kkg2YjYp9mE2KrYo9mD2K8g2YXZhiDYo9mGINmD2YQg2LTZitihINmK2LnZhdmEINmC2KjZhCDZgti22KfYoSDYp9mE2YXYstmK2K8g2YXZhiDYp9mE2YjZgtiqINi52YTZiSDZhdis2YXZiNi52Kkg2KfZhNio2YrYp9mG2KfYqiDYp9mE2YPYp9mF2YTYqS4KCmBgYHB5Cj4+PiBtaW5kcyA9IG1pbmRzLnRyYWluX3Rlc3Rfc3BsaXQodGVzdF9zaXplPTAuMikKYGBgCgrYq9mFINij2YTZgiDZhti42LHYqSDYudmE2Ykg2YXYrNmF2YjYudipINin2YTYqNmK2KfZhtin2Ko6CgpgYGBweQo+Pj4gbWluZHMKRGF0YXNldERpY3QoewogICAgdHJhaW46IERhdGFzZXQoewogICAgICAgIGZlYXR1cmVzOiBbJ3BhdGgnLCAnYXVkaW8nLCAndHJhbnNjcmlwdGlvbicsICdlbmdsaXNoX3RyYW5zY3JpcHRpb24nLCAnaW50ZW50X2NsYXNzJywgJ2xhbmdfaWQnXSwKICAgICAgICBudW1fcm93czogNDUwCiAgICB9KQogICAgdGVzdDogRGF0YXNldCh7CiAgICAgICAgZmVhdHVyZXM6IFsncGF0aCcsICdhdWRpbycsICd0cmFuc2NyaXB0aW9uJywgJ2VuZ2xpc2hfdHJhbnNjcmlwdGlvbicsICdpbnRlbnRfY2xhc3MnLCAnbGFuZ19pZCddLAogICAgICAgIG51bV9yb3dzOiAxMTMKICAgIH0pCn0pCmBgYAoK2YHZiiDYrdmK2YYg2KPZhiDZhdis2YXZiNi52Kkg2KfZhNio2YrYp9mG2KfYqiDYqtit2KrZiNmKINi52YTZiSDYp9mE2YPYq9mK2LEg2YXZhiDYp9mE2YXYudmE2YjZhdin2Kog2KfZhNmF2YHZitiv2KnYjCDZhdir2YQgYGxhbmdfaWRgINmIIGBlbmdsaXNoX3RyYW5zY3JpcHRpb25g2Iwg2LPYqtix2YPYsiDZgdmKINmH2LDYpyDYp9mE2K/ZhNmK2YQg2LnZhNmJIGBhdWRpb2Ag2YggYGludGVudF9jbGFzc2AuINmC2YUg2KjYpdiy2KfZhNipINin2YTYo9i52YXYr9ipINin2YTYo9iu2LHZiSDYqNin2LPYqtiu2K/Yp9mFINi32LHZitmC2KkgW2B+ZGF0YXNldHMuRGF0YXNldC5yZW1vdmVfY29sdW1uc2BdOgoKYGBgcHkKPj4+IG1pbmRzID0gbWluZHMucmVtb3ZlX2NvbHVtbnMoWyJwYXRoIiwgInRyYW5zY3JpcHRpb24iLCAiZW5nbGlzaF90cmFuc2NyaXB0aW9uIiwgImxhbmdfaWQiXSkKYGBgCgrYo9mE2YIg2YbYuNix2Kkg2LnZhNmJINmF2KvYp9mEINin2YTYotmGOgoKYGBgcHkKPj4+IG1pbmRzWyJ0cmFpbiJdWzBdCnsnYXVkaW8nOiB7J2FycmF5JzogYXJyYXkoWyAwLiAgICAgICAgLCAgMC4gICAgICAgICwgIDAuICAgICAgICAsIC4uLiwgLTAuMDAwNDg4MjgsCiAgICAgICAgIC0wLjAwMDI0NDE0LCAtMC4wMDAyNDQxNF0sIGR0eXBlPWZsb2F0MzIpLAogICdwYXRoJzogJy9yb290Ly5jYWNoZS9odWdnaW5nZmFjZS9kYXRhc2V0cy9kb3dubG9hZHMvZXh0cmFjdGVkL2YxNDk0OGUwZTg0YmU2MzhkZDc5NDNhYzM2NTE4YTRjZjMzMjRlOGI3YWEzMzFjNWFiMTE1NDE1MThlOTM2OGMvZW4tVVN+QVBQX0VSUk9SLzYwMmI5YTVmYmIxZTZkMGZiY2U5MWY1Mi53YXYnLAogICdzYW1wbGluZ19yYXRlJzogODAwMH0sCiAnaW50ZW50X2NsYXNzJzogMn0KYGBgCgrZh9mG2KfZgyDYrdmC2YTYp9mGOgoKLSBgYXVkaW9gOiDZhdi12YHZiNmB2Kkg2KPYrdin2K/ZitipINin2YTYqNi52K8g2YTZhNil2LTYp9ix2Kkg2KfZhNi12YjYqtmK2Kkg2KfZhNiq2Yog2YrYrNioINin2LPYqtiv2LnYp9ik2YfYpyDZhNiq2K3ZhdmK2YQg2YjZhdmI2KfYstmG2Kkg2YXZhNmBINin2YTYtdmI2KouCi0gYGludGVudF9jbGFzc2A6INmK2YXYq9mEINmF2LnYsdmBINmB2KbYqSDZhtmK2Kkg2KfZhNmF2KrYrdiv2KsuCgrZhNiq2LPZh9mK2YQg2K3YtdmI2YQg2KfZhNmG2YXZiNiw2Kwg2LnZhNmJINin2LPZhSDYp9mE2KrYs9mF2YrYqSDZhdmGINmF2LnYsdmBINin2YTYqtiz2YXZitip2Iwg2YLZhSDYqNil2YbYtNin2KEg2YLYp9mF2YjYsyDZitmC2YjZhSDYqNiq2LnZitmK2YYg2KfYs9mFINin2YTYqtiz2YXZitipINil2YTZiSDYudiv2K8g2LXYrdmK2K0g2YjYp9mE2LnZg9izINio2KfZhNi52YPYszoKCmBgYHB5Cj4+PiBsYWJlbHMgPSBtaW5kc1sidHJhaW4iXS5mZWF0dXJlc1siaW50ZW50X2NsYXNzIl0ubmFtZXMKPj4+IGxhYmVsMmlkLCBpZDJsYWJlbCA9IGRpY3QoKSwgZGljdCgpCj4+PiBmb3IgaSwgbGFiZWwgaW4gZW51bWVyYXRlKGxhYmVscyk6Ci4uLiAgICAgbGFiZWwyaWRbbGFiZWxdID0gc3RyKGkpCi4uLiAgICAgaWQybGFiZWxbc3RyKGkpXSA9IGxhYmVsCmBgYAoK2KfZhNii2YYg2YrZhdmD2YbZgyDYqtit2YjZitmEINmF2LnYsdmBINin2YTYqtiz2YXZitipINil2YTZiSDYp9iz2YUg2KfZhNiq2LPZhdmK2Kk6CgpgYGBweQo+Pj4gaWQybGFiZWxbc3RyKDIpXQonYXBwX2Vycm9yJwpgYGAKCiMjINin2YTZhdi52KfZhNis2Kkg2KfZhNmF2LPYqNmC2KkKCtin2YTYrti32YjYqSDYp9mE2KrYp9mE2YrYqSDZh9mKINiq2K3ZhdmK2YQg2YXYs9iq2K7YsdisINmF2YrYstin2KogV2F2MlZlYzIg2YTZhdi52KfZhNis2Kkg2KfZhNil2LTYp9ix2Kkg2KfZhNi12YjYqtmK2Kk6CgpgYGBweQo+Pj4gZnJvbSB0cmFuc2Zvcm1lcnMgaW1wb3J0IEF1dG9GZWF0dXJlRXh0cmFjdG9yCgo+Pj4gZmVhdHVyZV9leHRyYWN0b3IgPSBBdXRvRmVhdHVyZUV4dHJhY3Rvci5mcm9tX3ByZXRyYWluZWQoImZhY2Vib29rL3dhdjJ2ZWMyLWJhc2UiKQpgYGAKCtiq2KjZhNi6INmG2LPYqNipINij2K7YsCDYp9mE2LnZitmG2KfYqiDZgdmKINmF2KzZhdmI2LnYqSDYqNmK2KfZhtin2KogTUluRFMtMTQgODAwMCDZg9mK2YTZiCDZh9ix2KrYsiAo2YrZhdmD2YbZgyDYp9mE2LnYq9mI2LEg2LnZhNmJINmH2LDZhyDYp9mE2YXYudmE2YjZhdin2Kog2YHZiiBb2KjYt9in2YLYqSDZhdis2YXZiNi52Kkg2KfZhNio2YrYp9mG2KfYql0oaHR0cHM6Ly9odWdnaW5nZmFjZS5jby9kYXRhc2V0cy9Qb2x5QUkvbWluZHMxNCkp2Iwg2YXZhdinINmK2LnZhtmKINij2YbZgyDYs9iq2K3Yqtin2Kwg2KXZhNmJINil2LnYp9iv2Kkg2KPYrtiwINi52YrZhtin2Kog2YXZhiDZhdis2YXZiNi52Kkg2KfZhNio2YrYp9mG2KfYqiDYpdmE2YkgMTYwMDAg2YPZitmE2Ygg2YfYsdiq2LIg2YTYp9iz2KrYrtiv2KfZhSDZhtmF2YjYsNisIFdhdjJWZWMyINin2YTZhdmP2K/YsdioINmF2LPYqNmC2YvYpzoKCmBgYHB5Cj4+PiBtaW5kcyA9IG1pbmRzLmNhc3RfY29sdW1uKCJhdWRpbyIsIEF1ZGlvKHNhbXBsaW5nX3JhdGU9MTZfMDAwKSkKPj4+IG1pbmRzWyJ0cmFpbiJdWzBdCnsnYXVkaW8nOiB7J2FycmF5JzogYXJyYXkoWyAyLjIwOTg3NTdlLTA1LCAgNC42NTgyMjQxZS0wNSwgLTIuMjgwMzI2MGUtMDUsIC4uLiwKICAgICAgICAgLTIuODQxOTI5MWUtMDQsIC0yLjMzMDU5NDFlLTA0LCAtMS4xNDI1MTA3ZS0wNF0sIGR0eXBlPWZsb2F0MzIpLAogICdwYXRoJzogJy9yb290Ly5jYWNoZS9odWdnaW5nZmFjZS9kYXRhc2V0cy9kb3dubG9hZHMvZXh0cmFjdGVkL2YxNDk0OGUwZTg0YmU2MzhkZDc5NDNhYzM2NTE4YTRjZjMzMjRlOGI3YWEzMzFjNWFiMTE1NDE1MThlOTM2OGMvZW4tVVN+QVBQX0VSUk9SLzYwMmI5YTVmYmIxZTZkMGZiY2U5MWY1Mi53YXYnLAogICdzYW1wbGluZ19yYXRlJzogMTYwMDB9LAogJ2ludGVudF9jbGFzcyc6IDJ9CmBgYAoK2KfZhNii2YYg2YLZhSDYqNil2YbYtNin2KEg2K/Yp9mE2Kkg2YXYudin2YTYrNipINmF2LPYqNmC2Kkg2KrZgtmI2YUg2KjZhdinINmK2YTZijoKCjEuINin2LPYqtiv2LnYp9ihINi52YXZiNivIGBhdWRpb2Ag2YTYqtit2YXZitmE2Iwg2YjYpdiw2Kcg2YTYstmFINin2YTYo9mF2LHYjCDZhdmI2KfYstmG2Kkg2YXZhNmBINin2YTYtdmI2KouCjIuINin2YTYqtit2YLZgiDZhdmF2Kcg2KXYsNinINmD2KfZhtiqINmG2LPYqNipINij2K7YsCDYp9mE2LnZitmG2KfYqiDZhNmF2YTZgSDYp9mE2LXZiNiqINiq2KrYt9in2KjZgiDZhdi5INmG2LPYqNipINij2K7YsCDYp9mE2LnZitmG2KfYqiDZhNio2YrYp9mG2KfYqiDYp9mE2LXZiNiqINin2YTYqtmKINiq2YUg2KrYr9ix2YrYqCDYp9mE2YbZhdmI2LDYrCDYudmE2YrZh9inINmF2LPYqNmC2YvYpy4g2YrZhdmD2YbZgyDYp9mE2LnYq9mI2LEg2LnZhNmJINmH2LDZhyDYp9mE2YXYudmE2YjZhdin2Kog2YHZiiDYqNi32KfZgtipINmG2YXZiNiw2KwgV2F2MlZlYzIgW21vZGVsIGNhcmRdKGh0dHBzOi8vaHVnZ2luZ2ZhY2UuY28vZmFjZWJvb2svd2F2MnZlYzItYmFzZSkuCjMuINiq2LnZitmK2YYg2LfZiNmEINil2K/Yrtin2YQg2KPZgti12Ykg2YTYr9mB2LnYp9iqINin2YTYpdiv2K7Yp9mE2KfYqiDYp9mE2KPYt9mI2YQg2K/ZiNmGINiq2YLYt9mK2LnZh9inLgoKYGBgcHkKPj4+IGRlZiBwcmVwcm9jZXNzX2Z1bmN0aW9uKGV4YW1wbGVzKToKLi4uICAgICBhdWRpb19hcnJheXMgPSBbeFsiYXJyYXkiXSBmb3IgeCBpbiBleGFtcGxlc1siYXVkaW8iXV0KLi4uICAgICBpbnB1dHMgPSBmZWF0dXJlX2V4dHJhY3RvcigKLi4uICAgICAgICAgYXVkaW9fYXJyYXlzLCBzYW1wbGluZ19yYXRlPWZlYXR1cmVfZXh0cmFjdG9yLnNhbXBsaW5nX3JhdGUsIG1heF9sZW5ndGg9MTYwMDAsIHRydW5jYXRpb249VHJ1ZQouLi4gICAgICkKLi4uICAgICByZXR1cm4gaW5wdXRzCmBgYAoK2YTYqti32KjZitmCINiv2KfZhNipINin2YTZhdi52KfZhNis2Kkg2KfZhNmF2LPYqNmC2Kkg2LnZhNmJINmF2KzZhdmI2LnYqSDYp9mE2KjZitin2YbYp9iqINio2KfZhNmD2KfZhdmE2Iwg2KfYs9iq2K7Yr9mFINmI2LjZitmB2Kkg8J+klyBEYXRhc2V0cyBbYH5kYXRhc2V0cy5EYXRhc2V0Lm1hcGBdLiDZitmF2YPZhtmDINiq2LPYsdmK2LkgYG1hcGAg2LnZhiDYt9ix2YrZgiDYqti52YrZitmGIGBiYXRjaGVkPVRydWVgINmE2YXYudin2YTYrNipINi52YbYp9i12LEg2YXYqti52K/Yr9ipINmF2YYg2YXYrNmF2YjYudipINin2YTYqNmK2KfZhtin2Kog2YHZiiDZiNmC2Kog2YjYp9it2K8uINmC2YUg2KjYpdiy2KfZhNipINin2YTYo9i52YXYr9ipINin2YTYqtmKINmE2Kcg2KrYrdiq2KfYrNmH2KfYjCDZiNij2LnYryDYqtiz2YXZitipIGBpbnRlbnRfY2xhc3NgINil2YTZiSBgbGFiZWxgINmE2KPZhiDZh9iw2Kcg2YfZiCDYp9mE2KfYs9mFINin2YTYsNmKINmK2KrZiNmC2LnZhyDYp9mE2YbZhdmI2LDYrDoKCmBgYHB5Cj4+PiBlbmNvZGVkX21pbmRzID0gbWluZHMubWFwKHByZXByb2Nlc3NfZnVuY3Rpb24sIHJlbW92ZV9jb2x1bW5zPSJhdWRpbyIsIGJhdGNoZWQ9VHJ1ZSkKPj4+IGVuY29kZWRfbWluZHMgPSBlbmNvZGVkX21pbmRzLnJlbmFtZV9jb2x1bW4oImludGVudF9jbGFzcyIsICJsYWJlbCIpCmBgYAoKIyMg2KfZhNiq2YLZitmK2YUKCti62KfZhNio2YvYpyDZhdinINmK2YPZiNmGINiq2LbZhdmK2YYg2YXZgtmK2KfYsyDYo9ir2YbYp9ihINin2YTYqtiv2LHZitioINmF2YHZitiv2YvYpyDZhNiq2YLZitmK2YUg2KPYr9in2KEg2YbZhdmI2LDYrNmDLiDZitmF2YPZhtmDINiq2K3ZhdmK2YQg2LfYsdmK2YLYqSDYqtmC2YrZitmFINio2LPYsdi52Kkg2KjYp9iz2KrYrtiv2KfZhSDZhdmD2KrYqNipIPCfpJcgW0V2YWx1YXRlXShodHRwczovL2h1Z2dpbmdmYWNlLmNvL2RvY3MvZXZhbHVhdGUvaW5kZXgpLiDYqNin2YTZhtiz2KjYqSDZhNmH2LDZhyDYp9mE2YXZh9mF2KnYjCDZgtmFINio2KrYrdmF2YrZhCDZhdmC2YrYp9izIFvYp9mE2K/ZgtipXShodHRwczovL2h1Z2dpbmdmYWNlLmNvL3NwYWNlcy9ldmFsdWF0ZS1tZXRyaWMvYWNjdXJhY3kpICjYsdin2KzYuSDYrNmI2YTYqSDwn6SXIEV2YWx1YXRlIFtxdWljayB0b3VyXShodHRwczovL2h1Z2dpbmdmYWNlLmNvL2RvY3MvZXZhbHVhdGUvYV9xdWlja190b3VyKSDZhNmF2LnYsdmB2Kkg2KfZhNmF2LLZitivINit2YjZhCDZg9mK2YHZitipINiq2K3ZhdmK2YQg2YjYrdiz2KfYqCDZhdmC2YrYp9izKToKCmBgYHB5Cj4+PiBpbXBvcnQgZXZhbHVhdGUKCj4+PiBhY2N1cmFjeSA9IGV2YWx1YXRlLmxvYWQoImFjY3VyYWN5IikKYGBgCgrYq9mFINmC2YUg2KjYpdmG2LTYp9ihINiv2KfZhNipINiq2YLZiNmFINio2KrZhdix2YrYsSDYqtmG2KjYpNin2KrZgyDZiNiq2LPZhdmK2KfYqtmDINil2YTZiSBbYH5ldmFsdWF0ZS5FdmFsdWF0aW9uTW9kdWxlLmNvbXB1dGVgXSDZhNit2LPYp9ioINin2YTYr9mC2Kk6CgpgYGBweQo+Pj4gaW1wb3J0IG51bXB5IGFzIG5wCgoKPj4+IGRlZiBjb21wdXRlX21ldHJpY3MoZXZhbF9wcmVkKToKLi4uICAgICBwcmVkaWN0aW9ucyA9IG5wLmFyZ21heChldmFsX3ByZWQucHJlZGljdGlvbnMsIGF4aXM9MSkKLi4uICAgICByZXR1cm4gYWNjdXJhY3kuY29tcHV0ZShwcmVkaWN0aW9ucz1wcmVkaWN0aW9ucywgcmVmZXJlbmNlcz1ldmFsX3ByZWQubGFiZWxfaWRzKQpgYGAKCtiv2KfZhNipIGBjb21wdXRlX21ldHJpY3NgINin2YTYrtin2LXYqSDYqNmDINis2KfZh9iy2Kkg2KfZhNii2YbYjCDZiNiz2KrYudmI2K8g2KXZhNmK2YfYpyDYudmG2K8g2KXYudiv2KfYryDYqtiv2LHZitio2YMuCgojIyDYp9mE2KrYr9ix2YrYqAoKPGZyYW1ld29ya2NvbnRlbnQ+CjxwdD4KPFRpcD4KCtil2LDYpyDZhNmFINiq2YPZhiDYudmE2Ykg2K/Ysdin2YrYqSDYqNi22KjYtyDZhtmF2YjYsNisINio2KfYs9iq2K7Yr9in2YUgW2BUcmFpbmVyYF0sINij2YTZgiDZhti42LHYqSDYudmE2Ykg2KfZhNiv2YTZitmEINin2YTYqti52YTZitmF2Yog2KfZhNij2LPYp9iz2YogW9mH2YbYp10oLi4vdHJhaW5pbmcjdHJhaW4td2l0aC1weXRvcmNoLXRyYWluZXIpIQoKPC9UaXA+CgrYo9mG2Kog2YXYs9iq2LnYryDYp9mE2KLZhiDZhNio2K/YoSDYqtiv2LHZitioINmG2YXZiNiw2KzZgyEg2YLZhSDYqNiq2K3ZhdmK2YQgV2F2MlZlYzIg2KjYp9iz2KrYrtiv2KfZhSBbYEF1dG9Nb2RlbEZvckF1ZGlvQ2xhc3NpZmljYXRpb25gXSDYrNmG2KjZi9inINil2YTZiSDYrNmG2Kgg2YXYuSDYudiv2K8g2KfZhNiq2LPZhdmK2KfYqiDYp9mE2YXYqtmI2YLYudip2Iwg2YjYqti52YrZitmG2KfYqiDYp9mE2KrYs9mF2YrYp9iqOgoKYGBgcHkKPj4+IGZyb20gdHJhbnNmb3JtZXJzIGltcG9ydCBBdXRvTW9kZWxGb3JBdWRpb0NsYXNzaWZpY2F0aW9uLCBUcmFpbmluZ0FyZ3VtZW50cywgVHJhaW5lcgoKPj4+IG51bV9sYWJlbHMgPSBsZW4oaWQybGFiZWwpCj4+PiBtb2RlbCA9IEF1dG9Nb2RlbEZvckF1ZGlvQ2xhc3NpZmljYXRpb24uZnJvbV9wcmV0cmFpbmVkKAouLi4gICAgICJmYWNlYm9vay93YXYydmVjMi1iYXNlIiwgbnVtX2xhYmVscz1udW1fbGFiZWxzLCBsYWJlbDJpZD1sYWJlbDJpZCwgaWQybGFiZWw9aWQybGFiZWwKLi4uICkKYGBgCtmB2Yog2YfYsNmHINin2YTZhdix2K3ZhNip2Iwg2KrYqNmC2Ykg2KvZhNin2Ksg2K7Yt9mI2KfYqiDZgdmC2Lc6CgoxLiDYrdiv2K8g2YXYudmE2YXYp9iqINin2YTYqtiv2LHZitioINin2YTYrtin2LXYqSDYqNmDINmB2YogW2BUcmFpbmluZ0FyZ3VtZW50c2BdLiDYp9mE2YXYudmE2YXYqSDYp9mE2YjYrdmK2K/YqSDYp9mE2YXYt9mE2YjYqNipINmH2YogYG91dHB1dF9kaXJgINmI2KfZhNiq2Yog2KrYrdiv2K8g2YXZg9in2YYg2K3Zgdi4INmG2YXZiNiw2KzZgy4g2LPYqtix2LPZhCDZh9iw2Kcg2KfZhNmG2YXZiNiw2Kwg2KXZhNmJINin2YTZhdix2YPYsiDZhdmGINiu2YTYp9mEINiq2LnZitmK2YYgYHB1c2hfdG9faHViPVRydWVgICjZitis2Kgg2KPZhiDYqtmD2YjZhiDZhdiz2KzZhNin2Ysg2YHZiiBIdWdnaW5nIEZhY2Ug2YTYqtit2YXZitmEINmG2YXZiNiw2KzZgykuINmB2Yog2YbZh9in2YrYqSDZg9mEINit2YLYqNip2Iwg2LPZitmC2YjZhSBbYFRyYWluZXJgXSDYqNiq2YLZitmK2YUg2KfZhNiv2YLYqSDZiNit2YHYuCDZhtmC2LfYqSDYqtmB2KrZiti0INin2YTYqtiv2LHZitioLgoyLiDZhdix2LEg2K3YrNisINin2YTYqtiv2LHZitioINil2YTZiSBbYFRyYWluZXJgXSDYrNmG2KjZi9inINil2YTZiSDYrNmG2Kgg2YXYuSDYp9mE2YbZhdmI2LDYrNiMINmI2YXYrNmF2YjYudipINin2YTYqNmK2KfZhtin2KrYjCDZiNin2YTZhdit2YTZhNiMINmI2YXYrNmF2Lkg2KfZhNio2YrYp9mG2KfYqtiMINmI2YjYuNmK2YHYqSBgY29tcHV0ZV9tZXRyaWNzYC4KMy4g2KfYs9iq2K/Yudin2KEgW2B+VHJhaW5lci50cmFpbmBdINmE2KrYudiv2YrZhCDZhtmF2YjYsNis2YMuCgpgYGBweQo+Pj4gdHJhaW5pbmdfYXJncyA9IFRyYWluaW5nQXJndW1lbnRzKAouLi4gICAgIG91dHB1dF9kaXI9Im15X2F3ZXNvbWVfbWluZF9tb2RlbCIsCi4uLiAgICAgZXZhbF9zdHJhdGVneT0iZXBvY2giLAouLi4gICAgIHNhdmVfc3RyYXRlZ3k9ImVwb2NoIiwKLi4uICAgICBsZWFybmluZ19yYXRlPTNlLTUsCi4uLiAgICAgcGVyX2RldmljZV90cmFpbl9iYXRjaF9zaXplPTMyLAouLi4gICAgIGdyYWRpZW50X2FjY3VtdWxhdGlvbl9zdGVwcz00LAouLi4gICAgIHBlcl9kZXZpY2VfZXZhbF9iYXRjaF9zaXplPTMyLAouLi4gICAgIG51bV90cmFpbl9lcG9jaHM9MTAsCi4uLiAgICAgd2FybXVwX3JhdGlvPTAuMSwKLi4uICAgICBsb2dnaW5nX3N0ZXBzPTEwLAouLi4gICAgIGxvYWRfYmVzdF9tb2RlbF9hdF9lbmQ9VHJ1ZSwKLi4uICAgICBtZXRyaWNfZm9yX2Jlc3RfbW9kZWw9ImFjY3VyYWN5IiwKLi4uICAgICBwdXNoX3RvX2h1Yj1UcnVlLAouLi4gKQoKPj4+IHRyYWluZXIgPSBUcmFpbmVyKAouLi4gICAgIG1vZGVsPW1vZGVsLAouLi4gICAgIGFyZ3M9dHJhaW5pbmdfYXJncywKLi4uICAgICB0cmFpbl9kYXRhc2V0PWVuY29kZWRfbWluZHNbInRyYWluIl0sCi4uLiAgICAgZXZhbF9kYXRhc2V0PWVuY29kZWRfbWluZHNbInRlc3QiXSwKLi4uICAgICBwcm9jZXNzaW5nX2NsYXNzPWZlYXR1cmVfZXh0cmFjdG9yLAouLi4gICAgIGNvbXB1dGVfbWV0cmljcz1jb21wdXRlX21ldHJpY3MsCi4uLiApCgo+Pj4gdHJhaW5lci50cmFpbigpCmBgYAoK2KjZhdis2LHYryDYp9mD2KrZhdin2YQg2KfZhNiq2K/YsdmK2KjYjCDYtNin2LHZgyDZhtmF2YjYsNis2YMg2YHZiiDYp9mE2YXYsdmD2LIg2KjYp9iz2KrYrtiv2KfZhSDYt9ix2YrZgtipIFtgfnRyYW5zZm9ybWVycy5UcmFpbmVyLnB1c2hfdG9faHViYF0g2K3YqtmJINmK2KrZhdmD2YYg2KfZhNis2YXZiti5INmF2YYg2KfYs9iq2K7Yr9in2YUg2YbZhdmI2LDYrNmDOgoKYGBgcHkKPj4+IHRyYWluZXIucHVzaF90b19odWIoKQpgYGAKPC9mcmFtZXdvcmtjb250ZW50PgoKPFRpcD4KCtmE2YTYrdi12YjZhCDYudmE2Ykg2YXYq9in2YQg2KPZg9ir2LEg2LnZhdmC2YvYpyDYrdmI2YQg2YPZitmB2YrYqSDYqti52K/ZitmEINmG2YXZiNiw2Kwg2YTYqti12YbZitmBINin2YTYtdmI2KrYjCDYp9i32YTYuSDYudmE2Ykg2K/Zgdiq2LEg2YXZhNin2K3YuNin2KogUHlUb3JjaCDYp9mE2YXZgtin2KjZhCBbUHlUb3JjaCBub3RlYm9va10oaHR0cHM6Ly9jb2xhYi5yZXNlYXJjaC5nb29nbGUuY29tL2dpdGh1Yi9odWdnaW5nZmFjZS9ub3RlYm9va3MvYmxvYi9tYWluL2V4YW1wbGVzL2F1ZGlvX2NsYXNzaWZpY2F0aW9uLmlweW5iKS4KCjwvVGlwPgoKIyMg2KfZhNin2LPYqtiv2YTYp9mECgrYsdin2KbYudiMINin2YTYotmGINio2LnYryDYo9mGINmC2YXYqiDYqNiq2LnYr9mK2YQg2YbZhdmI2LDYrNiMINmK2YXZg9mG2YMg2KfYs9iq2K7Yr9in2YXZhyDZhNmE2KfYs9iq2K/ZhNin2YQhCgrZgtmFINio2KrYrdmF2YrZhCDZhdmE2YEg2LXZiNiq2Yog2KrYsdmK2K8g2KrYtNi62YrZhCDYp9mE2KfYs9iq2K/ZhNin2YQg2LnZhNmK2YcuINiq2LDZg9ixINil2LnYp9iv2Kkg2KPYrtiwINi52YrZhtipINmF2YYg2YXYudiv2YQg2KPYrtiwINin2YTYudmK2YbYp9iqINmE2YTZhdmE2YEg2KfZhNi12YjYqtmKINmE2YXYt9in2KjZgtipINmF2LnYr9mEINij2K7YsCDYp9mE2LnZitmG2KfYqiDZhNmE2YbZhdmI2LDYrCDYpdiw2Kcg2YPZhtiqINio2K3Yp9is2Kkg2KXZhNmJINiw2YTZgyEKCmBgYHB5Cj4+PiBmcm9tIGRhdGFzZXRzIGltcG9ydCBsb2FkX2RhdGFzZXQsIEF1ZGlvCgo+Pj4gZGF0YXNldCA9IGxvYWRfZGF0YXNldCgiUG9seUFJL21pbmRzMTQiLCBuYW1lPSJlbi1VUyIsIHNwbGl0PSJ0cmFpbiIpCj4+PiBkYXRhc2V0ID0gZGF0YXNldC5jYXN0X2NvbHVtbigiYXVkaW8iLCBBdWRpbyhzYW1wbGluZ19yYXRlPTE2MDAwKSkKPj4+IHNhbXBsaW5nX3JhdGUgPSBkYXRhc2V0LmZlYXR1cmVzWyJhdWRpbyJdLnNhbXBsaW5nX3JhdGUKPj4+IGF1ZGlvX2ZpbGUgPSBkYXRhc2V0WzBdWyJhdWRpbyJdWyJwYXRoIl0KYGBgCgrYo9io2LPYtyDYt9ix2YrZgtipINmE2KrYrNix2KjYqSDZhtmF2YjYsNis2YMg2KfZhNmF2LnYr9mEINmE2YTYp9iz2KrYr9mE2KfZhCDZh9mKINin2LPYqtiu2K/Yp9mF2Ycg2YHZiiBbYHBpcGVsaW5lYF0uINmC2YUg2KjYqtmG2YHZitiwIGBwaXBlbGluZWAg2YTYqti12YbZitmBINin2YTYtdmI2Kog2YXYuSDZhtmF2YjYsNis2YPYjCDZiNmF2LHYsSDZhdmE2YEg2KfZhNi12YjYqiDYp9mE2K7Yp9i1INio2YMg2KXZhNmK2Yc6CgpgYGBweQo+Pj4gZnJvbSB0cmFuc2Zvcm1lcnMgaW1wb3J0IHBpcGVsaW5lCgo+Pj4gY2xhc3NpZmllciA9IHBpcGVsaW5lKCJhdWRpby1jbGFzc2lmaWNhdGlvbiIsIG1vZGVsPSJzdGV2aGxpdS9teV9hd2Vzb21lX21pbmRzX21vZGVsIikKPj4+IGNsYXNzaWZpZXIoYXVkaW9fZmlsZSkKWwogICAgeydzY29yZSc6IDAuMDk3NjY4NjkyNDY5NTk2ODYsICdsYWJlbCc6ICdjYXNoX2RlcG9zaXQnfSwKICAgIHsnc2NvcmUnOiAwLjA3OTk4ODc3MDE4NjkwMTA5LCAnbGFiZWwnOiAnYXBwX2Vycm9yJ30sCiAgICB7J3Njb3JlJzogMC4wNzgxMDcwNjY0NTI1MDMyLCAnbGFiZWwnOiAnam9pbnRfYWNjb3VudCd9LAogICAgeydzY29yZSc6IDAuMDc2NjcxMDkzNzAyMzE2MjgsICdsYWJlbCc6ICdwYXlfYmlsbCd9LAogICAgeydzY29yZSc6IDAuMDc1NTI1MjA5MzA3NjcwNiwgJ2xhYmVsJzogJ2JhbGFuY2UnfQpdCmBgYAoK2YrZhdmD2YbZgyDYo9mK2LbZi9inINiq2YPYsdin2LEg2YbYqtin2KbYrCBgcGlwZWxpbmVgINmK2K/ZiNmK2YvYpyDYpdiw2Kcg2KPYsdiv2Ko6Cgo8ZnJhbWV3b3JrY29udGVudD4KPHB0PgrZgtmFINio2KrYrdmF2YrZhCDZhdiz2KrYrtix2Kwg2KfZhNmF2YrYstin2Kog2YTZhdi52KfZhNis2Kkg2YXZhNmBINin2YTYtdmI2Kog2YjYpdix2KzYp9i5IGBpbnB1dGAg2YPZhdiq2KzZh9in2KogUHlUb3JjaDoKCmBgYHB5Cj4+PiBmcm9tIHRyYW5zZm9ybWVycyBpbXBvcnQgQXV0b0ZlYXR1cmVFeHRyYWN0b3IKCj4+PiBmZWF0dXJlX2V4dHJhY3RvciA9IEF1dG9GZWF0dXJlRXh0cmFjdG9yLmZyb21fcHJldHJhaW5lZCgic3RldmhsaXUvbXlfYXdlc29tZV9taW5kc19tb2RlbCIpCj4+PiBpbnB1dHMgPSBmZWF0dXJlX2V4dHJhY3RvcihkYXRhc2V0WzBdWyJhdWRpbyJdWyJhcnJheSJdLCBzYW1wbGluZ19yYXRlPXNhbXBsaW5nX3JhdGUsIHJldHVybl90ZW5zb3JzPSJwdCIpCmBgYAoK2YXYsdixINmF2K/YrtmE2KfYqtmDINil2YTZiSDYp9mE2YbZhdmI2LDYrCDZiNij2LHYrNi5INin2YTZhNmI2LrYp9ix2YrYqtmF2KfYqjoKCmBgYHB5Cj4+PiBmcm9tIHRyYW5zZm9ybWVycyBpbXBvcnQgQXV0b01vZGVsRm9yQXVkaW9DbGFzc2lmaWNhdGlvbgoKPj4+IG1vZGVsID0gQXV0b01vZGVsRm9yQXVkaW9DbGFzc2lmaWNhdGlvbi5mcm9tX3ByZXRyYWluZWQoInN0ZXZobGl1L215X2F3ZXNvbWVfbWluZHNfbW9kZWwiKQo+Pj4gd2l0aCB0b3JjaC5ub19ncmFkKCk6Ci4uLiAgICAgbG9naXRzID0gbW9kZWwoKippbnB1dHMpLmxvZ2l0cwpgYGAKCtin2K3YtdmEINi52YTZiSDYp9mE2YHYptipINiw2KfYqiDYp9mE2KfYrdiq2YXYp9mE2YrYqSDYp9mE2KPYudmE2YnYjCDZiNin2LPYqtiu2K/ZhSDYrtix2YrYt9ipIGBpZDJsYWJlbGAg2YTZhNmG2YXZiNiw2Kwg2YTYqtit2YjZitmE2YfYpyDYpdmE2Ykg2KrYs9mF2YrYqToKCmBgYHB5Cj4+PiBpbXBvcnQgdG9yY2gKCj4+PiBwcmVkaWN0ZWRfY2xhc3NfaWRzID0gdG9yY2guYXJnbWF4KGxvZ2l0cykuaXRlbSgpCj4+PiBwcmVkaWN0ZWRfbGFiZWwgPSBtb2RlbC5jb25maWcuaWQybGFiZWxbcHJlZGljdGVkX2NsYXNzX2lkc10KPj4+IHByZWRpY3RlZF9sYWJlbAonY2FzaF9kZXBvc2l0JwpgYGAKPC9wdD4KPC9mcmFtZXdvcmtjb250ZW50PgpgYGA=
+<!-- حقوق النشر 2022 فريق HuggingFace. جميع الحقوق محفوظة.
+
+مرخص بموجب رخصة أباتشي، الإصدار 2.0 (الرخصة)؛ لا يجوز لك استخدام هذا الملف إلا وفقًا لشروط الرخصة. يمكنك الحصول على نسخة من الرخصة على
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+ما لم يتطلب القانون المعمول به أو يتم الاتفاق عليه كتابيًا، يتم توزيع البرنامج الموزع بموجب الرخصة على أساس "كما هو" بدون ضمانات أو شروط من أي نوع، سواء كانت صريحة أو ضمنية. راجع الرخصة للحصول على اللغة المحددة التي تحكم الأذونات والقيود بموجب الرخصة.
+
+⚠️ يرجى ملاحظة أن هذا الملف مكتوب بلغة Markdown ولكنه يحتوي على بناء جملة محدد لمُنشئ وثائقنا (يشبه MDX) والذي قد لا يتم عرضه بشكل صحيح في عارض Markdown الخاص بك.
+
+-->
+
+# التصنيف الصوتي
+
+[[open-in-colab]]
+
+<Youtube id="KWwzcmG98Ds"/>
+
+التصنيف الصوتي - تمامًا مثل النص - يقوم بتعيين تسمية فئة الإخراج من بيانات الإدخال. والفرق الوحيد هو أنك بدلاً من إدخال النص، لديك أشكال موجية صوتية خام. بعض التطبيقات العملية للتصنيف الصوتي تشمل تحديد نية المتحدث، وتصنيف اللغة، وحتى تحديد أنواع الحيوانات من خلال أصواتها.
+
+سيوضح لك هذا الدليل كيفية:
+
+1. ضبط نموذج [Wav2Vec2](https://huggingface.co/facebook/wav2vec2-base) على مجموعة بيانات [MInDS-14](https://huggingface.co/datasets/PolyAI/minds14) لتصنيف نية المتحدث.
+2. استخدام نموذجك المضبوط للتنبؤ.
+
+<Tip>
+
+لرؤية جميع البنى والنقاط المرجعية المتوافقة مع هذه المهمة، نوصي بالتحقق من [صفحة المهمة](https://huggingface.co/tasks/audio-classification)
+
+</Tip>
+
+قبل البدء، تأكد من تثبيت جميع المكتبات الضرورية:
+
+```bash
+pip install transformers datasets evaluate
+```
+
+نحن نشجعك على تسجيل الدخول إلى حساب Hugging Face الخاص بك حتى تتمكن من تحميل ومشاركة نموذجك مع المجتمع. عندما يُطلب منك، أدخل رمزك للدخول:
+
+```py
+>>> from huggingface_hub import notebook_login
+
+>>> notebook_login()
+```
+
+## تحميل مجموعة بيانات MInDS-14
+
+ابدأ بتحميل مجموعة بيانات MInDS-14 من مكتبة 🤗 Datasets:
+
+```py
+>>> from datasets import load_dataset, Audio
+
+>>> minds = load_dataset("PolyAI/minds14", name="en-US", split="train")
+```
+
+قم بتقسيم مجموعة بيانات `train` إلى مجموعة بيانات أصغر للتدريب والاختبار باستخدام طريقة [`~datasets.Dataset.train_test_split`]. سيعطيك هذا فرصة للتجربة والتأكد من أن كل شيء يعمل قبل قضاء المزيد من الوقت على مجموعة البيانات الكاملة.
+
+```py
+>>> minds = minds.train_test_split(test_size=0.2)
+```
+
+ثم ألق نظرة على مجموعة البيانات:
+
+```py
+>>> minds
+DatasetDict({
+    train: Dataset({
+        features: ['path', 'audio', 'transcription', 'english_transcription', 'intent_class', 'lang_id'],
+        num_rows: 450
+    })
+    test: Dataset({
+        features: ['path', 'audio', 'transcription', 'english_transcription', 'intent_class', 'lang_id'],
+        num_rows: 113
+    })
+})
+```
+
+في حين أن مجموعة البيانات تحتوي على الكثير من المعلومات المفيدة، مثل `lang_id` و `english_transcription`، ستركز في هذا الدليل على `audio` و `intent_class`. قم بإزالة الأعمدة الأخرى باستخدام طريقة [`~datasets.Dataset.remove_columns`]:
+
+```py
+>>> minds = minds.remove_columns(["path", "transcription", "english_transcription", "lang_id"])
+```
+
+ألق نظرة على مثال الآن:
+
+```py
+>>> minds["train"][0]
+{'audio': {'array': array([ 0.        ,  0.        ,  0.        , ..., -0.00048828,
+         -0.00024414, -0.00024414], dtype=float32),
+  'path': '/root/.cache/huggingface/datasets/downloads/extracted/f14948e0e84be638dd7943ac36518a4cf3324e8b7aa331c5ab11541518e9368c/en-US~APP_ERROR/602b9a5fbb1e6d0fbce91f52.wav',
+  'sampling_rate': 8000},
+ 'intent_class': 2}
+```
+
+هناك حقلان:
+
+- `audio`: مصفوفة أحادية البعد للإشارة الصوتية التي يجب استدعاؤها لتحميل وموازنة ملف الصوت.
+- `intent_class`: يمثل معرف فئة نية المتحدث.
+
+لتسهيل حصول النموذج على اسم التسمية من معرف التسمية، قم بإنشاء قاموس يقوم بتعيين اسم التسمية إلى عدد صحيح والعكس بالعكس:
+
+```py
+>>> labels = minds["train"].features["intent_class"].names
+>>> label2id, id2label = dict(), dict()
+>>> for i, label in enumerate(labels):
+...     label2id[label] = str(i)
+...     id2label[str(i)] = label
+```
+
+الآن يمكنك تحويل معرف التسمية إلى اسم التسمية:
+
+```py
+>>> id2label[str(2)]
+'app_error'
+```
+
+## المعالجة المسبقة
+
+الخطوة التالية هي تحميل مستخرج ميزات Wav2Vec2 لمعالجة الإشارة الصوتية:
+
+```py
+>>> from transformers import AutoFeatureExtractor
+
+>>> feature_extractor = AutoFeatureExtractor.from_pretrained("facebook/wav2vec2-base")
+```
+
+تبلغ نسبة أخذ العينات في مجموعة بيانات MInDS-14 8000 كيلو هرتز (يمكنك العثور على هذه المعلومات في [بطاقة مجموعة البيانات](https://huggingface.co/datasets/PolyAI/minds14))، مما يعني أنك ستحتاج إلى إعادة أخذ عينات من مجموعة البيانات إلى 16000 كيلو هرتز لاستخدام نموذج Wav2Vec2 المُدرب مسبقًا:
+
+```py
+>>> minds = minds.cast_column("audio", Audio(sampling_rate=16_000))
+>>> minds["train"][0]
+{'audio': {'array': array([ 2.2098757e-05,  4.6582241e-05, -2.2803260e-05, ...,
+         -2.8419291e-04, -2.3305941e-04, -1.1425107e-04], dtype=float32),
+  'path': '/root/.cache/huggingface/datasets/downloads/extracted/f14948e0e84be638dd7943ac36518a4cf3324e8b7aa331c5ab11541518e9368c/en-US~APP_ERROR/602b9a5fbb1e6d0fbce91f52.wav',
+  'sampling_rate': 16000},
+ 'intent_class': 2}
+```
+
+الآن قم بإنشاء دالة معالجة مسبقة تقوم بما يلي:
+
+1. استدعاء عمود `audio` لتحميل، وإذا لزم الأمر، موازنة ملف الصوت.
+2. التحقق مما إذا كانت نسبة أخذ العينات لملف الصوت تتطابق مع نسبة أخذ العينات لبيانات الصوت التي تم تدريب النموذج عليها مسبقًا. يمكنك العثور على هذه المعلومات في بطاقة نموذج Wav2Vec2 [model card](https://huggingface.co/facebook/wav2vec2-base).
+3. تعيين طول إدخال أقصى لدفعات الإدخالات الأطول دون تقطيعها.
+
+```py
+>>> def preprocess_function(examples):
+...     audio_arrays = [x["array"] for x in examples["audio"]]
+...     inputs = feature_extractor(
+...         audio_arrays, sampling_rate=feature_extractor.sampling_rate, max_length=16000, truncation=True
+...     )
+...     return inputs
+```
+
+لتطبيق دالة المعالجة المسبقة على مجموعة البيانات بالكامل، استخدم وظيفة 🤗 Datasets [`~datasets.Dataset.map`]. يمكنك تسريع `map` عن طريق تعيين `batched=True` لمعالجة عناصر متعددة من مجموعة البيانات في وقت واحد. قم بإزالة الأعمدة التي لا تحتاجها، وأعد تسمية `intent_class` إلى `label` لأن هذا هو الاسم الذي يتوقعه النموذج:
+
+```py
+>>> encoded_minds = minds.map(preprocess_function, remove_columns="audio", batched=True)
+>>> encoded_minds = encoded_minds.rename_column("intent_class", "label")
+```
+
+## التقييم
+
+غالبًا ما يكون تضمين مقياس أثناء التدريب مفيدًا لتقييم أداء نموذجك. يمكنك تحميل طريقة تقييم بسرعة باستخدام مكتبة 🤗 [Evaluate](https://huggingface.co/docs/evaluate/index). بالنسبة لهذه المهمة، قم بتحميل مقياس [الدقة](https://huggingface.co/spaces/evaluate-metric/accuracy) (راجع جولة 🤗 Evaluate [quick tour](https://huggingface.co/docs/evaluate/a_quick_tour) لمعرفة المزيد حول كيفية تحميل وحساب مقياس):
+
+```py
+>>> import evaluate
+
+>>> accuracy = evaluate.load("accuracy")
+```
+
+ثم قم بإنشاء دالة تقوم بتمرير تنبؤاتك وتسمياتك إلى [`~evaluate.EvaluationModule.compute`] لحساب الدقة:
+
+```py
+>>> import numpy as np
+
+
+>>> def compute_metrics(eval_pred):
+...     predictions = np.argmax(eval_pred.predictions, axis=1)
+...     return accuracy.compute(predictions=predictions, references=eval_pred.label_ids)
+```
+
+دالة `compute_metrics` الخاصة بك جاهزة الآن، وستعود إليها عند إعداد تدريبك.
+
+## التدريب
+
+<frameworkcontent>
+<pt>
+<Tip>
+
+إذا لم تكن على دراية بضبط نموذج باستخدام [`Trainer`], ألق نظرة على الدليل التعليمي الأساسي [هنا](../training#train-with-pytorch-trainer)!
+
+</Tip>
+
+أنت مستعد الآن لبدء تدريب نموذجك! قم بتحميل Wav2Vec2 باستخدام [`AutoModelForAudioClassification`] جنبًا إلى جنب مع عدد التسميات المتوقعة، وتعيينات التسميات:
+
+```py
+>>> from transformers import AutoModelForAudioClassification, TrainingArguments, Trainer
+
+>>> num_labels = len(id2label)
+>>> model = AutoModelForAudioClassification.from_pretrained(
+...     "facebook/wav2vec2-base", num_labels=num_labels, label2id=label2id, id2label=id2label
+... )
+```
+في هذه المرحلة، تبقى ثلاث خطوات فقط:
+
+1. حدد معلمات التدريب الخاصة بك في [`TrainingArguments`]. المعلمة الوحيدة المطلوبة هي `output_dir` والتي تحدد مكان حفظ نموذجك. سترسل هذا النموذج إلى المركز من خلال تعيين `push_to_hub=True` (يجب أن تكون مسجلاً في Hugging Face لتحميل نموذجك). في نهاية كل حقبة، سيقوم [`Trainer`] بتقييم الدقة وحفظ نقطة تفتيش التدريب.
+2. مرر حجج التدريب إلى [`Trainer`] جنبًا إلى جنب مع النموذج، ومجموعة البيانات، والمحلل، ومجمع البيانات، ووظيفة `compute_metrics`.
+3. استدعاء [`~Trainer.train`] لتعديل نموذجك.
+
+```py
+>>> training_args = TrainingArguments(
+...     output_dir="my_awesome_mind_model",
+...     eval_strategy="epoch",
+...     save_strategy="epoch",
+...     learning_rate=3e-5,
+...     per_device_train_batch_size=32,
+...     gradient_accumulation_steps=4,
+...     per_device_eval_batch_size=32,
+...     num_train_epochs=10,
+...     warmup_ratio=0.1,
+...     logging_steps=10,
+...     load_best_model_at_end=True,
+...     metric_for_best_model="accuracy",
+...     push_to_hub=True,
+... )
+
+>>> trainer = Trainer(
+...     model=model,
+...     args=training_args,
+...     train_dataset=encoded_minds["train"],
+...     eval_dataset=encoded_minds["test"],
+...     processing_class=feature_extractor,
+...     compute_metrics=compute_metrics,
+... )
+
+>>> trainer.train()
+```
+
+بمجرد اكتمال التدريب، شارك نموذجك في المركز باستخدام طريقة [`~transformers.Trainer.push_to_hub`] حتى يتمكن الجميع من استخدام نموذجك:
+
+```py
+>>> trainer.push_to_hub()
+```
+</frameworkcontent>
+
+<Tip>
+
+للحصول على مثال أكثر عمقًا حول كيفية تعديل نموذج لتصنيف الصوت، اطلع على دفتر ملاحظات PyTorch المقابل [PyTorch notebook](https://colab.research.google.com/github/huggingface/notebooks/blob/main/examples/audio_classification.ipynb).
+
+</Tip>
+
+## الاستدلال
+
+رائع، الآن بعد أن قمت بتعديل نموذج، يمكنك استخدامه للاستدلال!
+
+قم بتحميل ملف صوتي تريد تشغيل الاستدلال عليه. تذكر إعادة أخذ عينة من معدل أخذ العينات للملف الصوتي لمطابقة معدل أخذ العينات للنموذج إذا كنت بحاجة إلى ذلك!
+
+```py
+>>> from datasets import load_dataset, Audio
+
+>>> dataset = load_dataset("PolyAI/minds14", name="en-US", split="train")
+>>> dataset = dataset.cast_column("audio", Audio(sampling_rate=16000))
+>>> sampling_rate = dataset.features["audio"].sampling_rate
+>>> audio_file = dataset[0]["audio"]["path"]
+```
+
+أبسط طريقة لتجربة نموذجك المعدل للاستدلال هي استخدامه في [`pipeline`]. قم بتنفيذ `pipeline` لتصنيف الصوت مع نموذجك، ومرر ملف الصوت الخاص بك إليه:
+
+```py
+>>> from transformers import pipeline
+
+>>> classifier = pipeline("audio-classification", model="stevhliu/my_awesome_minds_model")
+>>> classifier(audio_file)
+[
+    {'score': 0.09766869246959686, 'label': 'cash_deposit'},
+    {'score': 0.07998877018690109, 'label': 'app_error'},
+    {'score': 0.0781070664525032, 'label': 'joint_account'},
+    {'score': 0.07667109370231628, 'label': 'pay_bill'},
+    {'score': 0.0755252093076706, 'label': 'balance'}
+]
+```
+
+يمكنك أيضًا تكرار نتائج `pipeline` يدويًا إذا أردت:
+
+<frameworkcontent>
+<pt>
+قم بتحميل مستخرج الميزات لمعالجة ملف الصوت وإرجاع `input` كمتجهات PyTorch:
+
+```py
+>>> from transformers import AutoFeatureExtractor
+
+>>> feature_extractor = AutoFeatureExtractor.from_pretrained("stevhliu/my_awesome_minds_model")
+>>> inputs = feature_extractor(dataset[0]["audio"]["array"], sampling_rate=sampling_rate, return_tensors="pt")
+```
+
+مرر مدخلاتك إلى النموذج وأرجع اللوغاريتمات:
+
+```py
+>>> from transformers import AutoModelForAudioClassification
+
+>>> model = AutoModelForAudioClassification.from_pretrained("stevhliu/my_awesome_minds_model")
+>>> with torch.no_grad():
+...     logits = model(**inputs).logits
+```
+
+احصل على الفئة ذات الاحتمالية الأعلى، واستخدم خريطة `id2label` للنموذج لتحويلها إلى تسمية:
+
+```py
+>>> import torch
+
+>>> predicted_class_ids = torch.argmax(logits).item()
+>>> predicted_label = model.config.id2label[predicted_class_ids]
+>>> predicted_label
+'cash_deposit'
+```
+</pt>
+</frameworkcontent>
+```
