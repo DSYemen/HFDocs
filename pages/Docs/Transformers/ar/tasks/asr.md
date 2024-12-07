@@ -1,1 +1,365 @@
-PCEtLSDYrdmC2YjZgiDYp9mE2YbYtNixIDIwMjMg2YHYsdmK2YIgSHVnZ2luZ0ZhY2UuINis2YXZiti5INin2YTYrdmC2YjZgiDZhdit2YHZiNi42KkuCgrZhdix2K7YtSDYqNmF2YjYrNioINix2K7YtdipINij2KjYp9iq2LTZitiMINin2YTYpdi12K/Yp9ixIDIuMCAo2KfZhNix2K7YtdipKdibINmE2Kcg2YrYrNmI2LIg2YTZgyDYp9iz2KrYrtiv2KfZhSDZh9iw2Kcg2KfZhNmF2YTZgSDYpdmE2Kcg2YjZgdmC2YvYpyDZhNi02LHZiNi3INin2YTYsdiu2LXYqS4g2YrZhdmD2YbZgyDYp9mE2K3YtdmI2YQg2LnZhNmJINmG2LPYrtipINmF2YYg2KfZhNix2K7YtdipINi52YTZiQoKaHR0cDovL3d3dy5hcGFjaGUub3JnL2xpY2Vuc2VzL0xJQ0VOU0UtMi4wCgrZhdinINmE2YUg2YrYqti32YTYqCDYp9mE2YLYp9mG2YjZhiDYp9mE2YXYudmF2YjZhCDYqNmHINij2Ygg2YrYqtmFINin2YTYp9iq2YHYp9mCINi52YTZitmHINmD2KrYp9io2YrZi9in2Iwg2YrYqtmFINiq2YjYstmK2Lkg2KfZhNio2LHYp9mF2Kwg2KfZhNmF2YjYsti52Kkg2KjZhdmI2KzYqCDYp9mE2LHYrti12Kkg2LnZhNmJINij2LPYp9izICLZg9mF2Kcg2YfZiiIg2K/ZiNmGINij2Yog2LbZhdin2YbYp9iqINij2Ygg2LTYsdmI2Lcg2YXZhiDYo9mKINmG2YjYudiMINiz2YjYp9ihINmD2KfZhtiqINi12LHZitit2Kkg2KPZiCDYttmF2YbZitipLiDYsdin2KzYuSDYp9mE2LHYrti12Kkg2YTZhNit2LXZiNmEINi52YTZiSDYp9mE2YTYutipINin2YTZhdit2K/Yr9ipINin2YTYqtmKINiq2K3Zg9mFINin2YTYo9iw2YjZhtin2Kog2YjYp9mE2YLZitmI2K8g2KjZhdmI2KzYqCDYp9mE2LHYrti12KkuCgrimqDvuI8g2YrYsdis2Ykg2YXZhNin2K3YuNipINij2YYg2YfYsNinINin2YTZhdmE2YEg2YXZg9iq2YjYqCDYqNmE2LrYqSBNYXJrZG93biDZiNmE2YPZhtmHINmK2K3YqtmI2Yog2LnZhNmJINio2YbYp9ihINis2YXZhNipINmF2K3Yr9iv2Kkg2YTYqNmG2KfYoSDYp9mE2YjYq9in2KbZgiDZhNiv2YrZhtinICjZiti02KjZhyBNRFgpINmI2KfZhNiq2Yog2YLYryDZhNinINmK2KrZhSDYudix2LbZh9inINio2LTZg9mEINi12K3ZititINmB2Yog2LnYp9ix2LYgTWFya2Rvd24g2KfZhNiu2KfYtSDYqNmDLgoKLS0+CgojINin2YTYqti52LHZgSDYp9mE2KrZhNmC2KfYptmKINi52YTZiSDYp9mE2YPZhNin2YUKCltbb3Blbi1pbi1jb2xhYl1dCgo8WW91dHViZSBpZD0iVGtzYVlfRkRnbmsiLz4KCtin2YTYqti52LHZgSDYp9mE2KrZhNmC2KfYptmKINi52YTZiSDYp9mE2YPZhNin2YUgKEFTUikg2YrYrdmI2YQg2KXYtNin2LHYqSDYp9mE2YPZhNin2YUg2KXZhNmJINmG2LXYjCDZhdmF2Kcg2YrYqtmK2K0g2LHYs9mFINiu2LHZiti32Kkg2YTYs9mE2LPZhNipINmF2YYg2KfZhNmF2K/YrtmE2KfYqiDYp9mE2LXZiNiq2YrYqSDYpdmE2Ykg2YXYrtix2KzYp9iqINmG2LXZitipLiDYqtiz2KrYrtiv2YUg2KfZhNmF2LPYp9i52K/Yp9iqINin2YTYp9mB2KrYsdin2LbZitipINmF2KvZhCBTaXJpINmIQWxleGEg2YbZhdin2LDYrCBBU1Ig2YTZhdiz2KfYudiv2Kkg2KfZhNmF2LPYqtiu2K/ZhdmK2YYg2YrZiNmF2YrZi9in2Iwg2YjZh9mG2KfZgyDYp9mE2LnYr9mK2K8g2YXZhiDYp9mE2KrYt9io2YrZgtin2Kog2KfZhNmF2YHZitiv2Kkg2KfZhNij2K7YsdmJINin2YTYqtmKINiq2YjYp9is2Ycg2KfZhNmF2LPYqtiu2K/ZhdmK2YYg2YXYq9mEINin2YTYqtix2KzZhdipINin2YTZgdmI2LHZitipINmI2KrYr9mI2YrZhiDYp9mE2YXZhNin2K3YuNin2Kog2KPYq9mG2KfYoSDYp9mE2KfYrNiq2YXYp9i52KfYqi4KCtiz2YrZiNi22K0g2YTZgyDZh9iw2Kcg2KfZhNiv2YTZitmEINmD2YrZgdmK2Kk6CgoxLiDYttio2Lcg2YbZhdmI2LDYrCBbV2F2MlZlYzJdKGh0dHBzOi8vaHVnZ2luZ2ZhY2UuY28vZmFjZWJvb2svd2F2MnZlYzItYmFzZSkg2LnZhNmJINmF2KzZhdmI2LnYqSDYqNmK2KfZhtin2KogW01JbkRTLTE0XShodHRwczovL2h1Z2dpbmdmYWNlLmNvL2RhdGFzZXRzL1BvbHlBSS9taW5kczE0KSDZhNmG2LPYriDYp9mE2LXZiNiqINil2YTZiSDZhti1LgoyLiDYp9iz2KrYrtiv2KfZhSDZhtmF2YjYsNis2YMg2KfZhNmF2LbYqNmI2Lcg2YTZhNin2LPYqtiv2YTYp9mELgoKPFRpcD4KCtmE2LHYpNmK2Kkg2KzZhdmK2Lkg2KfZhNio2YbZiSDZiNin2YTZhtmC2KfYtyDYp9mE2YXYsdis2LnZitipINin2YTZhdiq2YjYp9mB2YLYqSDZhdi5INmH2LDZhyDYp9mE2YXZh9mF2KnYjCDZhtmI2LXZiiDYqNin2YTYqtit2YLZgiDZhdmGIFvYtdmB2K3YqSDYp9mE2YXZh9mF2KldKGh0dHBzOi8vaHVnZ2luZ2ZhY2UuY28vdGFza3MvYXV0b21hdGljLXNwZWVjaC1yZWNvZ25pdGlvbikKCjwvVGlwPgoK2YLYqNmEINij2YYg2KrYqNiv2KPYjCDYqtij2YPYryDZhdmGINiq2KvYqNmK2Kog2KzZhdmK2Lkg2KfZhNmF2YPYqtio2KfYqiDYp9mE2LbYsdmI2LHZitipOgoKYGBgYmFzaApwaXAgaW5zdGFsbCB0cmFuc2Zvcm1lcnMgZGF0YXNldHMgZXZhbHVhdGUgaml3ZXIKYGBgCgrZhtit2YYg2YbYtNis2LnZgyDYudmE2Ykg2KrYs9is2YrZhCDYp9mE2K/YrtmI2YQg2KXZhNmJINit2LPYp9ioIEh1Z2dpbmcgRmFjZSDYp9mE2K7Yp9i1INio2YMg2K3YqtmJINiq2KrZhdmD2YYg2YXZhiDYqtit2YXZitmEINmI2YXYtNin2LHZg9ipINmG2YXZiNiw2KzZgyDZhdi5INin2YTZhdis2KrZhdi5LiDYudmG2K8g2KfZhNmF2LfYp9mE2KjYqdiMINij2K/YrtmEINix2YXYstmDINmE2KrYs9is2YrZhCDYp9mE2K/YrtmI2YQ6CgpgYGBweQo+Pj4gZnJvbSBodWdnaW5nZmFjZV9odWIgaW1wb3J0IG5vdGVib29rX2xvZ2luCgo+Pj4gbm90ZWJvb2tfbG9naW4oKQpgYGAKCiMjINiq2K3ZhdmK2YQg2YXYrNmF2YjYudipINio2YrYp9mG2KfYqiBNSW5EUy0xNAoK2KfYqNiv2KMg2KjYqtit2YXZitmEINmF2KzZhdmI2LnYqSDZgdix2LnZitipINij2LXYutixINmF2YYg2YXYrNmF2YjYudipINio2YrYp9mG2KfYqiBbTUluRFMtMTRdKGh0dHBzOi8vaHVnZ2luZ2ZhY2UuY28vZGF0YXNldHMvUG9seUFJL21pbmRzMTQpINmF2YYg2YXZg9iq2KjYqSDwn6SXIERhdGFzZXRzLiDYs9mK2LnYt9mK2YMg2YfYsNinINmB2LHYtdipINmE2YTYqtis2LHYqNipINmI2KfZhNiq2KPZg9ivINmF2YYg2KPZhiDZg9mEINi02YrYoSDZiti52YXZhCDZgtio2YQg2YLYttin2KEg2KfZhNmF2LLZitivINmF2YYg2KfZhNmI2YLYqiDZgdmKINin2YTYqtiv2LHZitioINi52YTZiSDZhdis2YXZiNi52Kkg2KfZhNio2YrYp9mG2KfYqiDYp9mE2YPYp9mF2YTYqS4KCmBgYHB5Cj4+PiBmcm9tIGRhdGFzZXRzIGltcG9ydCBsb2FkX2RhdGFzZXQsIEF1ZGlvCgo+Pj4gbWluZHMgPSBsb2FkX2RhdGFzZXQoIlBvbHlBSS9taW5kczE0IiwgbmFtZT0iZW4tVVMiLCBzcGxpdD0idHJhaW5bOjEwMF0iKQpgYGAKCtmC2YUg2KjYqtmC2LPZitmFINmF2KzZhdmI2LnYqSDYp9mE2KjZitin2YbYp9iqIGB0cmFpbmAg2KXZhNmJINmF2KzZhdmI2LnYqSDYqtiv2LHZitioINmI2YXYrNmF2YjYudipINin2K7Yqtio2KfYsSDYqNin2LPYqtiu2K/Yp9mFINi32LHZitmC2KkgW2B+RGF0YXNldC50cmFpbl90ZXN0X3NwbGl0YF06CgpgYGBweQo+Pj4gbWluZHMgPSBtaW5kcy50cmFpbl90ZXN0X3NwbGl0KHRlc3Rfc2l6ZT0wLjIpCmBgYAoK2KvZhSDYo9mE2YIg2YbYuNix2Kkg2LnZhNmJINmF2KzZhdmI2LnYqSDYp9mE2KjZitin2YbYp9iqOgoKYGBgcHkKPj4+IG1pbmRzCkRhdGFzZXREaWN0KHsKICAgIHRyYWluOiBEYXRhc2V0KHsKICAgICAgICBmZWF0dXJlczogWydwYXRoJywgJ2F1ZGlvJywgJ3RyYW5zY3JpcHRpb24nLCAnZW5nbGlzaF90cmFuc2NyaXB0aW9uJywgJ2ludGVudF9jbGFzcycsICdsYW5nX2lkJ10sCiAgICAgICAgbnVtX3Jvd3M6IDE2CiAgICB9KQogICAgdGVzdDogRGF0YXNldCh7CiAgICAgICAgZmVhdHVyZXM6IFsncGF0aCcsICdhdWRpbycsICd0cmFuc2NyaXB0aW9uJywgJ2VuZ2xpc2hfdHJhbnNjcmlwdGlvbicsICdpbnRlbnRfY2xhc3MnLCAnbGFuZ19pZCddLAogICAgICAgIG51bV9yb3dzOiA0CiAgICB9KQp9KQpgYGAKCtmB2Yog2K3ZitmGINij2YYg2YXYrNmF2YjYudipINin2YTYqNmK2KfZhtin2Kog2KrYrdiq2YjZiiDYudmE2Ykg2KfZhNmD2KvZitixINmF2YYg2KfZhNmF2LnZhNmI2YXYp9iqINin2YTZhdmB2YrYr9ip2Iwg2YXYq9mEIGBsYW5nX2lkYCDZiGBlbmdsaXNoX3RyYW5zY3JpcHRpb25g2Iwg2LPYqtix2YPYsiDZgdmKINmH2LDYpyDYp9mE2K/ZhNmK2YQg2LnZhNmJIGBhdWRpb2Ag2YhgdHJhbnNjcmlwdGlvbmAuINmC2YUg2KjYpdiy2KfZhNipINin2YTYo9i52YXYr9ipINin2YTYo9iu2LHZiSDYqNin2LPYqtiu2K/Yp9mFINi32LHZitmC2KkgW2B+ZGF0YXNldHMuRGF0YXNldC5yZW1vdmVfY29sdW1uc2BdOgoKYGBgcHkKPj4+IG1pbmRzID0gbWluZHMucmVtb3ZlX2NvbHVtbnMoWyJlbmdsaXNoX3RyYW5zY3JpcHRpb24iLCAiaW50ZW50X2NsYXNzIiwgImxhbmdfaWQiXSkKYGBgCgrYo9mE2YIg2YbYuNix2Kkg2LnZhNmJINin2YTZhdir2KfZhCDZhdix2Kkg2KPYrtix2Yk6CgpgYGBweQo+Pj4gbWluZHNbInRyYWluIl1bMF0KeydhdWRpbyc6IHsnYXJyYXknOiBhcnJheShbLTAuMDAwMjQ0MTQsICAwLiAgICAgICAgLCAgMC4gICAgICAgICwgLi4uLCAgMC4wMDAyNDQxNCwKICAgICAgICAgIDAuMDAwMjQ0MTQsICAwLjAwMDI0NDE0XSwgZHR5cGU9ZmxvYXQzMiksCiAgJ3BhdGgnOiAnL3Jvb3QvLmNhY2hlL2h1Z2dpbmdmYWNlL2RhdGFzZXRzL2Rvd25sb2Fkcy9leHRyYWN0ZWQvZjE0OTQ4ZTBlODRiZTYzOGRkNzk0M2FjMzY1MThhNGNmMzMyNGU4YjdhYTMzMWM1YWIxMTU0MTUxOGU5MzY4Yy9lbi1VU35BUFBfRVJST1IvNjAyYmE5ZTI5NjNlMTFjY2Q5MDFjZDRmLndhdicsCiAgJ3NhbXBsaW5nX3JhdGUnOiA4MDAwfSwKICdwYXRoJzogJy9yb290Ly5jYWNoZS9odWdnaW5nZmFjZS9kYXRhc2V0cy9kb3dubG9hZHMvZXh0cmFjdGVkL2YxNDk0OGUwZTg0YmU2MzhkZDc5NDNhYzM2NTE4YTRjZjMzMjRlOGI3YWEzMzFjNWFiMTE1NDE1MThlOTM2OGMvZW4tVVN+QVBQX0VSUk9SLzYwMmJhOWUyOTYzZTExY2NkOTAxY2Q0Zi53YXYnLAogJ3RyYW5zY3JpcHRpb24nOiAiaGkgSSdtIHRyeWluZyB0byB1c2UgdGhlIGJhbmtpbmcgYXBwIG9uIG15IHBob25lIGFuZCBjdXJyZW50bHkgbXkgY2hlY2tpbmcgYW5kIHNhdmluZ3MgYWNjb3VudCBiYWxhbmNlIGlzIG5vdCByZWZyZXNoaW5nIn0KYGBgCgrZh9mG2KfZgyDYrdmC2YjZhNin2YY6CgotIGBhdWRpb2A6INmF2LXZgdmI2YHYqSDYo9it2KfYr9mK2Kkg2KfZhNio2LnYryDZhNil2LTYp9ix2Kkg2KfZhNmD2YTYp9mFINin2YTYqtmKINmK2KzYqCDYp9iz2KrYr9i52KfYpNmH2Kcg2YTYqtit2YXZitmEINmI2KrYutmK2YrYsSDYudmK2YbYqSDZhdmE2YEg2KfZhNi12YjYqi4KLSBgdHJhbnNjcmlwdGlvbmA6INin2YTZhti1INin2YTZhdiz2KrZh9iv2YEuCgojIyDYp9mE2YXYudin2YTYrNipINin2YTZhdiz2KjZgtipCgrYp9mE2K7Yt9mI2Kkg2KfZhNiq2KfZhNmK2Kkg2YfZiiDYqtit2YXZitmEINmF2LnYp9mE2KwgV2F2MlZlYzIg2YTZhdi52KfZhNis2Kkg2KXYtNin2LHYqSDYp9mE2LXZiNiqOgoKYGBgcHkKPj4+IGZyb20gdHJhbnNmb3JtZXJzIGltcG9ydCBBdXRvUHJvY2Vzc29yCgo+Pj4gcHJvY2Vzc29yID0gQXV0b1Byb2Nlc3Nvci5mcm9tX3ByZXRyYWluZWQoImZhY2Vib29rL3dhdjJ2ZWMyLWJhc2UiKQpgYGAKCtiq2KjZhNi6INmG2LPYqNipINij2K7YsCDYp9mE2LnZitmG2KfYqiDZhNmF2KzZhdmI2LnYqSDYqNmK2KfZhtin2KogTUluRFMtMTQgODAwMCDZg9mK2YTZiCDZh9ix2KrYsiAo2YrZhdmD2YbZgyDYp9mE2LnYq9mI2LEg2LnZhNmJINmH2LDZhyDYp9mE2YXYudmE2YjZhdin2Kog2YHZiiBb2KjYt9in2YLYqSDZhdis2YXZiNi52Kkg2KfZhNio2YrYp9mG2KfYql0oaHR0cHM6Ly9odWdnaW5nZmFjZS5jby9kYXRhc2V0cy9Qb2x5QUkvbWluZHMxNCkp2Iwg2YXZhdinINmK2LnZhtmKINij2YbZhyDYs9mK2KrYudmK2YYg2LnZhNmK2YMg2KXYudin2K/YqSDYo9iu2LAg2LnZitmG2KfYqiDZhdmGINmF2KzZhdmI2LnYqSDYp9mE2KjZitin2YbYp9iqINil2YTZiSAxNjAwMCDZg9mK2YTZiCDZh9ix2KrYsiDZhNin2LPYqtiu2K/Yp9mFINmG2YXZiNiw2KwgV2F2MlZlYzIg2KfZhNmF2LPYqNmCINin2YTYqtiv2LHZitioOgoKYGBgcHkKPj4+IG1pbmRzID0gbWluZHMuY2FzdF9jb2x1bW4oImF1ZGlvIiwgQXVkaW8oc2FtcGxpbmdfcmF0ZT0xNl8wMDApKQo+Pj4gbWluZHNbInRyYWluIl1bMF0KeydhdWRpbyc6IHsnYXJyYXknOiBhcnJheShbLTIuMzgwNjQ3MDZlLTA0LCAtMS41ODYxODA1OWUtMDQsIC01LjQzOTg3ODM1ZS0wNiwgLi4uLAogICAgICAgICAgMi43ODEwMzk1MWUtMDQsICAyLjM4NDQ2MTExZS0wNCwgIDEuMTg3NDA4MzRlLTA0XSwgZHR5cGU9ZmxvYXQzMiksCiAgJ3BhdGgnOiAnL3Jvb3QvLmNhY2hlL2h1Z2dpbmdmYWNlL2RhdGFzZXRzL2Rvd25sb2Fkcy9leHRyYWN0ZWQvZjE0OTQ4ZTBlODRiZTYzOGRkNzk0M2FjMzY1MThhNGNmMzMyNGU4YjdhYTMzMWM1YWIxMTU0MTUxOGU5MzY4Yy9lbi1VU35BUFBfRVJST1IvNjAyYmE5ZTI5NjNlMTFjY2Q5MDFjZDRmLndhdicsCiAgJ3NhbXBsaW5nX3JhdGUnOiAxNjAwMH0sCiAncGF0aCc6ICcvcm9vdC8uY2FjaGUvaHVnZ2luZ2ZhY2UvZGF0YXNldHMvZG93bmxvYWRzL2V4dHJhY3RlZC9mMTQ5NDhlMGU4NGJlNjM4ZGQ3OTQzYWMzNjUxOGE0Y2YzMzI0ZThiN2FhMzMxYzVhYjExNTQxNTE4ZTkzNjhjL2VuLVVTfkFQUF9FUlJPUi82MDJiYTllMjk2M2UxMWNjZDkwMWNkNGYud2F2JywKICd0cmFuc2NyaXB0aW9uJzogImhpIEknbSB0cnlpbmcgdG8gdXNlIHRoZSBiYW5raW5nIGFwcCBvbiBteSBwaG9uZSBhbmQgY3VycmVudGx5IG15IGNoZWNraW5nIGFuZCBzYXZpbmdzIGFjY291bnQgYmFsYW5jZSBpcyBub3QgcmVmcmVzaGluZyJ9CmBgYAoK2YPZhdinINmK2YXZg9mG2YMg2KPZhiDYqtix2Ykg2YHZiiBgdHJhbnNjcmlwdGlvbmAg2KPYudmE2KfZh9iMINmK2K3YqtmI2Yog2KfZhNmG2LUg2LnZhNmJINmF2LLZitisINmF2YYg2KfZhNij2K3YsdmBINin2YTZg9io2YrYsdipINmI2KfZhNi12LrZitix2KkuINmF2K/YsdioINmF2LnYp9mE2KwgV2F2MlZlYzIg2YHZgti3INi52YTZiSDYp9mE2KPYrdix2YEg2KfZhNmD2KjZitix2KnYjCDZhNiw2YTZgyDYs9iq2K3Yqtin2Kwg2KXZhNmJINin2YTYqtij2YPYryDZhdmGINij2YYg2KfZhNmG2LUg2YrYqti32KfYqNmCINmF2Lkg2YXZgdix2K/Yp9iqINin2YTZhdi52KfZhNisOgoKYGBgcHkKPj4+IGRlZiB1cHBlcmNhc2UoZXhhbXBsZSk6Ci4uLiAgICAgcmV0dXJuIHsidHJhbnNjcmlwdGlvbiI6IGV4YW1wbGVbInRyYW5zY3JpcHRpb24iXS51cHBlcigpfQoKCj4+PiBtaW5kcyA9IG1pbmRzLm1hcCh1cHBlcmNhc2UpCmBgYAoK2KfZhNii2YYg2YLZhSDYqNil2YbYtNin2KEg2K/Yp9mE2Kkg2YXYudin2YTYrNipINmF2LPYqNmC2Kkg2KrZgtmI2YUg2KjZhdinINmK2YTZijoKCjEuINin2LPYqtiv2LnYp9ihINi52YXZiNivIGBhdWRpb2Ag2YTYqtit2YXZitmEINmI2KrYutmK2YrYsSDYudmK2YbYqSDZhdmE2YEg2KfZhNi12YjYqi4KMi4g2KfYs9iq2K7Ysdin2KwgYGlucHV0X3ZhbHVlc2Ag2YXZhiDZhdmE2YEg2KfZhNi12YjYqiDZiNiq2LTZgdmK2LEg2LnZhdmI2K8gYHRyYW5zY3JpcHRpb25gINio2KfYs9iq2K7Yr9in2YUg2KfZhNmF2LnYp9mE2KwuCgpgYGBweQo+Pj4gZGVmIHByZXBhcmVfZGF0YXNldChiYXRjaCk6Ci4uLiAgICAgYXVkaW8gPSBiYXRjaFsiYXVkaW8iXQouLi4gICAgIGJhdGNoID0gcHJvY2Vzc29yKGF1ZGlvWyJhcnJheSJdLCBzYW1wbGluZ19yYXRlPWF1ZGlvWyJzYW1wbGluZ19yYXRlIl0sIHRleHQ9YmF0Y2hbInRyYW5zY3JpcHRpb24iXSkKLi4uICAgICBiYXRjaFsiaW5wdXRfbGVuZ3RoIl0gPSBsZW4oYmF0Y2hbImlucHV0X3ZhbHVlcyJdWzBdKQouLi4gICAgIHJldHVybiBiYXRjaApgYGAKCtmE2KrYt9io2YrZgiDYr9in2YTYqSDYp9mE2YXYudin2YTYrNipINin2YTZhdiz2KjZgtipINi52YTZiSDZhdis2YXZiNi52Kkg2KfZhNio2YrYp9mG2KfYqiDYqNij2YPZhdmE2YfYp9iMINin2LPYqtiu2K/ZhSDZiNi42YrZgdipIPCfpJcgRGF0YXNldHMgW2B+ZGF0YXNldHMuRGF0YXNldC5tYXBgXS4g2YrZhdmD2YbZgyDYqtiz2LHZiti5IGBtYXBgINi52YYg2LfYsdmK2YIg2LLZitin2K/YqSDYudiv2K8g2KfZhNi52YXZhNmK2KfYqiDYqNin2LPYqtiu2K/Yp9mFINmF2LnZhNmF2KkgYG51bV9wcm9jYC4g2YLZhSDYqNil2LLYp9mE2Kkg2KfZhNij2LnZhdiv2Kkg2KfZhNiq2Yog2YTYpyDYqtit2KrYp9is2YfYpyDYqNin2LPYqtiu2K/Yp9mFINi32LHZitmC2KkgW2B+ZGF0YXNldHMuRGF0YXNldC5yZW1vdmVfY29sdW1uc2BdOgoKYGBgcHkKPj4+IGVuY29kZWRfbWluZHMgPSBtaW5kcy5tYXAocHJlcGFyZV9kYXRhc2V0LCByZW1vdmVfY29sdW1ucz1taW5kcy5jb2x1bW5fbmFtZXNbInRyYWluIl0sIG51bV9wcm9jPTQpCvCfpJcg2KrYsdin2YbYs9mB2YjYsdmF2LHYsiDZhNinINmK2K3YqtmI2Yog2LnZhNmJINij2K/Yp9ipINiq2KzZhdmK2Lkg2KjZitin2YbYp9iqINmE2KrYudix2YEg2KfZhNmD2YTYp9mFINin2YTYqtmE2YLYp9im2YrYjCDZhNiw2YTZgyDYs9iq2K3Yqtin2Kwg2KXZhNmJINiq2YPZitmK2YEgW2BEYXRhQ29sbGF0b3JXaXRoUGFkZGluZ2BdINmE2KXZhti02KfYoSDYr9mB2LnYqSDZhdmGINin2YTYo9mF2KvZhNipLiDZg9mF2Kcg2KPZhtmH2Kcg2LPYqtmC2YjZhSDYqtmE2YLYp9im2YrZi9inINio2YXZhNihINmB2LHYp9i62KfYqiDZhti12YMg2YjYudmE2KfZhdin2KrZgyDYpdmE2Ykg2LfZiNmEINin2YTYudmG2LXYsSDYp9mE2KPYt9mI2YQg2YHZiiDYr9mB2LnYqtmH2KcgKNio2K/ZhNin2Ysg2YXZhiDZhdis2YXZiNi52Kkg2KfZhNio2YrYp9mG2KfYqiDYqNij2YPZhdmE2YfYpykg2KjYrdmK2Ksg2KrZg9mI2YYg2LDYp9iqINi32YjZhCDZhdmI2K3Yry4g2LnZhNmJINin2YTYsdi62YUg2YXZhiDYo9mG2Ycg2YXZhiDYp9mE2YXZhdmD2YYg2YXZhNihINmB2LHYp9i62KfYqiDZhti12YMg2YHZiiDZiNi42YrZgdipIGB0b2tlbml6ZXJgINi52YYg2LfYsdmK2YIg2KrYudmK2YrZhiBgcGFkZGluZz1UcnVlYNiMINil2YTYpyDYo9mGINin2YTZhdmE2KEg2KfZhNiv2YrZhtin2YXZitmD2Yog2YTZhNmB2LHYp9i62KfYqiDYo9mD2KvYsSDZg9mB2KfYodipLgoK2LnZhNmJINi52YPYsyDYo9iv2YjYp9iqINiq2KzZhdmK2Lkg2KfZhNio2YrYp9mG2KfYqiDYp9mE2KPYrtix2YnYjCDYqtit2KrYp9isINmH2LDZhyDYp9mE2KPYr9in2Kkg2KfZhNmF2K3Yr9iv2Kkg2YTYqtis2YXZiti5INin2YTYqNmK2KfZhtin2Kog2KXZhNmJINiq2LfYqNmK2YIg2LfYsdmK2YLYqSDZhdmE2KEg2YHYsdin2LrYp9iqINmF2K7YqtmE2YHYqSDYudmE2YkgYGlucHV0X3ZhbHVlc2Ag2YhgbGFiZWxzYDoKCmBgYHB5Cj4+PiBpbXBvcnQgdG9yY2gKCj4+PiBmcm9tIGRhdGFjbGFzc2VzIGltcG9ydCBkYXRhY2xhc3MsIGZpZWxkCj4+PiBmcm9tIHR5cGluZyBpbXBvcnQgQW55LCBEaWN0LCBMaXN0LCBPcHRpb25hbCwgVW5pb24KCgo+Pj4gQGRhdGFjbGFzcwouLi4gY2xhc3MgRGF0YUNvbGxhdG9yQ1RDV2l0aFBhZGRpbmc6Ci4uLiAgICAgcHJvY2Vzc29yOiBBdXRvUHJvY2Vzc29yCi4uLiAgICAgcGFkZGluZzogVW5pb25bYm9vbCwgc3RyXSA9ICJsb25nZXN0IgoKLi4uICAgICBkZWYgX19jYWxsX18oc2VsZiwgZmVhdHVyZXM6IExpc3RbRGljdFtzdHIsIFVuaW9uW0xpc3RbaW50XSwgdG9yY2guVGVuc29yXV1dKSAtPiBEaWN0W3N0ciwgdG9yY2guVGVuc29yXToKLi4uICAgICAgICAgIyBzcGxpdCBpbnB1dHMgYW5kIGxhYmVscyBzaW5jZSB0aGV5IGhhdmUgdG8gYmUgb2YgZGlmZmVyZW50IGxlbmd0aHMgYW5kIG5lZWQKLi4uICAgICAgICAgIyBkaWZmZXJlbnQgcGFkZGluZyBtZXRob2RzCi4uLiAgICAgICAgIGlucHV0X2ZlYXR1cmVzID0gW3siaW5wdXRfdmFsdWVzIjogZmVhdHVyZVsiaW5wdXRfdmFsdWVzIl1bMF19IGZvciBmZWF0dXJlIGluIGZlYXR1cmVzXQouLi4gICAgICAgICBsYWJlbF9mZWF0dXJlcyA9IFt7ImlucHV0X2lkcyI6IGZlYXR1cmVbImxhYmVscyJdfSBmb3IgZmVhdHVyZSBpbiBmZWF0dXJlc10KCi4uLiAgICAgICAgIGJhdGNoID0gc2VsZi5wcm9jZXNzb3IucGFkKGlucHV0X2ZlYXR1cmVzLCBwYWRkaW5nPXNlbGYucGFkZGluZywgcmV0dXJuX3RlbnNvcnM9InB0IikKCi4uLiAgICAgICAgIGxhYmVsc19iYXRjaCA9IHNlbGYucHJvY2Vzc29yLnBhZChsYWJlbHM9bGFiZWxfZmVhdHVyZXMsIHBhZGRpbmc9c2VsZi5wYWRkaW5nLCByZXR1cm5fdGVuc29ycz0icHQiKQoKLi4uICAgICAgICAgIyByZXBsYWNlIHBhZGRpbmcgd2l0aCAtMTAwIHRvIGlnbm9yZSBsb3NzIGNvcnJlY3RseQouLi4gICAgICAgICBsYWJlbHMgPSBsYWJlbHNfYmF0Y2hbImlucHV0X2lkcyJdLm1hc2tlZF9maWxsKGxhYmVsc19iYXRjaC5hdHRlbnRpb25fbWFzay5uZSgxKSwgLTEwMCkKCi4uLiAgICAgICAgIGJhdGNoWyJsYWJlbHMiXSA9IGxhYmVscwoKLi4uICAgICAgICAgcmV0dXJuIGJhdGNoCmBgYAoK2KfZhNii2YYg2YLZhSDYqNil2YbYtNin2KEg2YXYq9mK2YQg2YTZgCBgRGF0YUNvbGxhdG9yRm9yQ1RDV2l0aFBhZGRpbmdgOgoKYGBgcHkKPj4+IGRhdGFfY29sbGF0b3IgPSBEYXRhQ29sbGF0b3JDVENXaXRoUGFkZGluZyhwcm9jZXNzb3I9cHJvY2Vzc29yLCBwYWRkaW5nPSJsb25nZXN0IikKYGBgCgojIyDYp9mE2KrZgtmK2YrZhQoK2LrYp9mE2KjZi9inINmF2Kcg2YrZg9mI2YYg2KrYttmF2YrZhiDZhdmC2YrYp9izINij2KvZhtin2KEg2KfZhNiq2K/YsdmK2Kgg2YXZgdmK2K/Zi9inINmE2KrZgtmK2YrZhSDYo9iv2KfYoSDZhtmF2YjYsNis2YMuINmK2YXZg9mG2YMg2KrYrdmF2YrZhCDYt9ix2YrZgtipINiq2YLZitmK2YUg2KjYs9ix2LnYqSDYqNin2LPYqtiu2K/Yp9mFINmF2YPYqtio2Kkg8J+klyBbRXZhbHVhdGVdKGh0dHBzOi8vaHVnZ2luZ2ZhY2UuY28vZG9jcy9ldmFsdWF0ZS9pbmRleCkuINio2KfZhNmG2LPYqNipINmE2YfYsNmHINin2YTZhdmH2YXYqdiMINmC2YUg2KjYqtit2YXZitmEINmF2YLZitin2LMgW9mF2LnYr9mEINiu2LfYoyDYp9mE2YPZhNmF2KldKGh0dHBzOi8vaHVnZ2luZ2ZhY2UuY28vc3BhY2VzL2V2YWx1YXRlLW1ldHJpYy93ZXIpIChXRVIpICjYp9i32YTYuSDYudmE2Ykg2KzZiNmE2Kkg8J+klyBFdmFsdWF0ZSBb2KfZhNiz2LHZiti52KldKGh0dHBzOi8vaHVnZ2luZ2ZhY2UuY28vZG9jcy9ldmFsdWF0ZS9hX3F1aWNrX3RvdXIpINmE2YXYudix2YHYqSDYp9mE2YXYstmK2K8g2K3ZiNmEINmD2YrZgdmK2Kkg2KrYrdmF2YrZhCDZiNit2LPYp9ioINmF2YLZitin2LMpOgoKYGBgcHkKPj4+IGltcG9ydCBldmFsdWF0ZQoKPj4+IHdlciA9IGV2YWx1YXRlLmxvYWQoIndlciIpCmBgYAoK2KvZhSDZgtmFINio2KXZhti02KfYoSDYr9in2YTYqSDYqtmF2LHYsSDYqtmG2KjYpNin2KrZgyDZiNi52YTYp9mF2KfYqtmDINil2YTZiSBbYH5ldmFsdWF0ZS5FdmFsdWF0aW9uTW9kdWxlLmNvbXB1dGVgXSDZhNit2LPYp9ioIFdFUjoKCmBgYHB5Cj4+PiBpbXBvcnQgbnVtcHkgYXMgbnAKCgo+Pj4gZGVmIGNvbXB1dGVfbWV0cmljcyhwcmVkKToKLi4uICAgICBwcmVkX2xvZ2l0cyA9IHByZWQucHJlZGljdGlvbnMKLi4uICAgICBwcmVkX2lkcyA9IG5wLmFyZ21heChwcmVkX2xvZ2l0cywgYXhpcz0tMSkKCi4uLiAgICAgcHJlZC5sYWJlbF9pZHNbcHJlZC5sYWJlbF9pZHMgPT0gLTEwMF0gPSBwcm9jZXNzb3IudG9rZW5pemVyLnBhZF90b2tlbl9pZAoKLi4uICAgICBwcmVkX3N0ciA9IHByb2Nlc3Nvci5iYXRjaF9kZWNvZGUocHJlZF9pZHMpCi4uLiAgICAgbGFiZWxfc3RyID0gcHJvY2Vzc29yLmJhdGNoX2RlY29kZShwcmVkLmxhYmVsX2lkcywgZ3JvdXBfdG9rZW5zPUZhbHNlKQoKLi4uICAgICB3ZXIgPSB3ZXIuY29tcHV0ZShwcmVkaWN0aW9ucz1wcmVkX3N0ciwgcmVmZXJlbmNlcz1sYWJlbF9zdHIpCgouLi4gICAgIHJldHVybiB7IndlciI6IHdlcn0KYGBgCgrYr9in2YTYqSBgY29tcHV0ZV9tZXRyaWNzYCDYp9mE2K7Yp9i12Kkg2KjZgyDYrNin2YfYstipINin2YTYotmG2Iwg2YjYs9iq2LnZiNivINil2YTZitmH2Kcg2LnZhtiv2YXYpyDYqtmC2YjZhSDYqNil2LnYr9in2K8g2KrYr9ix2YrYqNmDLgoKIyMg2KfZhNiq2K/YsdmK2KgKCjxmcmFtZXdvcmtjb250ZW50Pgo8cHQ+CjxUaXA+CgrYpdiw2Kcg2YTZhSDYqtmD2YYg2LnZhNmJINiv2LHYp9mK2Kkg2KjYttio2Lcg2YbZhdmI2LDYrCDYqNin2LPYqtiu2K/Yp9mFIFtgVHJhaW5lcmBd2Iwg2KPZhNmCINmG2LjYsdipINi52YTZiSDYp9mE2KjYsdmG2KfZhdisINin2YTYqti52YTZitmF2Yog2KfZhNij2LPYp9iz2YogW9mH2YbYp10oLi4vdHJhaW5pbmcjdHJhaW4td2l0aC1weXRvcmNoLXRyYWluZXIpIQoKPC9UaXA+CgrYo9mG2Kog2YXYs9iq2LnYryDYp9mE2KLZhiDZhNio2K/YoSDYqtiv2LHZitioINmG2YXZiNiw2KzZgyEg2YLZhSDYqNiq2K3ZhdmK2YQgV2F2MlZlYzIg2KjYp9iz2KrYrtiv2KfZhSBbYEF1dG9Nb2RlbEZvckNUQ2BdLiDYrdiv2K8g2KfZhNiq2K7ZgdmK2LYg2KfZhNiw2Yog2KrYsdmK2K8g2KrYt9io2YrZgtmHINio2KfYs9iq2K7Yr9in2YUg2YXYudmE2YXYqSBgY3RjX2xvc3NfcmVkdWN0aW9uYC4g2LrYp9mE2KjZi9inINmF2Kcg2YrZg9mI2YYg2YXZhiDYp9mE2KPZgdi22YQg2KfYs9iq2K7Yr9in2YUg2KfZhNmF2KrZiNiz2Lcg2KjYr9mE2KfZiyDZhdmGINin2YTYrNmF2Lkg2KfZhNin2YHYqtix2KfYttmKOgoKYGBgcHkKPj4+IGZyb20gdHJhbnNmb3JtZXJzIGltcG9ydCBBdXRvTW9kZWxGb3JDVEMsIFRyYWluaW5nQXJndW1lbnRzLCBUcmFpbmVyCgo+Pj4gbW9kZWwgPSBBdXRvTW9kZWxGb3JDVEMuZnJvbV9wcmV0cmFpbmVkKAouLi4gICAgICJmYWNlYm9vay93YXYydmVjMi1iYXNlIiwKLi4uICAgICBjdGNfbG9zc19yZWR1Y3Rpb249Im1lYW4iLAouLi4gICAgIHBhZF90b2tlbl9pZD1wcm9jZXNzb3IudG9rZW5pemVyLnBhZF90b2tlbl9pZCwKLi4uICkKYGBgCgrZgdmKINmH2LDZhyDYp9mE2YXYsdit2YTYqdiMINiq2KjZgtmJINir2YTYp9irINiu2LfZiNin2Kog2YHZgti3OgoKMS4g2K3Yr9ivINmF2LnZhNmF2KfYqiDYp9mE2KrYr9ix2YrYqCDYp9mE2K7Yp9i12Kkg2KjZgyDZgdmKIFtgVHJhaW5pbmdBcmd1bWVudHNgXS4g2KfZhNmF2LnZhNmF2Kkg2KfZhNmI2K3Zitiv2Kkg2KfZhNmF2LfZhNmI2KjYqSDZh9mKIGBvdXRwdXRfZGlyYCDYp9mE2KrZiiDYqtit2K/YryDZhdmD2KfZhiDYrdmB2Lgg2YbZhdmI2LDYrNmDLiDYs9iq2YLZiNmFINio2K/Zgdi5INmH2LDYpyDYp9mE2YbZhdmI2LDYrCDYpdmE2YkgSHViINi52YYg2LfYsdmK2YIg2KrYudmK2YrZhiBgcHVzaF90b19odWI9VHJ1ZWAgKNmK2KzYqCDYo9mGINiq2YPZiNmGINmF2LPYrNmE2KfZiyDYp9mE2K/YrtmI2YQg2KXZhNmJIEh1Z2dpbmcgRmFjZSDZhNiq2K3ZhdmK2YQg2YbZhdmI2LDYrNmDKS4g2YHZiiDZhtmH2KfZitipINmD2YQg2K3Zgtio2KnYjCDYs9mK2YLZiNmFIFtgVHJhaW5lcmBdINio2KrZgtmK2YrZhSBXRVIg2YjYrdmB2Lgg2YbZgti32Kkg2KrZgdiq2YrYtCDYp9mE2KrYr9ix2YrYqC4KMi4g2YLZhSDYqNiq2YXYsdmK2LEg2K3YrNisINin2YTYqtiv2LHZitioINil2YTZiSBbYFRyYWluZXJgXSDYpdmE2Ykg2KzYp9mG2Kgg2KfZhNmG2YXZiNiw2KzYjCDZiNmF2KzZhdmI2LnYqSDYp9mE2KjZitin2YbYp9iq2Iwg2YjYp9mE2YAgdG9rZW5pemVy2Iwg2YjYo9iv2KfYqSDYqtis2YXZiti5INin2YTYqNmK2KfZhtin2KrYjCDZiNiv2KfZhNipIGBjb21wdXRlX21ldHJpY3NgLgozLiDZgtmFINio2KfYs9iq2K/Yudin2KEgW2B+VHJhaW5lci50cmFpbmBdINmE2LbYqNi3INmG2YXZiNiw2KzZgy4KCmBgYHB5Cj4+PiB0cmFpbmluZ19hcmdzID0gVHJhaW5pbmdBcmd1bWVudHMoCi4uLiAgICAgb3V0cHV0X2Rpcj0ibXlfYXdlc29tZV9hc3JfbWluZF9tb2RlbCIsCi4uLiAgICAgcGVyX2RldmljZV90cmFpbl9iYXRjaF9zaXplPTgsCi4uLiAgICAgZ3JhZGllbnRfYWNjdW11bGF0aW9uX3N0ZXBzPTIsCi4uLiAgICAgbGVhcm5pbmdfcmF0ZT0xZS01LAouLi4gICAgIHdhcm11cF9zdGVwcz01MDAsCi4uLiAgICAgbWF4X3N0ZXBzPTIwMDAsCi4uLiAgICAgZ3JhZGllbnRfY2hlY2twb2ludGluZz1UcnVlLAouLi4gICAgIGZwMTY9VHJ1ZSwKLi4uICAgICBncm91cF9ieV9sZW5ndGg9VHJ1ZSwKLi4uICAgICBldmFsX3N0cmF0ZWd5PSJzdGVwcyIsCi4uLiAgICAgcGVyX2RldmljZV9ldmFsX2JhdGNoX3NpemU9OCwKLi4uICAgICBzYXZlX3N0ZXBzPTEwMDAsCi4uLiAgICAgZXZhbF9zdGVwcz0xMDAwLAouLi4gICAgIGxvZ2dpbmdfc3RlcHM9MjUsCi4uLiAgICAgbG9hZF9iZXN0X21vZGVsX2F0X2VuZD1UcnVlLAouLi4gICAgIG1ldHJpY19mb3JfYmVzdF9tb2RlbD0id2VyIiwKLi4uICAgICBncmVhdGVyX2lzX2JldHRlcj1GYWxzZSwKLi4uICAgICBwdXNoX3RvX2h1Yj1UcnVlLAouLi4gKQoKPj4+IHRyYWluZXIgPSBUcmFpbmVyKAouLi4gICAgIG1vZGVsPW1vZGVsLAouLi4gICAgIGFyZ3M9dHJhaW5pbmdfYXJncywKLi4uICAgICB0cmFpbl9kYXRhc2V0PWVuY29kZWRfbWluZHNbInRyYWluIl0sCi4uLiAgICAgZXZhbF9kYXRhc2V0PWVuY29kZWRfbWluZHNbInRlc3QiXSwKLi4uICAgICBwcm9jZXNzaW5nX2NsYXNzPXByb2Nlc3NvciwKLi4uICAgICBkYXRhX2NvbGxhdG9yPWRhdGFfY29sbGF0b3IsCi4uLiAgICAgY29tcHV0ZV9tZXRyaWNzPWNvbXB1dGVfbWV0cmljcywKLi4uICkKCj4+PiB0cmFpbmVyLnRyYWluKCkKYGBgCgrYqNmF2KzYsdivINin2YPYqtmF2KfZhCDYp9mE2KrYr9ix2YrYqNiMINi02KfYsdmDINmG2YXZiNiw2KzZgyDYudmE2YkgSHViINio2KfYs9iq2K7Yr9in2YUg2LfYsdmK2YLYqSBbYH50cmFuc2Zvcm1lcnMuVHJhaW5lci5wdXNoX3RvX2h1YmBdINit2KrZiSDZitiq2YXZg9mGINin2YTYrNmF2YrYuSDZhdmGINin2LPYqtiu2K/Yp9mFINmG2YXZiNiw2KzZgzoKCmBgYHB5Cj4+PiB0cmFpbmVyLnB1c2hfdG9faHViKCkKYGBgCjwvcHQ+CjwvZnJhbWV3b3JrY29udGVudD4KCjxUaXA+CgrZhNmE2K3YtdmI2YQg2LnZhNmJINmF2KvYp9mEINij2YPYq9ixINi52YXZgtmL2Kcg2K3ZiNmEINmD2YrZgdmK2Kkg2LbYqNi3INmG2YXZiNiw2Kwg2YTYqti52LHZgSDYp9mE2YPZhNin2YUg2KfZhNiq2YTZgtin2KbZitiMINij2YTZgiDZhti42LHYqSDYudmE2Ykg2YfYsNmHINin2YTZhdiv2YjZhtipIFvYp9mE2YXZhti02YjYsdipXShodHRwczovL2h1Z2dpbmdmYWNlLmNvL2Jsb2cvZmluZS10dW5lLXdhdjJ2ZWMyLWVuZ2xpc2gpINmE2KrYudix2YEg2KfZhNmD2YTYp9mFINin2YTYqtmE2YLYp9im2Yog2KjYp9mE2YTYutipINin2YTYpdmG2KzZhNmK2LLZitipINmI2YfYsNmHIFvYp9mE2YXZhti02YjYsdipXShodHRwczovL2h1Z2dpbmdmYWNlLmNvL2Jsb2cvZmluZS10dW5lLXhsc3Itd2F2MnZlYzIpINmE2KrYudix2YEg2KfZhNmD2YTYp9mFINin2YTYqtmE2YLYp9im2Yog2YXYqti52K/YryDYp9mE2YTYutin2KouCgo8L1RpcD4KCiMjINin2YTYp9iz2KrYr9mE2KfZhAoK2LHYp9im2LnYjCDYp9mE2KLZhiDYqNi52K8g2KPZhiDZgtmF2Kog2KjYttio2Lcg2YbZhdmI2LDYrNiMINmK2YXZg9mG2YMg2KfYs9iq2K7Yr9in2YXZhyDZhNmE2KfYs9iq2K/ZhNin2YQhCgrZgtmFINio2KrYrdmF2YrZhCDZhdmE2YEg2LXZiNiq2Yog2KrYsdmK2K8g2KrYtNi62YrZhCDYp9mE2KfYs9iq2K/ZhNin2YQg2LnZhNmK2YcuINiq2LDZg9ixINij2YYg2KrZgtmI2YUg2KjYpdi52KfYr9ipINij2K7YsCDYudmK2YbYqSDZhdmGINmF2LnYr9mEINij2K7YsCDYp9mE2LnZitmG2KfYqiDZhNmE2YXZhNmBINin2YTYtdmI2KrZiiDZhNmF2LfYp9io2YLYqSDZhdi52K/ZhCDYo9iu2LAg2KfZhNi52YrZhtin2Kog2YTZhNmG2YXZiNiw2Kwg2KXYsNinINmD2YbYqiDYqNit2KfYrNipINil2YTZiSDYsNmE2YMhCgpgYGBweQo+Pj4gZnJvbSBkYXRhc2V0cyBpbXBvcnQgbG9hZF9kYXRhc2V0LCBBdWRpbwoKPj4+IGRhdGFzZXQgPSBsb2FkX2RhdGFzZXQoIlBvbHlBSS9taW5kczE0IiwgImVuLVVTIiwgc3BsaXQ9InRyYWluIikKPj4+IGRhdGFzZXQgPSBkYXRhc2V0LmNhc3RfY29sdW1uKCJhdWRpbyIsIEF1ZGlvKHNhbXBsaW5nX3JhdGU9MTYwMDApKQo+Pj4gc2FtcGxpbmdfcmF0ZSA9IGRhdGFzZXQuZmVhdHVyZXNbImF1ZGlvIl0uc2FtcGxpbmdfcmF0ZQo+Pj4gYXVkaW9fZmlsZSA9IGRhdGFzZXRbMF1bImF1ZGlvIl1bInBhdGgiXQpgYGAKCtij2LPZh9mEINi32LHZitmC2Kkg2YTYqtis2LHYqNipINmG2YXZiNiw2KzZgyDYp9mE2YXYttio2YjYtyDZhNmE2KfYs9iq2K/ZhNin2YQg2YfZiiDYp9iz2KrYrtiv2KfZhdmHINmB2YogW2BwaXBlbGluZWBdLiDZgtmFINio2KXZhti02KfYoSDZhdir2YrZhCDZhNmAIGBwaXBlbGluZWAg2YTYqti52LHZgSDYp9mE2YPZhNin2YUg2KfZhNiq2YTZgtin2KbZiiDZhdi5INmG2YXZiNiw2KzZg9iMINmI2YXYsdixINmF2YTZgdmDINin2YTYtdmI2KrZiiDYpdmE2YrZhzoKCmBgYHB5Cj4+PiBmcm9tIHRyYW5zZm9ybWVycyBpbXBvcnQgcGlwZWxpbmUKCj4+PiB0cmFuc2NyaWJlciA9IHBpcGVsaW5lKCJhdXRvbWF0aWMtc3BlZWNoLXJlY29nbml0aW9uIiwgbW9kZWw9InN0ZXZobGl1L215X2F3ZXNvbWVfYXNyX21pbmRzX21vZGVsIikKPj4+IHRyYW5zY3JpYmVyKGF1ZGlvX2ZpbGUpCnsndGV4dCc6ICdJIFdPVUQgTElLRSBPIFNFVCBVUCBKT0lOVCBBQ09VTlQgV1RIIFkgUEFSVE5FUid9CmBgYAoKPFRpcD4KCtin2YTYqtiv2YjZitmGINis2YrYr9iMINmE2YPZhtmHINmK2YXZg9mGINij2YYg2YrZg9mI2YYg2KPZgdi22YQhINis2LHYqCDYttio2Lcg2YbZhdmI2LDYrNmDINi52YTZiSDYp9mE2YXYstmK2K8g2YXZhiDYp9mE2KPZhdir2YTYqSDZhNmE2K3YtdmI2YQg2LnZhNmJINmG2KrYp9im2Kwg2KPZgdi22YQhCgo8L1RpcD4KCtmK2YXZg9mG2YMg2KPZiti22YvYpyDYqtmD2LHYp9ixINmG2KrYp9im2KwgYHBpcGVsaW5lYCDZitiv2YjZitmL2Kcg2KXYsNinINij2LHYr9iqOgoKPGZyYW1ld29ya2NvbnRlbnQ+CjxwdD4K2YLZhSDYqNiq2K3ZhdmK2YQg2YXYudin2YTYrCDZhNmF2LnYp9mE2KzYqSDZhdmE2YEg2KfZhNi12YjYqiDZiNin2YTYqtiv2YjZitmGINmI2KXYsdis2KfYuSBgaW5wdXRgINmD2YXYpNir2LHYp9iqIFB5VG9yY2g6CgpgYGBweQo+Pj4gZnJvbSB0cmFuc2Zvcm1lcnMgaW1wb3J0IEF1dG9Qcm9jZXNzb3IKCj4+PiBwcm9jZXNzb3IgPSBBdXRvUHJvY2Vzc29yLmZyb21fcHJldHJhaW5lZCgic3RldmhsaXUvbXlfYXdlc29tZV9hc3JfbWluZF9tb2RlbCIpCj4+PiBpbnB1dHMgPSBwcm9jZXNzb3IoZGF0YXNldFswXVsiYXVkaW8iXVsiYXJyYXkiXSwgc2FtcGxpbmdfcmF0ZT1zYW1wbGluZ19yYXRlLCByZXR1cm5fdGVuc29ycz0icHQiKQpgYGAKCtmF2LHYsSDZhdiv2K7ZhNin2KrZgyDYpdmE2Ykg2KfZhNmG2YXZiNiw2Kwg2YjYpdix2KzYp9i5INin2YTZhNmI2LrYp9ix2YrYqtmF2KfYqjoKCmBgYHB5Cj4+PiBmcm9tIHRyYW5zZm9ybWVycyBpbXBvcnQgQXV0b01vZGVsRm9yQ1RDCgo+Pj4gbW9kZWwgPSBBdXRvTW9kZWxGb3JDVEMuZnJvbV9wcmV0cmFpbmVkKCJzdGV2aGxpdS9teV9hd2Vzb21lX2Fzcl9taW5kX21vZGVsIikKPj4+IHdpdGggdG9yY2gubm9fZ3JhZCgpOgouLi4gICAgIGxvZ2l0cyA9IG1vZGVsKCoqaW5wdXRzKS5sb2dpdHMKYGBgCgrYp9it2LXZhCDYudmE2YkgYGlucHV0X2lkc2Ag2KfZhNmF2KrZiNmC2LnYqSDYqNij2LnZhNmJINin2K3YqtmF2KfZhNiMINmI2KfYs9iq2K7Yr9mFINin2YTZhdi52KfZhNisINmE2KrYsdmF2YrYsiBgaW5wdXRfaWRzYCDYp9mE2YXYqtmI2YLYudipINmF2LHYqSDYo9iu2LHZiSDYpdmE2Ykg2YbYtToKCmBgYHB5Cj4+PiBpbXBvcnQgdG9yY2gKCj4+PiBwcmVkaWN0ZWRfaWRzID0gdG9yY2guYXJnbWF4KGxvZ2l0cywgZGltPS0xKQo+Pj4gdHJhbnNjcmlwdGlvbiA9IHByb2Nlc3Nvci5iYXRjaF9kZWNvZGUocHJlZGljdGVkX2lkcykKPj4+IHRyYW5zY3JpcHRpb24KWydJIFdPVUwgTElLRSBPIFNFVCBVUCBKT0lOVCBBQ09VTlQgV1RIIFkgUEFSVE5FUiddCmBgYAo8L3B0Pgo8L2ZyYW1ld29ya2NvbnRlbnQ+
+<!-- حقوق النشر 2023 فريق HuggingFace. جميع الحقوق محفوظة.
+
+مرخص بموجب رخصة أباتشي، الإصدار 2.0 (الرخصة)؛ لا يجوز لك استخدام هذا الملف إلا وفقًا لشروط الرخصة. يمكنك الحصول على نسخة من الرخصة على
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+ما لم يتطلب القانون المعمول به أو يتم الاتفاق عليه كتابيًا، يتم توزيع البرامج الموزعة بموجب الرخصة على أساس "كما هي" دون أي ضمانات أو شروط من أي نوع، سواء كانت صريحة أو ضمنية. راجع الرخصة للحصول على اللغة المحددة التي تحكم الأذونات والقيود بموجب الرخصة.
+
+⚠️ يرجى ملاحظة أن هذا الملف مكتوب بلغة Markdown ولكنه يحتوي على بناء جملة محددة لبناء الوثائق لدينا (يشبه MDX) والتي قد لا يتم عرضها بشكل صحيح في عارض Markdown الخاص بك.
+
+-->
+
+# التعرف التلقائي على الكلام
+
+[[open-in-colab]]
+
+<Youtube id="TksaY_FDgnk"/>
+
+التعرف التلقائي على الكلام (ASR) يحول إشارة الكلام إلى نص، مما يتيح رسم خريطة لسلسلة من المدخلات الصوتية إلى مخرجات نصية. تستخدم المساعدات الافتراضية مثل Siri وAlexa نماذج ASR لمساعدة المستخدمين يوميًا، وهناك العديد من التطبيقات المفيدة الأخرى التي تواجه المستخدمين مثل الترجمة الفورية وتدوين الملاحظات أثناء الاجتماعات.
+
+سيوضح لك هذا الدليل كيفية:
+
+1. ضبط نموذج [Wav2Vec2](https://huggingface.co/facebook/wav2vec2-base) على مجموعة بيانات [MInDS-14](https://huggingface.co/datasets/PolyAI/minds14) لنسخ الصوت إلى نص.
+2. استخدام نموذجك المضبوط للاستدلال.
+
+<Tip>
+
+لرؤية جميع البنى والنقاط المرجعية المتوافقة مع هذه المهمة، نوصي بالتحقق من [صفحة المهمة](https://huggingface.co/tasks/automatic-speech-recognition)
+
+</Tip>
+
+قبل أن تبدأ، تأكد من تثبيت جميع المكتبات الضرورية:
+
+```bash
+pip install transformers datasets evaluate jiwer
+```
+
+نحن نشجعك على تسجيل الدخول إلى حساب Hugging Face الخاص بك حتى تتمكن من تحميل ومشاركة نموذجك مع المجتمع. عند المطالبة، أدخل رمزك لتسجيل الدخول:
+
+```py
+>>> from huggingface_hub import notebook_login
+
+>>> notebook_login()
+```
+
+## تحميل مجموعة بيانات MInDS-14
+
+ابدأ بتحميل مجموعة فرعية أصغر من مجموعة بيانات [MInDS-14](https://huggingface.co/datasets/PolyAI/minds14) من مكتبة 🤗 Datasets. سيعطيك هذا فرصة للتجربة والتأكد من أن كل شيء يعمل قبل قضاء المزيد من الوقت في التدريب على مجموعة البيانات الكاملة.
+
+```py
+>>> from datasets import load_dataset, Audio
+
+>>> minds = load_dataset("PolyAI/minds14", name="en-US", split="train[:100]")
+```
+
+قم بتقسيم مجموعة البيانات `train` إلى مجموعة تدريب ومجموعة اختبار باستخدام طريقة [`~Dataset.train_test_split`]:
+
+```py
+>>> minds = minds.train_test_split(test_size=0.2)
+```
+
+ثم ألق نظرة على مجموعة البيانات:
+
+```py
+>>> minds
+DatasetDict({
+    train: Dataset({
+        features: ['path', 'audio', 'transcription', 'english_transcription', 'intent_class', 'lang_id'],
+        num_rows: 16
+    })
+    test: Dataset({
+        features: ['path', 'audio', 'transcription', 'english_transcription', 'intent_class', 'lang_id'],
+        num_rows: 4
+    })
+})
+```
+
+في حين أن مجموعة البيانات تحتوي على الكثير من المعلومات المفيدة، مثل `lang_id` و`english_transcription`، ستركز في هذا الدليل على `audio` و`transcription`. قم بإزالة الأعمدة الأخرى باستخدام طريقة [`~datasets.Dataset.remove_columns`]:
+
+```py
+>>> minds = minds.remove_columns(["english_transcription", "intent_class", "lang_id"])
+```
+
+ألق نظرة على المثال مرة أخرى:
+
+```py
+>>> minds["train"][0]
+{'audio': {'array': array([-0.00024414,  0.        ,  0.        , ...,  0.00024414,
+          0.00024414,  0.00024414], dtype=float32),
+  'path': '/root/.cache/huggingface/datasets/downloads/extracted/f14948e0e84be638dd7943ac36518a4cf3324e8b7aa331c5ab11541518e9368c/en-US~APP_ERROR/602ba9e2963e11ccd901cd4f.wav',
+  'sampling_rate': 8000},
+ 'path': '/root/.cache/huggingface/datasets/downloads/extracted/f14948e0e84be638dd7943ac36518a4cf3324e8b7aa331c5ab11541518e9368c/en-US~APP_ERROR/602ba9e2963e11ccd901cd4f.wav',
+ 'transcription': "hi I'm trying to use the banking app on my phone and currently my checking and savings account balance is not refreshing"}
+```
+
+هناك حقولان:
+
+- `audio`: مصفوفة أحادية البعد لإشارة الكلام التي يجب استدعاؤها لتحميل وتغيير عينة ملف الصوت.
+- `transcription`: النص المستهدف.
+
+## المعالجة المسبقة
+
+الخطوة التالية هي تحميل معالج Wav2Vec2 لمعالجة إشارة الصوت:
+
+```py
+>>> from transformers import AutoProcessor
+
+>>> processor = AutoProcessor.from_pretrained("facebook/wav2vec2-base")
+```
+
+تبلغ نسبة أخذ العينات لمجموعة بيانات MInDS-14 8000 كيلو هرتز (يمكنك العثور على هذه المعلومات في [بطاقة مجموعة البيانات](https://huggingface.co/datasets/PolyAI/minds14))، مما يعني أنه سيتعين عليك إعادة أخذ عينات من مجموعة البيانات إلى 16000 كيلو هرتز لاستخدام نموذج Wav2Vec2 المسبق التدريب:
+
+```py
+>>> minds = minds.cast_column("audio", Audio(sampling_rate=16_000))
+>>> minds["train"][0]
+{'audio': {'array': array([-2.38064706e-04, -1.58618059e-04, -5.43987835e-06, ...,
+          2.78103951e-04,  2.38446111e-04,  1.18740834e-04], dtype=float32),
+  'path': '/root/.cache/huggingface/datasets/downloads/extracted/f14948e0e84be638dd7943ac36518a4cf3324e8b7aa331c5ab11541518e9368c/en-US~APP_ERROR/602ba9e2963e11ccd901cd4f.wav',
+  'sampling_rate': 16000},
+ 'path': '/root/.cache/huggingface/datasets/downloads/extracted/f14948e0e84be638dd7943ac36518a4cf3324e8b7aa331c5ab11541518e9368c/en-US~APP_ERROR/602ba9e2963e11ccd901cd4f.wav',
+ 'transcription': "hi I'm trying to use the banking app on my phone and currently my checking and savings account balance is not refreshing"}
+```
+
+كما يمكنك أن ترى في `transcription` أعلاه، يحتوي النص على مزيج من الأحرف الكبيرة والصغيرة. مدرب معالج Wav2Vec2 فقط على الأحرف الكبيرة، لذلك ستحتاج إلى التأكد من أن النص يتطابق مع مفردات المعالج:
+
+```py
+>>> def uppercase(example):
+...     return {"transcription": example["transcription"].upper()}
+
+
+>>> minds = minds.map(uppercase)
+```
+
+الآن قم بإنشاء دالة معالجة مسبقة تقوم بما يلي:
+
+1. استدعاء عمود `audio` لتحميل وتغيير عينة ملف الصوت.
+2. استخراج `input_values` من ملف الصوت وتشفير عمود `transcription` باستخدام المعالج.
+
+```py
+>>> def prepare_dataset(batch):
+...     audio = batch["audio"]
+...     batch = processor(audio["array"], sampling_rate=audio["sampling_rate"], text=batch["transcription"])
+...     batch["input_length"] = len(batch["input_values"][0])
+...     return batch
+```
+
+لتطبيق دالة المعالجة المسبقة على مجموعة البيانات بأكملها، استخدم وظيفة 🤗 Datasets [`~datasets.Dataset.map`]. يمكنك تسريع `map` عن طريق زيادة عدد العمليات باستخدام معلمة `num_proc`. قم بإزالة الأعمدة التي لا تحتاجها باستخدام طريقة [`~datasets.Dataset.remove_columns`]:
+
+```py
+>>> encoded_minds = minds.map(prepare_dataset, remove_columns=minds.column_names["train"], num_proc=4)
+🤗 ترانسفورمرز لا يحتوي على أداة تجميع بيانات لتعرف الكلام التلقائي، لذلك ستحتاج إلى تكييف [`DataCollatorWithPadding`] لإنشاء دفعة من الأمثلة. كما أنها ستقوم تلقائيًا بملء فراغات نصك وعلاماتك إلى طول العنصر الأطول في دفعتها (بدلاً من مجموعة البيانات بأكملها) بحيث تكون ذات طول موحد. على الرغم من أنه من الممكن ملء فراغات نصك في وظيفة `tokenizer` عن طريق تعيين `padding=True`، إلا أن الملء الديناميكي للفراغات أكثر كفاءة.
+
+على عكس أدوات تجميع البيانات الأخرى، تحتاج هذه الأداة المحددة لتجميع البيانات إلى تطبيق طريقة ملء فراغات مختلفة على `input_values` و`labels`:
+
+```py
+>>> import torch
+
+>>> from dataclasses import dataclass, field
+>>> from typing import Any, Dict, List, Optional, Union
+
+
+>>> @dataclass
+... class DataCollatorCTCWithPadding:
+...     processor: AutoProcessor
+...     padding: Union[bool, str] = "longest"
+
+...     def __call__(self, features: List[Dict[str, Union[List[int], torch.Tensor]]]) -> Dict[str, torch.Tensor]:
+...         # split inputs and labels since they have to be of different lengths and need
+...         # different padding methods
+...         input_features = [{"input_values": feature["input_values"][0]} for feature in features]
+...         label_features = [{"input_ids": feature["labels"]} for feature in features]
+
+...         batch = self.processor.pad(input_features, padding=self.padding, return_tensors="pt")
+
+...         labels_batch = self.processor.pad(labels=label_features, padding=self.padding, return_tensors="pt")
+
+...         # replace padding with -100 to ignore loss correctly
+...         labels = labels_batch["input_ids"].masked_fill(labels_batch.attention_mask.ne(1), -100)
+
+...         batch["labels"] = labels
+
+...         return batch
+```
+
+الآن قم بإنشاء مثيل لـ `DataCollatorForCTCWithPadding`:
+
+```py
+>>> data_collator = DataCollatorCTCWithPadding(processor=processor, padding="longest")
+```
+
+## التقييم
+
+غالبًا ما يكون تضمين مقياس أثناء التدريب مفيدًا لتقييم أداء نموذجك. يمكنك تحميل طريقة تقييم بسرعة باستخدام مكتبة 🤗 [Evaluate](https://huggingface.co/docs/evaluate/index). بالنسبة لهذه المهمة، قم بتحميل مقياس [معدل خطأ الكلمة](https://huggingface.co/spaces/evaluate-metric/wer) (WER) (اطلع على جولة 🤗 Evaluate [السريعة](https://huggingface.co/docs/evaluate/a_quick_tour) لمعرفة المزيد حول كيفية تحميل وحساب مقياس):
+
+```py
+>>> import evaluate
+
+>>> wer = evaluate.load("wer")
+```
+
+ثم قم بإنشاء دالة تمرر تنبؤاتك وعلاماتك إلى [`~evaluate.EvaluationModule.compute`] لحساب WER:
+
+```py
+>>> import numpy as np
+
+
+>>> def compute_metrics(pred):
+...     pred_logits = pred.predictions
+...     pred_ids = np.argmax(pred_logits, axis=-1)
+
+...     pred.label_ids[pred.label_ids == -100] = processor.tokenizer.pad_token_id
+
+...     pred_str = processor.batch_decode(pred_ids)
+...     label_str = processor.batch_decode(pred.label_ids, group_tokens=False)
+
+...     wer = wer.compute(predictions=pred_str, references=label_str)
+
+...     return {"wer": wer}
+```
+
+دالة `compute_metrics` الخاصة بك جاهزة الآن، وستعود إليها عندما تقوم بإعداد تدريبك.
+
+## التدريب
+
+<frameworkcontent>
+<pt>
+<Tip>
+
+إذا لم تكن على دراية بضبط نموذج باستخدام [`Trainer`]، ألق نظرة على البرنامج التعليمي الأساسي [هنا](../training#train-with-pytorch-trainer)!
+
+</Tip>
+
+أنت مستعد الآن لبدء تدريب نموذجك! قم بتحميل Wav2Vec2 باستخدام [`AutoModelForCTC`]. حدد التخفيض الذي تريد تطبيقه باستخدام معلمة `ctc_loss_reduction`. غالبًا ما يكون من الأفضل استخدام المتوسط بدلاً من الجمع الافتراضي:
+
+```py
+>>> from transformers import AutoModelForCTC, TrainingArguments, Trainer
+
+>>> model = AutoModelForCTC.from_pretrained(
+...     "facebook/wav2vec2-base",
+...     ctc_loss_reduction="mean",
+...     pad_token_id=processor.tokenizer.pad_token_id,
+... )
+```
+
+في هذه المرحلة، تبقى ثلاث خطوات فقط:
+
+1. حدد معلمات التدريب الخاصة بك في [`TrainingArguments`]. المعلمة الوحيدة المطلوبة هي `output_dir` التي تحدد مكان حفظ نموذجك. ستقوم بدفع هذا النموذج إلى Hub عن طريق تعيين `push_to_hub=True` (يجب أن تكون مسجلاً الدخول إلى Hugging Face لتحميل نموذجك). في نهاية كل حقبة، سيقوم [`Trainer`] بتقييم WER وحفظ نقطة تفتيش التدريب.
+2. قم بتمرير حجج التدريب إلى [`Trainer`] إلى جانب النموذج، ومجموعة البيانات، والـ tokenizer، وأداة تجميع البيانات، ودالة `compute_metrics`.
+3. قم باستدعاء [`~Trainer.train`] لضبط نموذجك.
+
+```py
+>>> training_args = TrainingArguments(
+...     output_dir="my_awesome_asr_mind_model",
+...     per_device_train_batch_size=8,
+...     gradient_accumulation_steps=2,
+...     learning_rate=1e-5,
+...     warmup_steps=500,
+...     max_steps=2000,
+...     gradient_checkpointing=True,
+...     fp16=True,
+...     group_by_length=True,
+...     eval_strategy="steps",
+...     per_device_eval_batch_size=8,
+...     save_steps=1000,
+...     eval_steps=1000,
+...     logging_steps=25,
+...     load_best_model_at_end=True,
+...     metric_for_best_model="wer",
+...     greater_is_better=False,
+...     push_to_hub=True,
+... )
+
+>>> trainer = Trainer(
+...     model=model,
+...     args=training_args,
+...     train_dataset=encoded_minds["train"],
+...     eval_dataset=encoded_minds["test"],
+...     processing_class=processor,
+...     data_collator=data_collator,
+...     compute_metrics=compute_metrics,
+... )
+
+>>> trainer.train()
+```
+
+بمجرد اكتمال التدريب، شارك نموذجك على Hub باستخدام طريقة [`~transformers.Trainer.push_to_hub`] حتى يتمكن الجميع من استخدام نموذجك:
+
+```py
+>>> trainer.push_to_hub()
+```
+</pt>
+</frameworkcontent>
+
+<Tip>
+
+للحصول على مثال أكثر عمقًا حول كيفية ضبط نموذج لتعرف الكلام التلقائي، ألق نظرة على هذه المدونة [المنشورة](https://huggingface.co/blog/fine-tune-wav2vec2-english) لتعرف الكلام التلقائي باللغة الإنجليزية وهذه [المنشورة](https://huggingface.co/blog/fine-tune-xlsr-wav2vec2) لتعرف الكلام التلقائي متعدد اللغات.
+
+</Tip>
+
+## الاستدلال
+
+رائع، الآن بعد أن قمت بضبط نموذج، يمكنك استخدامه للاستدلال!
+
+قم بتحميل ملف صوتي تريد تشغيل الاستدلال عليه. تذكر أن تقوم بإعادة أخذ عينة من معدل أخذ العينات للملف الصوتي لمطابقة معدل أخذ العينات للنموذج إذا كنت بحاجة إلى ذلك!
+
+```py
+>>> from datasets import load_dataset, Audio
+
+>>> dataset = load_dataset("PolyAI/minds14", "en-US", split="train")
+>>> dataset = dataset.cast_column("audio", Audio(sampling_rate=16000))
+>>> sampling_rate = dataset.features["audio"].sampling_rate
+>>> audio_file = dataset[0]["audio"]["path"]
+```
+
+أسهل طريقة لتجربة نموذجك المضبوط للاستدلال هي استخدامه في [`pipeline`]. قم بإنشاء مثيل لـ `pipeline` لتعرف الكلام التلقائي مع نموذجك، ومرر ملفك الصوتي إليه:
+
+```py
+>>> from transformers import pipeline
+
+>>> transcriber = pipeline("automatic-speech-recognition", model="stevhliu/my_awesome_asr_minds_model")
+>>> transcriber(audio_file)
+{'text': 'I WOUD LIKE O SET UP JOINT ACOUNT WTH Y PARTNER'}
+```
+
+<Tip>
+
+التدوين جيد، لكنه يمكن أن يكون أفضل! جرب ضبط نموذجك على المزيد من الأمثلة للحصول على نتائج أفضل!
+
+</Tip>
+
+يمكنك أيضًا تكرار نتائج `pipeline` يدويًا إذا أردت:
+
+<frameworkcontent>
+<pt>
+قم بتحميل معالج لمعالجة ملف الصوت والتدوين وإرجاع `input` كمؤثرات PyTorch:
+
+```py
+>>> from transformers import AutoProcessor
+
+>>> processor = AutoProcessor.from_pretrained("stevhliu/my_awesome_asr_mind_model")
+>>> inputs = processor(dataset[0]["audio"]["array"], sampling_rate=sampling_rate, return_tensors="pt")
+```
+
+مرر مدخلاتك إلى النموذج وإرجاع اللوغاريتمات:
+
+```py
+>>> from transformers import AutoModelForCTC
+
+>>> model = AutoModelForCTC.from_pretrained("stevhliu/my_awesome_asr_mind_model")
+>>> with torch.no_grad():
+...     logits = model(**inputs).logits
+```
+
+احصل على `input_ids` المتوقعة بأعلى احتمال، واستخدم المعالج لترميز `input_ids` المتوقعة مرة أخرى إلى نص:
+
+```py
+>>> import torch
+
+>>> predicted_ids = torch.argmax(logits, dim=-1)
+>>> transcription = processor.batch_decode(predicted_ids)
+>>> transcription
+['I WOUL LIKE O SET UP JOINT ACOUNT WTH Y PARTNER']
+```
+</pt>
+</frameworkcontent>
