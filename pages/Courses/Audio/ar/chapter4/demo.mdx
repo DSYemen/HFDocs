@@ -1,6 +1,6 @@
-# إنشاء عرض توضيحي باستخدام Gradio
+# بناء عرض توضيحي باستخدام Gradio
 
-في هذا القسم الأخير حول تصنيف الصوت، سنقوم بإنشاء عرض توضيحي باستخدام Gradio لعرض نموذج تصنيف الموسيقى الذي قمنا بتدريبه للتو على مجموعة بيانات GTZAN. أول شيء يجب فعله هو تحميل نقطة التحقق المعالجة باستخدام فئة pipeline() - هذا أمر مألوف الآن من القسم الخاص بالنماذج المدربة مسبقًا classification_models. يمكنك تغيير model_id إلى مساحة عمل نموذجك المعالج على Hugging Face Hub:
+في هذا القسم الأخير حول تصنيف الصوت، سنقوم ببناء عرض توضيحي باستخدام [Gradio](https://gradio.app) لعرض نموذج تصنيف الموسيقى الذي قمنا بتدريبه للتو على مجموعة بيانات [GTZAN](https://huggingface.co/datasets/marsyas/gtzan). أول شيء يجب القيام به هو تحميل نقطة التحقق الدقيقة باستخدام فئة `pipeline()` - هذا مألوف الآن من القسم الخاص بـ [النماذج المدربة مسبقًا](classification_models). يمكنك تغيير `model_id` إلى مساحة اسم النموذج الدقيق الخاص بك على منصة Hugging Face Hub:
 
 ```python
 from transformers import pipeline
@@ -9,7 +9,7 @@ model_id = "sanchit-gandhi/distilhubert-finetuned-gtzan"
 pipe = pipeline("audio-classification", model=model_id)
 ```
 
-ثانيًا، سنقوم بتعريف دالة تأخذ مسار ملف صوتي كمدخل وتقوم بتمريره عبر الأنابيب. هنا، تتولى الأنابيب تلقائيًا مهمة تحميل ملف الصوت وإعادة أخذ العينات إلى معدل العينات الصحيح وتشغيل الاستدلال باستخدام النموذج. نأخذ تنبؤات النموذج preds ونقوم بتنسيقها ككائن قاموس ليتم عرضه على الإخراج:
+ثانيًا، سنقوم بتعريف دالة تأخذ مسار الملف لملف صوتي وتمرره عبر الأنبوب. هنا، يقوم الأنبوب تلقائيًا بتحميل ملف الصوت، وإعادة أخذ العينات بمعدل العينة الصحيح، وتشغيل الاستدلال مع النموذج. نأخذ تنبؤات النموذج `preds` ونقوم بتهيئتها ككائن قاموس ليتم عرضه في الإخراج:
 
 ```python
 def classify_audio(filepath):
@@ -20,7 +20,7 @@ def classify_audio(filepath):
     return outputs
 ```
 
-أخيرًا، نقوم بتشغيل العرض التوضيحي Gradio باستخدام الدالة التي قمنا بتعريفها للتو:
+أخيرًا، نقوم بتشغيل العرض التوضيحي لـ Gradio باستخدام الدالة التي قمنا بتعريفها للتو:
 
 ```python
 import gradio as gr
@@ -31,6 +31,6 @@ demo = gr.Interface(
 demo.launch(debug=True)
 ```
 
-سيؤدي هذا إلى تشغيل عرض توضيحي لـ Gradio مشابه للعرض التوضيحي الذي يعمل على Hugging Face Space:
+سيؤدي هذا إلى تشغيل عرض توضيحي لـ Gradio مشابه للعرض التوضيحي الذي يعمل على منصة Hugging Face Space:
 
 <iframe src="https://course-demos-song-classifier.hf.space" frameBorder="0" height="450" title="Gradio app" class="container p-0 flex-grow space-iframe" allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; document-domain; encrypted-media; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; vr ; wake-lock; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe>
