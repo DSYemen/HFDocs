@@ -1,49 +1,14 @@
-# الوحدة 1: العمل مع بيانات الصوت
+# الوحدة 1. العمل مع البيانات الصوتية
 
 ## ما ستتعلمه في هذه الوحدة
 
-كل مهمة صوت أو كلام تبدأ بملف صوتي. قبل أن نتمكن من الغوص في حل هذه المهام، من المهم أن نفهم ما تحتوي عليه هذه الملفات بالفعل، وكيفية العمل معها.
+تبدأ كل مهمة صوتية أو مهمة كلام بملف صوتي. قبل أن نتمكن من حل هذه المهام، من المهم أن
+نفهم ما الذي تحتويه هذه الملفات بالفعل، وكيفية العمل بها.
 
-في هذه الوحدة، ستحصل على فهم للمصطلحات الأساسية المتعلقة ببيانات الصوت، بما في ذلك الموجة الصوتية، ومعدل العينات، ومخطط طيف الترددات. وستتعلم أيضًا كيفية العمل مع مجموعات بيانات الصوت، بما في ذلك تحميل بيانات الصوت ومعالجتها مسبقًا، وكيفية بث مجموعات البيانات الكبيرة بكفاءة.
+في هذه الوحدة، ستكتسب فهمًا للمصطلحات الأساسية المتعلقة بالبيانات الصوتية، بما في ذلك الموجة،
+معدل العينة، والطيف. ستتعلم أيضًا كيفية العمل مع مجموعات البيانات الصوتية، بما في ذلك تحميل ومعالجة مسبقة
+البيانات الصوتية، وكيفية بث مجموعات البيانات الكبيرة بكفاءة.
 
-بحلول نهاية هذه الوحدة، سيكون لديك إلمام قوي بالمصطلحات الأساسية لبيانات الصوت وستكون مجهزًا بالمهارات اللازمة للعمل مع مجموعات بيانات الصوت لمختلف التطبيقات. ستضع المعرفة التي ستكتسبها في هذه الوحدة الأساس لفهم بقية الدورة.
-
-```python
-# Import libraries
-import librosa
-import matplotlib.pyplot as plt
-
-# Load the audio file
-audio_file = 'audio_example.wav'
-audio, sr = librosa.load(audio_file)
-
-# Get duration of the audio file
-duration = librosa.get_duration(y=audio, sr=sr)
-print(f"Duration of the audio file: {duration} seconds")
-
-# Plot the waveform
-plt.figure(figsize=(14, 5))
-librosa.display.waveplot(audio, sr=sr)
-plt.title('Waveform')
-plt.xlabel('Time (s)')
-plt.ylabel('Amplitude')
-plt.tight_layout()
-plt.show()
-
-# Generate a spectrogram
-n_fft = 2048
-hop_length = 512
-spectrogram = librosa.stft(audio, n_fft=n_fft, hop_length=hop_length)
-spectrogram_db = librosa.amplitude_to_db(abs(spectrogram))
-
-plt.figure(figsize=(14, 5))
-librosa.display.specshow(spectrogram_db, sr=sr, x_axis='time', y_axis='hz')
-plt.colorbar(label='dB')
-plt.title('Spectrogram')
-plt.tight_layout()
-plt plt.show()
-```
-
-<div align="center">
-  <b>Figure 1.</b> Waveform and spectrogram of an audio signal.
-</div>
+بحلول نهاية هذه الوحدة، سيكون لديك فهم قوي للمصطلحات الأساسية للبيانات الصوتية وستكون مجهزًا بالمهارات اللازمة
+للعمل مع مجموعات البيانات الصوتية لمختلف التطبيقات. المعرفة التي ستكتسبها في هذه الوحدة سوف
+وضع الأساس لفهم بقية الدورة.
