@@ -69,11 +69,11 @@ reader = pipeline("question-answering", model=model_checkpoint)
 
 ```python out
 """
-OSError: لا يمكن تحميل التهيئة لـ 'lewtun/distillbert-base-uncased-finetuned-squad-d5716d28'. تأكد من أن:
+OSError: Can't load config for 'lewtun/distillbert-base-uncased-finetuned-squad-d5716d28'. Make sure that:
 
-- 'lewtun/distillbert-base-uncased-finetuned-squad-d5716d28' هو معرف نموذج صحيح مدرج على 'https://huggingface.co/models'
+- 'lewtun/distillbert-base-uncased-finetuned-squad-d5716d28' is a correct model identifier listed on 'https://huggingface.co/models'
 
-- أو 'lewtun/distillbert-base-uncased-finetuned-squad-d5716d28' هو المسار الصحيح إلى دليل يحتوي على ملف config.json
+- or 'lewtun/distillbert-base-uncased-finetuned-squad-d5716d28' is the correct path to a directory containing a config.json file
 """
 ```
 
@@ -95,11 +95,11 @@ OSError: لا يمكن تحميل التهيئة لـ 'lewtun/distillbert-base-u
 
 ```python out
 """
-تأكد من أن:
+Make sure that:
 
-- 'lewtun/distillbert-base-uncased-finetuned-squad-d5716d28' هو معرف نموذج صحيح مدرج على 'https://huggingface.co/models'
+- 'lewtun/distillbert-base-uncased-finetuned-squad-d5716d28' is a correct model identifier listed on 'https://huggingface.co/models'
 
-- أو 'lewtun/distillbert-base-uncased-finetuned-squad-d5716d28' هو المسار الصحيح إلى دليل يحتوي على ملف config.json
+- or 'lewtun/distillbert-base-uncased-finetuned-squad-d5716d28' is the correct path to a directory containing a config.json file
 """
 ```
 
@@ -130,11 +130,11 @@ reader = pipeline("question-answering", model=model_checkpoint)
 
 ```python out
 """
-OSError: لا يمكن تحميل التهيئة لـ 'lewtun/distilbert-base-uncased-finetuned-squad-d5716d28'. تأكد من أن:
+OSError: Can't load config for 'lewtun/distilbert-base-uncased-finetuned-squad-d5716d28'. Make sure that:
 
-- 'lewtun/distilbert-base-uncased-finetuned-squad-d5716d28' هو معرف نموذج صحيح مدرج على 'https://huggingface.co/models'
+- 'lewtun/distilbert-base-uncased-finetuned-squad-d5716d28' is a correct model identifier listed on 'https://huggingface.co/models'
 
-- أو 'lewtun/distilbert-base-uncased-finetuned-squad-d5716d28' هو المسار الصحيح إلى دليل يحتوي على ملف config.json
+- or 'lewtun/distilbert-base-uncased-finetuned-squad-d5716d28' is the correct path to a directory containing a config.json file
 """
 ```
 آه، أحبطت مرة أخرى -- مرحبا بك في الحياة اليومية لمهندس تعلم الآلة! بما أننا أصلحنا معرف النموذج، فيجب أن تكمن المشكلة في المستودع نفسه. طريقة سريعة للوصول إلى محتويات مستودع على 🤗 Hub هي عبر دالة `list_repo_files()` لمكتبة `huggingface_hub`:
