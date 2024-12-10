@@ -142,6 +142,8 @@ model.compile(optimizer=opt, loss=loss, metrics=["accuracy"])
 
 ```py
 model.fit(tf_train_dataset, validation_data=tf_validation_dataset, epochs=3)
+```
+
 <Tip>
 
 💡 إذا أردت تحميل نموذجك تلقائيًا إلى Hub أثناء التدريب، يمكنك تمرير `PushToHubCallback` في طريقة `model.fit()`. سنتعلم المزيد عن هذا في [الفصل 4](/course/chapter4/3)
