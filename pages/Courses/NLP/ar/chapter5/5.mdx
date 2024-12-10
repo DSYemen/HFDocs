@@ -1,28 +1,43 @@
 # إنشاء مجموعة بياناتك الخاصة
 
-في بعض الأحيان، قد لا تتوفر مجموعة البيانات التي تحتاجها لبناء تطبيق NLP، لذلك سيتعين عليك إنشاءها بنفسك. في هذا القسم، سنريكم كيفية إنشاء مجموعة من قضايا GitHub، والتي تستخدم بشكل شائع لتتبع الأخطاء أو الميزات في مستودعات GitHub. يمكن استخدام هذه المجموعة لأغراض مختلفة، بما في ذلك:
+<CourseFloatingBanner chapter={5}
+  classNames="absolute z-10 right-0 top-0"
+  notebooks={[
+    {label: "Google Colab", value: "https://colab.research.google.com/github/huggingface/notebooks/blob/master/course/en/chapter5/section5.ipynb"},
+    {label: "Aws Studio", value: "https://studiolab.sagemaker.aws/import/github/huggingface/notebooks/blob/master/course/en/chapter5/section5.ipynb"},
+]} />
 
-- استكشاف المدة التي يستغرقها إغلاق القضايا أو طلبات السحب المفتوحة
-- تدريب _مصنف متعدد التصنيفات_ يمكنه وضع علامات على القضايا باستخدام البيانات الوصفية بناءً على وصف القضية (مثل "خلل" أو "تحسين" أو "سؤال")
-- إنشاء محرك بحث دلالي للعثور على القضايا التي تتطابق مع استعلام المستخدم
+في بعض الأحيان، لا تتوفر مجموعة البيانات التي تحتاجها لبناء تطبيق NLP، لذلك ستحتاج إلى إنشائها بنفسك. في هذا القسم، سنريكم كيفية إنشاء مجموعة من [قضايا GitHub](https://github.com/features/issues/)، والتي تستخدم بشكل شائع لتتبع الأخطاء أو الميزات في مستودعات GitHub. يمكن استخدام هذه المجموعة لأغراض مختلفة، بما في ذلك:
 
-سنركز هنا على إنشاء المجموعة، وفي القسم التالي، سنتناول تطبيق البحث الدلالي. للحفاظ على الأمور متسقة، سنستخدم قضايا GitHub المرتبطة بمشروع مفتوح المصدر شهير: 🤗 Datasets! دعونا نلقي نظرة على كيفية الحصول على البيانات واستكشاف المعلومات الواردة في هذه القضايا.
+* استكشاف المدة التي يستغرقها إغلاق القضايا أو طلبات السحب المفتوحة
+* تدريب _مصنف متعدد التصنيفات_ يمكنه وضع علامات على القضايا بالبيانات الوصفية بناءً على وصف القضية (مثل "خطأ" أو "تحسين" أو "سؤال")
+* إنشاء محرك بحث دلالي للعثور على القضايا التي تتطابق مع استعلام المستخدم
+
+هنا سنركز على إنشاء المجموعة، وفي القسم التالي سنتناول تطبيق البحث الدلالي. للحفاظ على الأمور متشابكة، سنستخدم قضايا GitHub المرتبطة بمشروع مفتوح المصدر شهير: 🤗 Datasets! دعونا نلقي نظرة على كيفية الحصول على البيانات واستكشاف المعلومات الواردة في هذه القضايا.
 
 ## الحصول على البيانات
 
-يمكنك العثور على جميع القضايا في 🤗 Datasets عن طريق الانتقال إلى علامة التبويب "القضايا" في المستودع. كما هو موضح في لقطة الشاشة التالية، كان هناك 331 قضية مفتوحة و668 قضية مغلقة في وقت كتابة هذا التقرير.
+يمكنك العثور على جميع القضايا في 🤗 Datasets من خلال الانتقال إلى علامة التبويب [Issues](https://github.com/huggingface/datasets/issues) في المستودع. كما هو موضح في لقطة الشاشة التالية، في وقت كتابة هذا التقرير، كان هناك 331 قضية مفتوحة و668 قضية مغلقة.
 
-إذا نقرت على إحدى هذه القضايا، فستجد أنها تحتوي على عنوان ووصف ومجموعة من العلامات التي تميز القضية. ويظهر مثال على ذلك في لقطة الشاشة أدناه.
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/huggingface-course/documentation-images/resolve/main/en/chapter5/datasets-issues.png" alt="قضايا GitHub المرتبطة بـ 🤗 Datasets." width="80%"/>
+</div>
 
-لتنزيل جميع قضايا المستودع، سنستخدم [واجهة برمجة تطبيقات REST من GitHub](https://docs.github.com/en/rest) لاستطلاع [نهاية نقطة القضايا](https://docs.github.com/en/rest/reference/issues#list-repository-issues). تعيد هذه النقطة النهائية قائمة من كائنات JSON، يحتوي كل منها على عدد كبير من الحقول التي تشمل العنوان والوصف بالإضافة إلى البيانات الوصفية حول حالة القضية، وما إلى ذلك.
+إذا نقرت على إحدى هذه القضايا، ستجد أنها تحتوي على عنوان ووصف ومجموعة من العلامات التي تصف القضية. يتم عرض مثال في لقطة الشاشة أدناه.
 
-تتمثل إحدى الطرق المريحة لتنزيل القضايا في استخدام مكتبة `requests`، والتي تعد الطريقة القياسية لإجراء طلبات HTTP في Python. يمكنك تثبيت المكتبة بتشغيل ما يلي:
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/huggingface-course/documentation-images/resolve/main/en/chapter5/datasets-issues-single.png" alt="قضية GitHub نموذجية في مستودع 🤗 Datasets." width="80%"/>
+</div>
+
+لتنزيل جميع قضايا المستودع، سنستخدم [GitHub REST API](https://docs.github.com/en/rest) لاستطلاع نقطة النهاية [Issues](https://docs.github.com/en/rest/reference/issues#list-repository-issues). تعيد هذه النقطة قائمة من الكائنات JSON، حيث يحتوي كل كائن على عدد كبير من الحقول التي تشمل العنوان والوصف بالإضافة إلى البيانات الوصفية حول حالة القضية وهكذا.
+
+تتمثل إحدى الطرق الملائمة لتنزيل القضايا في استخدام مكتبة `requests`، وهي الطريقة القياسية لإرسال طلبات HTTP في Python. يمكنك تثبيت المكتبة بتشغيل:
 
 ```python
 !pip install requests
 ```
 
-بمجرد تثبيت المكتبة، يمكنك إجراء طلبات GET إلى نقطة نهاية "القضايا" عن طريق استدعاء الدالة `requests.get()`. على سبيل المثال، يمكنك تشغيل الأمر التالي لاسترداد القضية الأولى في الصفحة الأولى:
+بمجرد تثبيت المكتبة، يمكنك إرسال طلبات GET إلى نقطة النهاية `Issues` عن طريق استدعاء الدالة `requests.get()`. على سبيل المثال، يمكنك تشغيل الأمر التالي لاسترداد القضية الأولى في الصفحة الأولى:
 
 ```py
 import requests
@@ -41,7 +56,7 @@ response.status_code
 200
 ```
 
-حيث يشير رمز الحالة `200` إلى نجاح الطلب (يمكنك العثور على قائمة برموز حالة HTTP [هنا](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)). ولكن ما يهمنا حقًا هو _الحمولة_، والتي يمكن الوصول إليها بتنسيقات مختلفة مثل البايتات أو السلاسل أو JSON. نظرًا لأننا نعرف أن قضايانا بتنسيق JSON، دعونا نتفقد الحمولة على النحو التالي:
+حيث يشير رمز الحالة `200` إلى نجاح الطلب (يمكنك العثور على قائمة برموز حالة HTTP المحتملة [هنا](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)). لكن ما يهمنا حقًا هو _الحمولة_، والتي يمكن الوصول إليها بتنسيقات مختلفة مثل البايتات أو السلاسل النصية أو JSON. حيث نعلم أن قضايانا بتنسيق JSON، دعنا نتفقد الحمولة على النحو التالي:
 
 ```py
 response.json()
@@ -49,67 +64,74 @@ response.json()
 
 ```python out
 [{'url': 'https://api.github.com/repos/huggingface/datasets/issues/2792',
-'repository_url': 'https://api.github.com/repos/huggingface/datasets',
-'labels_url': 'https://api.github.com/repos/huggingface/datasets/issues/2792/labels{/name}',
-'comments_url': 'https://api.github.com/repos/huggingface/datasets/issues/2792/comments',
-'events_url': 'https://api.github.com/repos/huggingface/datasets/issues/2792/events',
-'html_url': 'https://github.com/huggingface/datasets/pull/2792',
-'id': 968650274,
-'node_id': 'MDExOlB1bGxSZXF1ZXN0NzEwNzUyMjc0',
-'number': 2792,
-'title': 'Update GooAQ',
-'user': {'login': 'bhavitvyamalik',
-'id': 19718818,
-'node_id': 'MDQ6VXNlcjE5NzE4ODE4',
-'avatar_url': 'https://avatars.githubusercontent.com/u/19718818?v=4',
-'gravatar_id': '',
-'url': 'https://api.github.com/users/bhavitvyamalik',
-'html_url': 'https://github.com/bhavitvyamalik',
-'followers_url': 'https://api.github.com/users/bhavitvyamalik/followers',
-'following_url': 'https://api.github.com/users/bhavitvyamalik/following{/other_user}',
-'gists_url': 'https://api.github.com/users/bhavitvyamalik/gists{/gist_id}',
-'starred_url': 'https://api.github.com/users/bhavitvyamalik/starred{/owner}{/repo}',
-'subscriptions_url': 'https://api.github.com/users/bhavitvyamalik/subscriptions',
-'organizations_url': 'https://api.github.com/users/bhavitvyamalik/orgs',
-'repos_url': 'https://api.github.com/users/bhavitvyamalik/repos',
-'events_url': 'https://api.github.com/users/bhavitvyamalik/events{/privacy}',
-'received_events_url': 'https://api.github.com/users/bhavitvyamalik/received_events',
-'type': 'User',
-'site_admin': False},
-'labels': [],
-'state': 'open',
-'locked': False,
-'assignee': None,
-'assignees': [],
-'milestone': None,
-'comments': 1,
-'created_at': '2021-08-12T11:40:18Z',
-'updated_at': '2021-08-12T12:31:17Z',
-'closed_at': None,
-'author_association': 'CONTRIBUTOR',
-'active_lock_reason': None,
-'pull_request': {'url': 'https://api.github.com/repos/huggingface/datasets/pulls/2792',
-'html_url': 'https://github.com/huggingface/datasets/pull/2792',
-'diff_url': 'https://github.com/huggingface/datasets/pull/2792.diff',
-'patch_url': 'https://github.com/huggingface/datasets/pull/2792.patch'},
-'body': '[GooAQ](https://github.com/allenai/gooaq) dataset was recently updated after splits were added for the same. This PR contains new updated GooAQ with train/val/test splits and updated README as well.',
-'performed_via_github_app': None}]
+  'repository_url': 'https://api.github.com/repos/huggingface/datasets',
+  'labels_url': 'https://api.github.com/repos/huggingface/datasets/issues/2792/labels{/name}',
+  'comments_url': 'https://api.github.com/repos/huggingface/datasets/issues/2792/comments',
+  'events_url': 'https://api.github.com/repos/huggingface/datasets/issues/2792/events',
+  'html_url': 'https://github.com/huggingface/datasets/pull/2792',
+  'id': 968650274,
+  'node_id': 'MDExOlB1bGxSZXF1ZXN0NzEwNzUyMjc0',
+  'number': 2792,
+  'title': 'Update GooAQ',
+  'user': {'login': 'bhavitvyamalik',
+   'id': 19718818,
+   'node_id': 'MDQ6VXNlcjE5NzE4ODE4',
+   'avatar_url': 'https://avatars.githubusercontent.com/u/19718818?v=4',
+   'gravatar_id': '',
+   'url': 'https://api.github.com/users/bhavitvyamalik',
+   'html_url': 'https://github.com/bhavitvyamalik',
+   'followers_url': 'https://api.github.com/users/bhavitvyamalik/followers',
+   'following_url': 'https://api.github.com/users/bhavitvyamalik/following{/other_user}',
+   'gists_url': 'https://api.github.com/users/bhavitvyamalik/gists{/gist_id}',
+   'starred_url': 'https://api.github.com/users/bhavitvyamalik/starred{/owner}{/repo}',
+   'subscriptions_url': 'https://api.github.com/users/bhavitvyamalik/subscriptions',
+   'organizations_url': 'https://api.github.com/users/bhavitvyamalik/orgs',
+   'repos_url': 'https://api.github.com/users/bhavitvyamalik/repos',
+   'events_url': 'https://api.github.com/users/bhavitvyamalik/events{/privacy}',
+   'received_events_url': 'https://api.github.com/users/bhavitvyamalik/received_events',
+   'type': 'User',
+   'site_admin': False},
+  'labels': [],
+  'state': 'open',
+  'locked': False,
+  'assignee': None,
+  'assignees': [],
+  'milestone': None,
+  'comments': 1,
+  'created_at': '2021-08-12T11:40:18Z',
+  'updated_at': '2021-08-12T12:31:17Z',
+  'closed_at': None,
+  'author_association': 'CONTRIBUTOR',
+  'active_lock_reason': None,
+  'pull_request': {'url': 'https://api.github.com/repos/huggingface/datasets/pulls/2792',
+   'html_url': 'https://github.com/huggingface/datasets/pull/2792',
+   'diff_url': 'https://github.com/huggingface/datasets/pull/2792.diff',
+   'patch_url': 'https://github.com/huggingface/datasets/pull/2792.patch'},
+  'body': '[GooAQ](https://github.com/allenai/gooaq) dataset was recently updated after splits were added for the same. This PR contains new updated GooAQ with train/val/test splits and updated README as well.',
+  'performed_via_github_app': None}]
 ```
 
-يا له من قدر كبير من المعلومات! يمكننا أن نرى حقول مفيدة مثل `title` و`body` و`number` التي تصف القضية، بالإضافة إلى معلومات حول مستخدم GitHub الذي فتح القضية.
+يا له من قدر كبير من المعلومات! يمكننا رؤية حقول مفيدة مثل `title` و`body` و`number` التي تصف القضية، بالإضافة إلى معلومات حول مستخدم GitHub الذي فتح القضية.
 
-✏️ **جربها!** انقر فوق بعض عناوين URL في حمولة JSON أعلاه للحصول على فكرة عن نوع المعلومات التي ترتبط بها كل قضية من قضايا GitHub.
+<Tip>
 
-كما هو موضح في وثائق GitHub، [الوثائق](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting)، فإن الطلبات غير المصادق عليها محدودة بـ 60 طلبًا في الساعة. على الرغم من أنه يمكنك زيادة معلمة الاستعلام `per_page` لتقليل عدد الطلبات التي تقدمها، إلا أنك ستصل إلى حد المعدل لأي مستودع يحتوي على أكثر من بضعة آلاف من القضايا. لذلك، بدلاً من ذلك، يجب عليك اتباع تعليمات GitHub حول [تعليمات](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) لإنشاء _رمز وصول شخصي_ حتى تتمكن من زيادة حد المعدل إلى 5000 طلب في الساعة. بمجرد حصولك على الرمز المميز، يمكنك تضمينه كجزء من رأس الطلب:
+✏️ **جربها!** انقر على بعض عناوين URL في حمولة JSON أعلاه لتشعر بنوع المعلومات التي ترتبط بها كل قضية من قضايا GitHub.
+
+</Tip>
+
+كما هو موضح في وثائق GitHub [documentation](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting)، تقتصر الطلبات غير المصادق عليها على 60 طلبًا في الساعة. على الرغم من أنه يمكنك زيادة معلمة الاستعلام `per_page` لتقليل عدد الطلبات التي تقوم بها، إلا أنك ستصل إلى حد المعدل على أي مستودع يحتوي على أكثر من بضعة آلاف من القضايا. لذا بدلاً من ذلك، يجب عليك اتباع تعليمات GitHub [instructions](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) حول إنشاء _رمز وصول شخصي_ حتى تتمكن من زيادة حد المعدل إلى 5000 طلب في الساعة. بمجرد حصولك على الرمز، يمكنك تضمينه كجزء من رأس الطلب:
 
 ```py
 GITHUB_TOKEN = xxx  # انسخ رمز GitHub الخاص بك هنا
 headers = {"Authorization": f"token {GITHUB_TOKEN}"}
 ```
+<Tip warning={true}>
 
-⚠️ لا تشارك دفتر الملاحظات برمز `GITHUB_TOKEN` الملصق فيه. نوصي بحذف الخلية الأخيرة بمجرد تنفيذها لتجنب تسرب هذه المعلومات عن طريق الخطأ. من الأفضل، قم بتخزين الرمز المميز في ملف *.env* واستخدم مكتبة [`python-dotenv`](https://github.com/theskumar/python-dotenv) لتحميله تلقائيًا كمتغير بيئي.
+⚠️ لا تشارك مفكرة مع `GITHUB_TOKEN` الملصق فيها. نوصي بحذف الخلية الأخيرة بمجرد تنفيذها لتجنب تسريب هذه المعلومات عن طريق الخطأ. والأفضل من ذلك، قم بتخزين الرمز في ملف *.env* واستخدم مكتبة [`python-dotenv`](https://github.com/theskumar/python-dotenv) لتحميله تلقائيًا كمتغير بيئي.
 
-الآن بعد أن حصلنا على رمز الوصول الخاص بنا، دعنا ننشئ دالة يمكنها تنزيل جميع القضايا من مستودع GitHub:
+</Tip>
+
+الآن بعد أن حصلنا على رمز الوصول، دعنا ننشئ دالة يمكنها تنزيل جميع المشكلات من مستودع GitHub:
 
 ```py
 import time
@@ -120,118 +142,119 @@ from tqdm.notebook import tqdm
 
 
 def fetch_issues(
-owner="huggingface"،
-repo="datasets"،
-num_issues=10_000،
-rate_limit=5_000،
-issues_path=Path("."),
+    owner="huggingface",
+    repo="datasets",
+    num_issues=10_000,
+    rate_limit=5_000,
+    issues_path=Path("."),
 ):
-if not issues_path.is_dir():
-issues_path.mkdir(exist_ok=True)
+    if not issues_path.is_dir():
+        issues_path.mkdir(exist_ok=True)
 
-batch = []
-all_issues = []
-per_page = 100  # عدد القضايا التي سيتم إرجاعها لكل صفحة
-num_pages = math.ceil(num_issues / per_page)
-base_url = "https://api.github.com/repos"
+    batch = []
+    all_issues = []
+    per_page = 100  # عدد المشكلات التي سيتم إرجاعها في كل صفحة
+    num_pages = math.ceil(num_issues / per_page)
+    base_url = "https://api.github.com/repos"
 
-for page in tqdm(range(num_pages)):
-# استعلام مع state=all للحصول على القضايا المفتوحة والمغلقة
-query = f"issues?page={page}&per_page={per_page}&state=all"
-issues = requests.get(f"{base_url}/{owner}/{repo}/{query}", headers=headers)
-batch.extend(issues.json())
+    for page in tqdm(range(num_pages)):
+        # استعلام مع state=all للحصول على كل من المشكلات المفتوحة والمغلقة
+        query = f"issues?page={page}&per_page={per_page}&state=all"
+        issues = requests.get(f"{base_url}/{owner}/{repo}/{query}", headers=headers)
+        batch.extend(issues.json())
 
-if len(batch) > rate_limit and len(all_issues) < num_issues:
-all_issues.extend(batch)
-batch = []  # مسح الدفعة للفترة الزمنية التالية
-print(f"تم الوصول إلى حد معدل GitHub. النوم لمدة ساعة واحدة ...")
-time.sleep(60 * 60 + 1)
+        if len(batch) > rate_limit and len(all_issues) < num_issues:
+            all_issues.extend(batch)
+            batch = []  # مسح الدفعة للفترة الزمنية التالية
+            print(f"تم الوصول إلى حد GitHub للمعدل. النوم لمدة ساعة واحدة ...")
+            time.sleep(60 * 60 + 1)
 
-all_issues.extend(batch)
-df = pd.DataFrame.from_records(all_issues)
-df.to_json(f"{issues_path}/{repo}-issues.jsonl"، orient="records"، lines=True)
-print(
-f"تم تنزيل جميع القضايا لـ {repo}! تم تخزين مجموعة البيانات في {issues_path}/{repo}-issues.jsonl"
-)
+    all_issues.extend(batch)
+    df = pd.DataFrame.from_records(all_issues)
+    df.to_json(f"{issues_path}/{repo}-issues.jsonl", orient="records", lines=True)
+    print(
+        f"تم تنزيل جميع المشكلات لـ {repo}! مجموعة البيانات مخزنة في {issues_path}/{repo}-issues.jsonl"
+    )
 ```
 
-الآن عندما نستدعي الدالة `fetch_issues()`، فستقوم بتنزيل جميع القضايا على دفعات لتجنب تجاوز حد GitHub لعدد الطلبات في الساعة؛ وستتم تخزين النتيجة في ملف _repository_name-issues.jsonl_، حيث يكون كل سطر كائن JSON يمثل قضية. دعونا نستخدم هذه الدالة للحصول على جميع القضايا من 🤗 Datasets:
+الآن عند استدعاء `fetch_issues()`، سيقوم بتنزيل جميع المشكلات على دفعات لتجنب تجاوز حد GitHub على عدد الطلبات في الساعة؛ وستتم تخزين النتيجة في ملف _repository_name-issues.jsonl_، حيث يكون كل سطر عبارة عن كائن JSON يمثل مشكلة. دعنا نستخدم هذه الدالة لالتقاط جميع المشكلات من 🤗 Datasets:
 
 ```py
-# اعتمادًا على اتصالك بالإنترنت، قد يستغرق ذلك عدة دقائق للتشغيل...
+# اعتمادًا على اتصال الإنترنت لديك، قد يستغرق هذا عدة دقائق للتشغيل...
 fetch_issues()
 ```
 
-بمجرد تنزيل القضايا، يمكننا تحميلها محليًا باستخدام مهاراتنا الجديدة التي اكتسبناها من [القسم 2](/course/chapter5/2):
+بمجرد تنزيل المشكلات، يمكننا تحميلها محليًا باستخدام مهاراتنا الجديدة التي اكتسبناها من [القسم 2](/course/chapter5/2):
 
 ```py
-issues_dataset = load_dataset("json"، data_files="datasets-issues.jsonl"، split="train")
+issues_dataset = load_dataset("json", data_files="datasets-issues.jsonl", split="train")
 issues_dataset
 ```
 
 ```python out
 Dataset({
-features: ['url'، 'repository_url'، 'labels_url'، 'comments_url'، 'events_url'، 'html_url'، 'id'، 'node_id'، 'number'، 'title'، 'user'، 'labels'، 'state'، 'locked'، 'assignee'، 'assignees'، 'milestone'، 'comments'، 'created_at'، 'updated_at'، 'closed_at'، 'author_association'، 'active_lock_reason'، 'pull_request'، 'body'، 'timeline_url'، 'performed_via_github_app']،
-num_rows: 3019
+    features: ['url', 'repository_url', 'labels_url', 'comments_url', 'events_url', 'html_url', 'id', 'node_id', 'number', 'title', 'user', 'labels', 'state', 'locked', 'assignee', 'assignees', 'milestone', 'comments', 'created_at', 'updated_at', 'closed_at', 'author_association', 'active_lock_reason', 'pull_request', 'body', 'timeline_url', 'performed_via_github_app'],
+    num_rows: 3019
 })
 ```
 
-رائع، لقد أنشأنا أول مجموعة بيانات خاصة بنا من الصفر! ولكن لماذا هناك عدة آلاف من القضايا عندما تعرض علامة التبويب "القضايا" في مستودع 🤗 Datasets حوالي 1000 قضية فقط 🤔؟ كما هو موضح في وثائق GitHub، [الوثائق](https://docs.github.com/en/rest/reference/issues#list-issues-assigned-to-the-authenticated-user)، وذلك لأننا قمنا بتنزيل جميع طلبات السحب أيضًا:
+رائع، لقد أنشأنا أول مجموعة بيانات من الصفر! ولكن لماذا هناك عدة آلاف من المشكلات عندما يعرض تبويب [المشكلات](https://github.com/huggingface/datasets/issues) في مستودع 🤗 Datasets حوالي 1000 مشكلة فقط؟ كما هو موضح في [وثائق](https://docs.github.com/en/rest/reference/issues#list-issues-assigned-to-the-authenticated-user) GitHub، وذلك لأننا قمنا بتنزيل جميع طلبات السحب أيضًا:
 
-> تعتبر واجهة برمجة تطبيقات REST v3 من GitHub كل طلب سحب كقضية، ولكن ليست كل قضية هي طلب سحب. ولهذا السبب، قد تعيد نقاط نهاية "القضايا" كل من القضايا وطلبات السحب في الاستجابة. يمكنك تحديد طلبات السحب بواسطة مفتاح `pull_request`. كن على علم بأن `id` لطلب السحب الذي تم إرجاعه من نقاط نهاية "القضايا" سيكون معرف القضية.
+> تعتبر واجهة برمجة التطبيقات REST v3 الخاصة بـ GitHub كل طلب سحب مشكلة، ولكن ليست كل مشكلة هي طلب سحب. لهذا السبب، قد تعيد نقاط النهاية "المشكلات" كل من المشكلات وطلبات السحب في الاستجابة. يمكنك تحديد طلبات السحب من خلال مفتاح `pull_request`. كن على دراية بأن `id` لطلب السحب الذي تم إرجاعه من نقاط النهاية "المشكلات" سيكون معرف مشكلة.
 
-نظرًا لأن محتويات القضايا وطلبات السحب مختلفة تمامًا، فلننجز بعض المعالجة المسبقة البسيطة لتمكيننا من التمييز بينهما.
-## تنظيف البيانات
+نظرًا لأن محتويات المشكلات وطلبات السحب مختلفة تمامًا، دعنا نقوم ببعض المعالجة الأولية لتمكيننا من التمييز بينهما.
 
-توضح الشفرة البرمجية التالية من وثائق GitHub أن عمود "pull_request" يمكن استخدامه للتمييز بين القضايا وطلبات السحب. دعونا نلقي نظرة على عينة عشوائية لنرى ما هو الفرق. كما فعلنا في [القسم 3](/course/chapter5/3)، سنقوم بتسلسل "Dataset.shuffle()" و"Dataset.select()" لإنشاء عينة عشوائية، ثم نقوم بدمج عمودي "html_url" و"pull_request" حتى نتمكن من مقارنة عناوين URL المختلفة:
+## تنظيف البيانات [[تنظيف-البيانات]]
+
+تُخبرنا المقتطف أعلاه من وثائق GitHub أنه يمكن استخدام عمود `pull_request` للتمييز بين المشكلات وطلبات السحب. دعنا نلقي نظرة على عينة عشوائية لنرى ما هو الفرق. كما فعلنا في [القسم 3](/course/chapter5/3)، سنقوم بتوصيل `Dataset.shuffle()` و `Dataset.select()` لإنشاء عينة عشوائية ثم نقوم بتوصيل أعمدة `html_url` و `pull_request` بحيث يمكننا مقارنة عناوين URL المختلفة:
 
 ```py
 sample = issues_dataset.shuffle(seed=666).select(range(3))
 
-# طباعة عنوان URL وإدخالات طلب السحب
+# طباعة إدخالات عنوان URL وطلب السحب
 for url, pr in zip(sample["html_url"], sample["pull_request"]):
-print(f">> URL: {url}")
-print(f">> Pull request: {pr}\n")
+    print(f">> URL: {url}")
+    print(f">> Pull request: {pr}\n")
 ```
 
 ```python out
->> عنوان URL: https://github.com/huggingface/datasets/pull/850
->> طلب السحب: {'url': 'https://api.github.com/repos/huggingface/datasets/pulls/850', 'html_url': 'https://github.com/huggingface/datasets/pull/850', 'diff_url': 'https://github.com/huggingface/datasets/pull/850.diff', 'patch_url': 'https://github.com/huggingface/datasets/pull/850.patch'}
+>> URL: https://github.com/huggingface/datasets/pull/850
+>> Pull request: {'url': 'https://api.github.com/repos/huggingface/datasets/pulls/850', 'html_url': 'https://github.com/huggingface/datasets/pull/850', 'diff_url': 'https://github.com/huggingface/datasets/pull/850.diff', 'patch_url': 'https://github.com/huggingface/datasets/pull/850.patch'}
 
->> عنوان URL: https://github.com/huggingface/datasets/issues/2773
->> طلب السحب: None
+>> URL: https://github.com/huggingface/datasets/issues/2773
+>> Pull request: None
 
->> عنوان URL: https://github.com/huggingface/datasets/pull/783
->> طلب السحب: {'url': 'https://api.github.com/repos/huggingface/datasets/pulls/783', 'html_url': 'https://github.com/huggingface/datasets/pull/783', 'diff_url': 'https://github.com/huggingface/datasets/pull/783.diff', 'patch_url': 'https://github.com/huggingface/datasets/pull/783.patch'}
+>> URL: https://github.com/huggingface/datasets/pull/783
+>> Pull request: {'url': 'https://api.github.com/repos/huggingface/datasets/pulls/783', 'html_url': 'https://github.com/huggingface/datasets/pull/783', 'diff_url': 'https://github.com/huggingface/datasets/pull/783.diff', 'patch_url': 'https://github.com/huggingface/datasets/pull/783.patch'}
 ```
 
-هنا يمكننا أن نرى أن كل طلب سحب يرتبط بمختلف عناوين URL، في حين أن القضايا العادية لديها إدخال "None". يمكننا استخدام هذا التمييز لإنشاء عمود جديد "is_pull_request" الذي يتحقق مما إذا كان حقل "pull_request" هو "None" أم لا:
+هنا يمكننا أن نرى أن كل طلب سحب مرتبط بعناوين URL مختلفة، في حين أن المشكلات العادية لها إدخال `None`. يمكننا استخدام هذا التمييز لإنشاء عمود جديد `is_pull_request` الذي يتحقق مما إذا كان حقل `pull_request` هو `None` أم لا:
 
 ```py
 issues_dataset = issues_dataset.map(
-lambda x: {"is_pull_request": False if x["pull_request"] is None else True}
+    lambda x: {"is_pull_request": False if x["pull_request"] is None else True}
 )
 ```
 
 <Tip>
 
-✏️ **جربها!** احسب متوسط الوقت الذي يستغرقه إغلاق القضايا في 🤗 Datasets. قد تجد وظيفة "Dataset.filter()" مفيدة لتصفية طلبات السحب والقضايا المفتوحة، ويمكنك استخدام وظيفة "Dataset.set_format()" لتحويل مجموعة البيانات إلى "DataFrame" بحيث يمكنك بسهولة معالجة الطوابع الزمنية "created_at" و"closed_at". وللحصول على نقاط المكافأة، احسب متوسط الوقت الذي يستغرقه إغلاق طلبات السحب.
+✏️ **جربه!** احسب متوسط الوقت الذي يستغرقه إغلاق المشكلات في 🤗 Datasets. قد تجد وظيفة `Dataset.filter()` مفيدة لتصفية طلبات السحب والمشكلات المفتوحة، ويمكنك استخدام وظيفة `Dataset.set_format()` لتحويل مجموعة البيانات إلى `DataFrame` بحيث يمكنك بسهولة التلاعب بالطوابع الزمنية `created_at` و `closed_at`. للحصول على نقاط إضافية، احسب متوسط الوقت الذي يستغرقه إغلاق طلبات السحب.
 
 </Tip>
 
-على الرغم من أنه يمكننا المضي قدمًا في تنظيف مجموعة البيانات أكثر عن طريق إسقاط أو إعادة تسمية بعض الأعمدة، إلا أنه من الجيد عمومًا الحفاظ على مجموعة البيانات "خام" قدر الإمكان في هذه المرحلة بحيث يمكن استخدامها بسهولة في تطبيقات متعددة.
+على الرغم من أنه يمكننا الاستمرار في تنظيف مجموعة البيانات عن طريق إسقاط أو إعادة تسمية بعض الأعمدة، إلا أنه من الممارسات الجيدة عمومًا الحفاظ على مجموعة البيانات "خام" قدر الإمكان في هذه المرحلة بحيث يمكن استخدامها بسهولة في تطبيقات متعددة.
 
-قبل أن نقوم بدفع مجموعة البيانات الخاصة بنا إلى Hugging Face Hub، دعونا نتعامل مع شيء واحد مفقود منها: التعليقات المرتبطة بكل قضية وطلب سحب. سنضيفها في المرة القادمة باستخدام واجهة برمجة تطبيقات GitHub REST!
+قبل أن ندفع بمجموعة البيانات الخاصة بنا إلى Hugging Face Hub، دعنا نتعامل مع شيء مفقود منها: التعليقات المرتبطة بكل مشكلة وطلب سحب. سنضيفها في المرة القادمة - كما توقعت - باستخدام واجهة برمجة تطبيقات GitHub REST!
 
-## إثراء مجموعة البيانات
+## تعزيز مجموعة البيانات [[تعزيز-مجموعة-البيانات]]
 
-كما هو موضح في لقطة الشاشة التالية، توفر التعليقات المرتبطة بقضية أو طلب سحب مصدرًا غنيًا بالمعلومات، خاصة إذا كنا مهتمين ببناء محرك بحث للإجابة على استفسارات المستخدمين حول المكتبة.
+كما هو موضح في لقطة الشاشة التالية، توفر التعليقات المرتبطة بمشكلة أو طلب سحب مصدرًا غنيًا بالمعلومات، خاصة إذا كنا مهتمين ببناء محرك بحث للإجابة على استفسارات المستخدم حول المكتبة.
 
 <div class="flex justify-center">
-<img src="https://huggingface.co/datasets/huggingface-course/documentation-images/resolve/main/en/chapter5/datasets-issues-comment.png" alt="التعليقات المرتبطة بقضية حول 🤗 Datasets." width="80%"/>
+<img src="https://huggingface.co/datasets/huggingface-course/documentation-images/resolve/main/en/chapter5/datasets-issues-comment.png" alt="تعليقات مرتبطة بمشكلة حول 🤗 Datasets." width="80%"/>
 </div>
 
-توفر واجهة برمجة تطبيقات GitHub REST نقطة نهاية ["Comments"](https://docs.github.com/en/rest/reference/issues#list-issue-comments) التي تعيد جميع التعليقات المرتبطة برقم القضية. دعونا نختبر نقطة النهاية لنرى ما الذي تعيده:
+توفر واجهة برمجة التطبيقات REST الخاصة بـ GitHub نقطة نهاية [`Comments`](https://docs.github.com/en/rest/reference/issues#list-issue-comments) التي تعيد جميع التعليقات المرتبطة برقم مشكلة. دعنا نختبر نقطة النهاية لنرى ما الذي تعيده:
 
 ```py
 issue_number = 2792
@@ -239,71 +262,71 @@ url = f"https://api.github.com/repos/huggingface/datasets/issues/{issue_number}/
 response = requests.get(url, headers=headers)
 response.json()
 ```
-
-```python out
+```
+```python
 [{'url': 'https://api.github.com/repos/huggingface/datasets/issues/comments/897594128',
-'html_url': 'https://github.com/huggingface/datasets/pull/2792#issuecomment-897594128',
-'issue_url': 'https://api.github.com/repos/huggingface/datasets/issues/2792',
-'id': 897594128,
-'node_id': 'IC_kwDODunzps41gDMQ',
-'user': {'login': 'bhavitvyamalik',
-'id': 19718818,
-'node_id': 'MDQ6VXNlcjE5NzE4ODE4',
-'avatar_url': 'https://avatars.githubusercontent.com/u/19718818?v=4',
-'gravatar_id': '',
-'url': 'https://api.github.com/users/bhavitvyamalik',
-'html_url': 'https://github.com/bhavitvyamalik',
-'followers_url': 'https://api.github.com/users/bhavitvyamalik/followers',
-'following_url': 'https://api.github.com/users/bhavitvyamalik/following{/other_user}',
-'gists_url': 'https://api.github.com/users/bhavitvyamalik/gists{/gist_id}',
-'starred_url': 'https://api.github.com/users/bhavitvyamalik/starred{/owner}{/repo}',
-'subscriptions_url': 'https://api.github.com/users/bhavitvyamalik/subscriptions',
-'organizations_url': 'https://api.github.com/users/bhavitvyamalik/orgs',
-'repos_url': 'https://api.github.com/users/bhavitvyamalik/repos',
-'events_url': 'https://api.github.com/users/bhavitvyamalik/events{/privacy}',
-'received_events_url': 'https://api.github.com/users/bhavitvyamalik/received_events',
-'type': 'User',
-'site_admin': False},
-'created_at': '2021-08-12T12:21:52Z',
-'updated_at': '2021-08-12T12:31:17Z',
-'author_association': 'CONTRIBUTOR',
-'body': "@albertvillanova اختباراتي تفشل هنا:\r\n```\r\ndataset_name = 'gooaq'\r\n\r\n    def test_load_dataset(self, dataset_name):\r\n        configs = self.dataset_tester.load_all_configs(dataset_name, is_local=True)[:1]\r\n>       self.dataset_tester.check_load_dataset(dataset_name, configs, is_local=True, use_local_dummy_data=True)\r\n\r\ntests/test_dataset_common.py:234: \r\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \r\ntests/test_dataset_common.py:187: in check_load_dataset\r\n    self.parent.assertTrue(len(dataset[split]) > 0)\r\nE   AssertionError: False is not true\r\n```\r\nعندما أحاول تحميل مجموعة البيانات على جهاز الكمبيوتر المحلي الخاص بي، يعمل بشكل جيد. هل لديك أي اقتراحات حول كيفية تجنب هذا الخطأ؟",
-'performed_via_github_app': None}]
+  'html_url': 'https://github.com/huggingface/datasets/pull/2792#issuecomment-897594128',
+  'issue_url': 'https://api.github.com/repos/huggingface/datasets/issues/2792',
+  'id': 897594128,
+  'node_id': 'IC_kwDODunzps41gDMQ',
+  'user': {'login': 'bhavitvyamalik',
+   'id': 19718818,
+   'node_id': 'MDQ6VXNlcjE5NzE4ODE4',
+   'avatar_url': 'https://avatars.githubusercontent.com/u/19718818?v=4',
+   'gravatar_id': '',
+   'url': 'https://api.github.com/users/bhavitvyamalik',
+   'html_url': 'https://github.com/bhavitvyamalik',
+   'followers_url': 'https://api.github.com/users/bhavitvyamalik/followers',
+   'following_url': 'https://api.github.com/users/bhavitvyamalik/following{/other_user}',
+   'gists_url': 'https://api.github.com/users/bhavitvyamalik/gists{/gist_id}',
+   'starred_url': 'https://api.github.com/users/bhavitvyamalik/starred{/owner}{/repo}',
+   'subscriptions_url': 'https://api.github.com/users/bhavitvyamalik/subscriptions',
+   'organizations_url': 'https://api.github.com/users/bhavitvyamalik/orgs',
+   'repos_url': 'https://api.github.com/users/bhavitvyamalik/repos',
+   'events_url': 'https://api.github.com/users/bhavitvyamalik/events{/privacy}',
+   'received_events_url': 'https://api.github.com/users/bhavitvyamalik/received_events',
+   'type': 'User',
+   'site_admin': False},
+  'created_at': '2021-08-12T12:21:52Z',
+  'updated_at': '2021-08-12T12:31:17Z',
+  'author_association': 'CONTRIBUTOR',
+  'body': "@albertvillanova اختباراتي تفشل هنا:\r\n```\r\ndataset_name = 'gooaq'\r\n\r\n    def test_load_dataset(self, dataset_name):\r\n        configs = self.dataset_tester.load_all_configs(dataset_name, is_local=True)[:1]\r\n>       self.dataset_tester.check_load_dataset(dataset_name, configs, is_local=True, use_local_dummy_data=True)\r\n\r\ntests/test_dataset_common.py:234: \r\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \r\ntests/test_dataset_common.py:187: in check_load_dataset\r\n    self.parent.assertTrue(len(dataset[split]) > 0)\r\nE   AssertionError: False is not true\r\n```\r\nعندما أحاول تحميل مجموعة البيانات على الجهاز المحلي، يعمل بشكل جيد. هل لديك أي اقتراحات حول كيفية تجنب هذا الخطأ؟",
+  'performed_via_github_app': None}]
 ```
 
-يمكننا أن نرى أن التعليق مخزن في حقل "body"، لذلك دعونا نكتب دالة بسيطة تعيد جميع التعليقات المرتبطة بقضية عن طريق اختيار محتويات "body" لكل عنصر في "response.json()":
+يمكننا أن نرى أن التعليق مخزن في حقل `body`، لذا دعنا نكتب دالة بسيطة تعيد كل التعليقات المرتبطة بمسألة ما عن طريق اختيار محتويات `body` لكل عنصر في `response.json()`:
 
 ```py
 def get_comments(issue_number):
-url = f"https://api.github.com/repos/huggingface/datasets/issues/{issue_number}/comments"
-response = requests.get(url, headers=headers)
-return [r["body"] for r in response.json()]
+    url = f"https://api.github.com/repos/huggingface/datasets/issues/{issue_number}/comments"
+    response = requests.get(url, headers=headers)
+    return [r["body"] for r in response.json()]
 
 
-# اختبار وظيفتنا كما هو متوقع
+# اختبر عمل دالتنا كما هو متوقع
 get_comments(2792)
 ```
 
 ```python out
-["@albertvillanova اختباراتي تفشل هنا:\r\n```\r\ndataset_name = 'gooaq'\r\n\r\n    def test_load_dataset(self, dataset_name):\r\n        configs = self.dataset_tester.load_all_configs(dataset_name, is_local=True)[:1]\r\n>       self.dataset_tester.check_load_dataset(dataset_name, configs, is_local=True, use_local_dummy_data=True)\r\n\r\ntests/test_dataset_common.py:234: \r\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \r\ntests/test_dataset_common.py:187: in check_load_dataset\r\n    self.parent.assertTrue(len(dataset[split]) > 0)\r\nE   AssertionError: False is not true\r\n```\r\nعندما أحاول تحميل مجموعة البيانات على جهاز الكمبيوتر المحلي الخاص بي، يعمل بشكل جيد. هل لديك أي اقتراحات حول كيفية تجنب هذا الخطأ؟"]
+["@albertvillanova اختباراتي تفشل هنا:\r\n```\r\ndataset_name = 'gooaq'\r\n\r\n    def test_load_dataset(self, dataset_name):\r\n        configs = self.dataset_tester.load_all_configs(dataset_name, is_local=True)[:1]\r\n>       self.dataset_tester.check_load_dataset(dataset_name, configs, is_local=True, use_local_dummy_data=True)\r\n\r\ntests/test_dataset_common.py:234: \r\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \r\ntests/test_dataset_common.py:187: in check_load_dataset\r\n    self.parent.assertTrue(len(dataset[split]) > 0)\r\nE   AssertionError: False is not true\r\n```\r\nعندما أحاول تحميل مجموعة البيانات على الجهاز المحلي، يعمل بشكل جيد. هل لديك أي اقتراحات حول كيفية تجنب هذا الخطأ؟"]
 ```
 
-يبدو هذا جيدًا، لذلك دعونا نستخدم "Dataset.map()" لإضافة عمود "comments" جديد إلى كل قضية في مجموعة البيانات الخاصة بنا:
+يبدو جيداً، لذا دعنا نستخدم `Dataset.map()` لإضافة عمود `comments` جديد لكل مسألة في مجموعة بياناتنا:
 
 ```py
-# اعتمادًا على اتصالك بالإنترنت، قد يستغرق هذا بضع دقائق...
+# اعتماداً على اتصالك بالإنترنت، قد يستغرق هذا بضع دقائق...
 issues_with_comments_dataset = issues_dataset.map(
-lambda x: {"comments": get_comments(x["number"])}
+    lambda x: {"comments": get_comments(x["number"])}
 )
 ```
 
-الخطوة الأخيرة هي دفع مجموعة البيانات الخاصة بنا إلى Hub. دعونا نلقي نظرة على كيفية القيام بذلك.
+الخطوة الأخيرة هي دفع مجموعة البيانات الخاصة بنا إلى Hub. دعنا نلقي نظرة على كيفية القيام بذلك.
 
-## تحميل مجموعة البيانات إلى Hugging Face Hub
+## تحميل مجموعة البيانات إلى Hugging Face Hub[[uploading-the-dataset-to-the-hugging-face-hub]]
 
 <Youtube id="HaN6qCr_Afc"/>
 
-الآن بعد أن حصلنا على مجموعة البيانات المعززة لدينا، حان الوقت لدفعها إلى Hub حتى نتمكن من مشاركتها مع المجتمع! تحميل مجموعة من البيانات أمر بسيط للغاية: تمامًا مثل النماذج ومحولات الرموز من 🤗 Transformers، يمكننا استخدام طريقة "push_to_hub()" لتحميل مجموعة من البيانات. للقيام بذلك، نحتاج إلى رمز توثيق، والذي يمكن الحصول عليه أولاً عن طريق تسجيل الدخول إلى Hugging Face Hub باستخدام وظيفة "notebook_login()":
+الآن بعد أن أصبحت لدينا مجموعة بياناتنا المعززة، حان الوقت لدفعها إلى Hub حتى نتمكن من مشاركتها مع المجتمع! تحميل مجموعة بيانات أمر بسيط جداً: مثل النماذج والمحللات الرمزية من 🤗 Transformers، يمكننا استخدام طريقة `push_to_hub()` لدفع مجموعة بيانات. للقيام بذلك نحتاج إلى رمز توثيق، والذي يمكن الحصول عليه أولاً بتسجيل الدخول إلى Hugging Face Hub باستخدام دالة `notebook_login()`:
 
 ```py
 from huggingface_hub import notebook_login
@@ -311,19 +334,19 @@ from huggingface_hub import notebook_login
 notebook_login()
 ```
 
-سيؤدي هذا إلى إنشاء أداة تحكم يمكنك من خلالها إدخال اسم المستخدم وكلمة المرور الخاصين بك، وسيتم حفظ رمز واجهة برمجة التطبيقات في *~/.huggingface/token*. إذا كنت تشغل الرمز في المحطة الطرفية، فيمكنك تسجيل الدخول عبر واجهة سطر الأوامر بدلاً من ذلك:
+سيقوم هذا بإنشاء أداة يمكنك من خلالها إدخال اسم المستخدم وكلمة المرور الخاصة بك، وسيتم حفظ رمز واجهة برمجة التطبيقات في *~/.huggingface/token*. إذا كنت تقوم بتشغيل الكود في المحطة الطرفية، يمكنك تسجيل الدخول عبر واجهة سطر الأوامر بدلاً من ذلك:
 
 ```bash
 huggingface-cli login
 ```
 
-بمجرد قيامنا بذلك، يمكننا تحميل مجموعة البيانات الخاصة بنا عن طريق تشغيل:
+بمجرد أن نفعل ذلك، يمكننا تحميل مجموعة البيانات الخاصة بنا عن طريق تشغيل:
 
 ```py
 issues_with_comments_dataset.push_to_hub("github-issues")
 ```
 
-من هنا، يمكن لأي شخص تنزيل مجموعة البيانات عن طريق توفير "load_dataset()" بمعرف المستودع كحجة "path":
+من هنا، يمكن لأي شخص تنزيل مجموعة البيانات عن طريق توفير `load_dataset()` مع معرف المستودع كحجة `path`:
 
 ```py
 remote_dataset = load_dataset("lewtun/github-issues", split="train")
@@ -332,34 +355,33 @@ remote_dataset
 
 ```python out
 Dataset({
-features: ['url', 'repository_url', 'labels_url', 'comments_url', 'events_url', 'html_url', 'id', 'node_id', 'number', 'title', 'user', 'labels', 'state', 'locked', 'assignee', 'assignees', 'milestone', 'comments', 'created_at', 'updated_at', 'closed_at', 'author_association', 'active_lock_reason', 'pull_request', 'body', 'performed_via_github_app', 'is_pull_request'],
-num_rows: 2855
+    features: ['url', 'repository_url', 'labels_url', 'comments_url', 'events_url', 'html_url', 'id', 'node_id', 'number', 'title', 'user', 'labels', 'state', 'locked', 'assignee', 'assignees', 'milestone', 'comments', 'created_at', 'updated_at', 'closed_at', 'author_association', 'active_lock_reason', 'pull_request', 'body', 'performed_via_github_app', 'is_pull_request'],
+    num_rows: 2855
 })
 ```
-
-رائع، لقد قمنا بدفع مجموعة البيانات الخاصة بنا إلى Hub وهي متاحة الآن للآخرين لاستخدامها! هناك شيء مهم واحد فقط يجب القيام به: إضافة "بطاقة مجموعة بيانات" تشرح كيفية إنشاء المجموعة وتوفر معلومات مفيدة أخرى للمجتمع.
+رائع، لقد قمنا برفع مجموعة البيانات الخاصة بنا إلى المركز وهي متاحة الآن للآخرين للاستخدام! هناك شيء مهم واحد فقط يجب القيام به: إضافة بطاقة مجموعة بيانات _dataset card_ تشرح كيفية إنشاء مجموعة البيانات وتوفر معلومات مفيدة أخرى للمجتمع.
 
 <Tip>
 
-💡 يمكنك أيضًا تحميل مجموعة من البيانات إلى Hugging Face Hub مباشرة من المحطة الطرفية باستخدام "huggingface-cli" وقليل من سحر Git. راجع [دليل 🤗 Datasets](https://huggingface.co/docs/datasets/share#share-a-dataset-using-the-cli) للحصول على التفاصيل حول كيفية القيام بذلك.
+💡 يمكنك أيضًا تحميل مجموعة بيانات إلى مركز Hugging Face مباشرة من المحطة الطرفية باستخدام `huggingface-cli` وبعض سحر Git. راجع دليل [🤗 Datasets](https://huggingface.co/docs/datasets/share#share-a-dataset-using-the-cli) للحصول على التفاصيل حول كيفية القيام بذلك.
 
 </Tip>
 
-## إنشاء بطاقة مجموعة بيانات
+## إنشاء بطاقة مجموعة بيانات [[creating-a-dataset-card]]
 
-مجموعات البيانات الموثقة جيدًا من المرجح أن تكون مفيدة للآخرين (بما في ذلك أنت في المستقبل!)، حيث توفر السياق الذي يمكّن المستخدمين من تحديد ما إذا كانت مجموعة البيانات ذات صلة بمهمتهم وتقييم أي تحيزات أو مخاطر محتملة مرتبطة باستخدام مجموعة البيانات.
+من المرجح أن تكون مجموعات البيانات الموثقة جيدًا مفيدة للآخرين (بما في ذلك أنت في المستقبل!)، حيث توفر السياق الذي يمكّن المستخدمين من تحديد ما إذا كانت مجموعة البيانات ذات صلة بمهمتهم وتقييم أي تحيزات أو مخاطر محتملة مرتبطة باستخدام مجموعة البيانات.
 
-على Hugging Face Hub، يتم تخزين هذه المعلومات في ملف *README.md* لكل مستودع مجموعة بيانات. هناك خطوتان رئيسيتان يجب اتخاذهما قبل إنشاء هذا الملف:
+على مركز Hugging Face، يتم تخزين هذه المعلومات في ملف *README.md* الخاص بكل مستودع لمجموعة البيانات. هناك خطوتان رئيسيتان يجب اتخاذهما قبل إنشاء هذا الملف:
 
-1. استخدم تطبيق ["datasets-tagging"](https://huggingface.co/datasets/tagging/) لإنشاء علامات بيانات وصفية بتنسيق YAML. تُستخدم هذه العلامات لمجموعة متنوعة من ميزات البحث على Hugging Face Hub وتضمن إمكانية العثور على مجموعة البيانات الخاصة بك بسهولة من قبل أعضاء المجتمع. نظرًا لأننا أنشأنا مجموعة بيانات مخصصة هنا، فسيتعين عليك استنساخ مستودع "datasets-tagging" وتشغيل التطبيق محليًا. يبدو واجهة التطبيق على النحو التالي:
+1. استخدم تطبيق [`datasets-tagging`](https://huggingface.co/datasets/tagging/) لإنشاء علامات بيانات وصفية بتنسيق YAML. تُستخدم هذه العلامات لمجموعة متنوعة من ميزات البحث على مركز Hugging Face وتضمن إمكانية العثور على مجموعة البيانات الخاصة بك بسهولة من قبل أعضاء المجتمع. نظرًا لأننا أنشأنا مجموعة بيانات مخصصة هنا، ستحتاج إلى استنساخ مستودع `datasets-tagging` وتشغيل التطبيق محليًا. هذا ما يبدو عليه واجهة التطبيق:
 
 <div class="flex justify-center">
 <img src="https://huggingface.co/datasets/huggingface-course/documentation-images/resolve/main/en/chapter5/datasets-tagger.png" alt="واجهة `datasets-tagging`." width="80%"/>
 </div>
 
-2. اقرأ [دليل 🤗 Datasets](https://github.com/huggingface/datasets/blob/master/templates/README_guide.md) حول إنشاء بطاقات بيانات مفيدة واستخدمها كقالب.
+2. اقرأ دليل [🤗 Datasets](https://github.com/huggingface/datasets/blob/master/templates/README_guide.md) حول إنشاء بطاقات مجموعة بيانات إعلامية واستخدمه كقالب.
 
-يمكنك إنشاء ملف *README.md* مباشرة على Hub، ويمكنك العثور على قالب لبطاقة مجموعة البيانات في مستودع مجموعة البيانات "lewtun/github-issues". تُظهر لقطة الشاشة التالية بطاقة مجموعة البيانات المكتملة.
+يمكنك إنشاء ملف *README.md* مباشرة على المركز، ويمكنك العثور على نموذج بطاقة مجموعة بيانات في مستودع مجموعة البيانات `lewtun/github-issues`. تُظهر لقطة الشاشة أدناه بطاقة مجموعة البيانات بعد تعبئتها.
 
 <div class="flex justify-center">
 <img src="https://huggingface.co/datasets/huggingface-course/documentation-images/resolve/main/en/chapter5/dataset-card.png" alt="بطاقة مجموعة بيانات." width="80%"/>
@@ -367,4 +389,14 @@ num_rows: 2855
 
 <Tip>
 
-✏️ **جربها!** استخدم تطبيق "dataset-tagging" و[دليل 🤗 Datasets](https://github.com/huggingface/datasets/blob/master/templates/README_guide.md) لإكمال ملف *README.md* لم
+✏️ **جربها!** استخدم تطبيق `dataset-tagging` ودليل [🤗 Datasets](https://github.com/huggingface/datasets/blob/master/templates/README_guide.md) لإكمال ملف *README.md* لمجموعة بيانات GitHub issues الخاصة بك.
+
+</Tip>
+
+هذا كل شيء! لقد رأينا في هذا القسم أن إنشاء مجموعة بيانات جيدة يمكن أن يكون معقدًا، ولكن لحسن الحظ، تحميلها ومشاركتها مع المجتمع ليس كذلك. في القسم التالي، سنستخدم مجموعة البيانات الجديدة لإنشاء محرك بحث دلالي باستخدام 🤗 Datasets يمكنه مطابقة الأسئلة مع القضايا والتعليقات الأكثر صلة.
+
+<Tip>
+
+✏️ **جربها!** مر عبر الخطوات التي اتخذناها في هذا القسم لإنشاء مجموعة بيانات من قضايا GitHub لمكتبتك مفتوحة المصدر المفضلة (اختر شيئًا آخر غير 🤗 Datasets، بالطبع!). للحصول على نقاط إضافية، قم بضبط مصنف متعدد التصنيفات للتنبؤ بالعلامات الموجودة في حقل `labels`.
+
+</Tip>
