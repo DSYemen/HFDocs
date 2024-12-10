@@ -1,32 +1,37 @@
-# مقدمة في Gradio 
+# مقدمة إلى Gradio[[introduction-to-gradio]]
 
-في هذا الفصل، سنتعلم كيفية بناء عروض توضيحية **تفاعلية** لنماذج تعلم الآلة الخاصة بك. 
+<CourseFloatingBanner
+    chapter={9}
+    classNames="absolute z-10 right-0 top-0"
+/>
 
-قد يتساءل البعض عن سبب بناء عرض توضيحي أو واجهة مستخدم رسومية (GUI) لنموذج تعلم الآلة في المقام الأول. والإجابة هي أن العروض التوضيحية تتيح ما يلي: 
+في هذا الفصل، سنتعلم كيفية بناء **عروض توضيحية تفاعلية** لنماذج التعلم الآلي الخاصة بك.
 
-- يتيح لمطوري تعلم الآلة **عرض** عملهم بسهولة لجمهور واسع، بما في ذلك الفرق أو العملاء غير التقنيين. 
-- تسهيل استنساخ الباحثين **لسلوك** ونماذج تعلم الآلة. 
-- مساعدة **مختبري الجودة** أو **المستخدمين النهائيين** على تحديد نقاط الفشل في النماذج وإصلاح الأخطاء بسهولة. 
-- تمكين المستخدمين **المختلفين** من اكتشاف التحيزات الخوارزمية في النماذج. 
+لماذا نقوم ببناء عرض توضيحي أو واجهة مستخدم رسومية لنموذج التعلم الآلي في المقام الأول؟ تتيح العروض التوضيحية:
 
-سنستخدم مكتبة Gradio لبناء عروض توضيحية لنماذجنا. تتيح لنا Gradio بناء وتخصيص ومشاركة العروض التوضيحية المستندة إلى الويب لأي نموذج من نماذج تعلم الآلة، بالكامل باستخدام لغة Python. 
+- **لمطوري التعلم الآلي** عرض عملهم بسهولة لجمهور واسع بما في ذلك الفرق غير التقنية أو العملاء.
+- **للباحثين** تسهيل إعادة إنتاج نماذج وسلوكيات التعلم الآلي.
+- **لمختبري الجودة** أو **المستخدمين النهائيين** تحديد نقاط فشل النماذج وتصحيحها بسهولة أكبر.
+- **لمستخدمين متنوعين** اكتشاف التحيزات الخوارزمية في النماذج.
 
-فيما يلي بعض الأمثلة على العروض التوضيحية لتعلم الآلة التي تم إنشاؤها باستخدام Gradio: 
+سنستخدم مكتبة Gradio لبناء عروض توضيحية لنماذجنا. تتيح لك Gradio بناء وتخصيص ومشاركة العروض التوضيحية المستندة إلى الويب لأي نموذج تعلم آلي، بالكامل في بايثون.
 
-* نموذج **التعرف على الرسوم** الذي يأخذ رسمًا ويخرج تسميات لما يعتقد أنه يتم رسمه: 
+هنا بعض الأمثلة على العروض التوضيحية للتعلم الآلي التي تم بناؤها باستخدام Gradio:
 
-<iframe src="https://course-demos-draw2.hf.space" frameBorder="0" height="450" title="Gradio app" class="container p-0 flex-grow space-iframe" allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; document-domain; encrypted-media; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; vr ; wake-lock; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe> 
+* نموذج **التعرف على الرسومات** الذي يأخذ رسمًا ويخرج تسميات لما يعتقد أنه يتم رسمه:
 
-* نموذج **الإجابة على الأسئلة** الاستخراجي الذي يأخذ فقرة سياق وسؤالًا ويخرج استجابة ودرجة احتمالية (ناقشنا هذا النوع من النماذج في الفصل 7): 
+<iframe src="https://course-demos-draw2.hf.space" frameBorder="0" height="450" title="Gradio app" class="container p-0 flex-grow space-iframe" allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; document-domain; encrypted-media; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; vr ; wake-lock; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe>
 
-<iframe src="https://course-demos-question-answering-simple.hf.space" frameBorder="0" height="640" title="Gradio app" class="container p-0 flex-grow space-iframe" allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; document-domain; encrypted-media; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; vr ; wake-lock; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe> 
+* نموذج **الإجابة على الأسئلة الاستخراجية** الذي يأخذ فقرة سياق وسؤالًا ويخرج إجابة ودرجة احتمالية (ناقشنا هذا النوع من النماذج [في الفصل 7](/course/chapter7/7)):
 
-* نموذج **إزالة الخلفية** الذي يأخذ صورة ويخرج الصورة مع إزالة الخلفية: 
+<iframe src="https://course-demos-question-answering-simple.hf.space" frameBorder="0" height="640" title="Gradio app" class="container p-0 flex-grow space-iframe" allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; document-domain; encrypted-media; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; vr ; wake-lock; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe>
 
-<iframe src="https://course-demos-remove-bg-original.hf.space" frameBorder="0" height="640" title="Gradio app" class="container p-0 flex-grow space-iframe" allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; document-domain; encrypted-media; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; vr ; wake-lock; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe> 
+* نموذج **إزالة الخلفية** الذي يأخذ صورة ويخرج الصورة مع إزالة الخلفية:
 
-ينقسم هذا الفصل إلى أقسام تشمل كلاً من **المفاهيم** و**التطبيقات**. بعد تعلم المفهوم في كل قسم، ستطبقه لبناء نوع معين من العروض التوضيحية، بدءًا من تصنيف الصور إلى التعرف على الكلام. وبحلول الوقت الذي تنتهي فيه من هذا الفصل، ستتمكن من بناء هذه العروض التوضيحية (والكثير غيرها!) في بضع سطور فقط من كود Python. 
+<iframe src="https://course-demos-remove-bg-original.hf.space" frameBorder="0" height="640" title="Gradio app" class="container p-0 flex-grow space-iframe" allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; document-domain; encrypted-media; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; vr ; wake-lock; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe>
+
+هذا الفصل مقسم إلى أقسام تشمل كل من _المفاهيم_ و_التطبيقات_. بعد تعلم المفهوم في كل قسم، ستطبقه لبناء نوع معين من العروض التوضيحية، بدءًا من تصنيف الصور إلى التعرف على الكلام. وبحلول الوقت الذي تنتهي فيه من هذا الفصل، ستتمكن من بناء هذه العروض التوضيحية (والكثير غيرها!) في بضع سطور فقط من كود بايثون.
 
 <Tip>
-👀 اطلع على <a href="https://huggingface.co/spaces" target="_blank">Hugging Face Spaces</a> لمشاهدة العديد من الأمثلة الحديثة على العروض التوضيحية لتعلم الآلة التي أنشأها مجتمع تعلم الآلة!
+👀 اطلع على <a href="https://huggingface.co/spaces" target="_blank">Hugging Face Spaces</a> لمشاهدة العديد من الأمثلة الحديثة للعروض التوضيحية للتعلم الآلي التي بناها مجتمع التعلم الآلي!
 </Tip>

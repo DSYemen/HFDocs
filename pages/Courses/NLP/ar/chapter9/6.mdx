@@ -1,18 +1,25 @@
-# الميزات المتقدمة للواجهة
+# ميزات واجهة المستخدم المتقدمة [[advanced-interface-features]]
 
-الآن بعد أن تعلمنا كيفية بناء واجهة أساسية ومشاركتها، دعونا نستكشف بعض الميزات المتقدمة مثل الحالة والتفسير.
+<CourseFloatingBanner chapter={9}
+  classNames="absolute z-10 right-0 top-0"
+  notebooks={[
+    {label: "Google Colab", value: "https://colab.research.google.com/github/huggingface/notebooks/blob/master/course/en/chapter9/section6.ipynb"},
+    {label: "Aws Studio", value: "https://studiolab.sagemaker.aws/import/github/huggingface/notebooks/blob/master/course/en/chapter9/section6.ipynb"},
+]} />
 
-## استخدام الحالة لإبقاء البيانات
+الآن بعد أن أصبح بإمكاننا بناء ومشاركة واجهة مستخدم أساسية، دعنا نستكشف بعض الميزات الأكثر تقدماً مثل الحالة والتفسير.
 
-يدعم Gradio *حالة الجلسة*، حيث تبقى البيانات ثابتة عبر إرسالات متعددة ضمن تحميل الصفحة. حالة الجلسة مفيدة لبناء عروض توضيحية، على سبيل المثال، دردشة الآلي حيث تريد الاحتفاظ بالبيانات أثناء تفاعل المستخدم مع النموذج. لاحظ أن حالة الجلسة لا تشارك البيانات بين مستخدمين مختلفين لنموذجك.
+### استخدام الحالة لإبقاء البيانات [[using-state-to-persist-data]]
+
+يدعم Gradio *حالة الجلسة*، حيث تستمر البيانات عبر عدة إرسالات ضمن تحميل الصفحة. حالة الجلسة مفيدة لبناء عروض توضيحية، على سبيل المثال، للمحادثات الآلية حيث تريد إبقاء البيانات أثناء تفاعل المستخدم مع النموذج. لاحظ أن حالة الجلسة لا تشارك البيانات بين مستخدمين مختلفين لنموذجك.
 
 لتخزين البيانات في حالة الجلسة، تحتاج إلى القيام بثلاثة أشياء:
 
-1. قم بتمرير *معامل إضافي* إلى دالتك، والذي يمثل حالة الواجهة.
-2. في نهاية الدالة، قم بإرجاع القيمة المحدثة للحالة كـ *قيمة إرجاع إضافية*.
-3. أضف مكونات 'state' input و 'state' output عند إنشاء واجهة 'Interface'.
+1. تمرير *معامل إضافي* إلى دالتك، والذي يمثل حالة واجهة المستخدم.
+1. في نهاية الدالة، قم بإرجاع القيمة المحدثة للحالة كـ *قيمة إرجاع إضافية*.
+1. أضف مكونات الإدخال 'state' والإخراج 'state' عند إنشاء واجهة المستخدم الخاصة بك `Interface`.
 
-انظر مثال الدردشة الآلية أدناه:
+انظر مثال المحادثة الآلية أدناه:
 
 ```py
 import random
@@ -44,13 +51,15 @@ iface = gr.Interface(
 iface.launch()
 ```
 
-لاحظ كيف تبقى حالة مكون الإخراج ثابتة عبر الإرسالات.
+<iframe src="https://course-demos-Chatbot-Demo.hf.space" frameBorder="0" height="350" title="Gradio app" class="container p-0 flex-grow space-iframe" allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; document-domain; encrypted-media; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; vr ; wake-lock; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe>
 
-ملاحظة: يمكنك تمرير قيمة افتراضية إلى معامل الحالة، والتي يتم استخدامها كقيمة أولية للحالة.
+لاحظ كيف تستمر حالة مكون الإخراج عبر الإرسالات.
+ملاحظة: يمكنك تمرير قيمة افتراضية لمعامل الحالة،
+والتي تستخدم كقيمة أولية للحالة.
 
-## استخدام التفسير لفهم التنبؤات
+### استخدام التفسير لفهم التنبؤات [[using-interpretation-to-understand-predictions]]
 
-معظم نماذج التعلم الآلي عبارة عن صناديق سوداء ومنطقها الداخلي مخفي عن المستخدم النهائي. لتشجيع الشفافية، جعلناه سهلاً للغاية لإضافة التفسير إلى نموذجك ببساطة عن طريق تعيين كلمة التفسير الأساسية في فئة الواجهة إلى الافتراضية. يتيح هذا للمستخدمين فهم أجزاء الإدخال المسؤولة عن الإخراج. الق نظرة على الواجهة البسيطة أدناه والتي تعرض مصنف الصور الذي يتضمن أيضًا التفسير:
+معظم نماذج التعلم الآلي عبارة عن صناديق سوداء والمنطق الداخلي للوظيفة مخفي عن المستخدم النهائي. لتشجيع الشفافية، جعلنا من السهل جداً إضافة التفسير إلى نموذجك ببساطة عن طريق تعيين معامل التفسير في فئة واجهة المستخدم إلى الافتراضي. يسمح هذا لمستخدميك بفهم أي أجزاء من الإدخال مسؤولة عن الإخراج. ألق نظرة على واجهة المستخدم البسيطة أدناه والتي تعرض مصنف الصور الذي يتضمن أيضًا التفسير:
 
 ```py
 import requests
@@ -58,9 +67,9 @@ import tensorflow as tf
 
 import gradio as gr
 
-inception_net = tf.keras.applications.MobileNetV2() # تحميل النموذج
+inception_net = tf.keras.applications.MobileNetV2()  # تحميل النموذج
 
-# تنزيل التسميات التي يمكن قراءتها بواسطة الإنسان لـ ImageNet.
+# تنزيل التصنيفات التي يمكن قراءتها بواسطة الإنسان لـ ImageNet.
 response = requests.get("https://git.io/JJkYN")
 labels = response.text.split("\n")
 
@@ -75,16 +84,17 @@ def classify_image(inp):
 image = gr.Image(shape=(224, 224))
 label = gr.Label(num_top_classes=3)
 
-title = "مثال Gradio على تصنيف الصور + التفسير"
+title = "Gradio Image Classifiction + Interpretation Example"
 gr.Interface(
     fn=classify_image, inputs=image, outputs=label, interpretation="default", title=title
 ).launch()
 ```
 
-اختبر دالة التفسير عن طريق إرسال إدخال ثم النقر فوق "Interpret" أسفل مكون الإخراج.
+اختبر دالة التفسير عن طريق إرسال إدخال ثم النقر على "تفسير" أسفل مكون الإخراج.
 
-بالإضافة إلى طريقة التفسير الافتراضية التي يوفرها Gradio، يمكنك أيضًا تحديد `shap` لمعلمة `interpretation` وتعيين معلمة `num_shap`. يستخدم هذا التفسير القائم على Shapley، والذي يمكنك قراءة المزيد عنه [هنا](https://christophm.github.io/interpretable-ml-book/shap.html).
+<iframe src="https://course-demos-gradio-image-interpretation.hf.space" frameBorder="0" height="570" title="Gradio app" class="container p-0 flex-grow space-iframe" allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; document-domain; encrypted-media; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; vr ; wake-lock; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe>
 
-أخيرًا، يمكنك أيضًا تمرير دالة التفسير الخاصة بك إلى معلمة التفسير. راجع المثال في صفحة Gradio للبدء [هنا](https://gradio.app/getting_started/).
+بالإضافة إلى طريقة التفسير الافتراضية التي يوفرها Gradio، يمكنك أيضًا تحديد `shap` لمعامل `interpretation` وتعيين معامل `num_shap`. يستخدم هذا التفسير القائم على Shapley، والذي يمكنك قراءة المزيد عنه [هنا](https://christophm.github.io/interpretable-ml-book/shap.html).
+أخيرًا، يمكنك أيضًا تمرير دالة التفسير الخاصة بك إلى معامل `interpretation`. انظر مثالًا في صفحة Gradio للبدء [هنا](https://gradio.app/getting_started/).
 
-هذا يختتم غوصنا العميق في فئة "الواجهة" في Gradio. كما رأينا، تجعل هذه الفئة من السهل إنشاء عروض توضيحية للتعلم الآلي في بضع سطور من رمز Python. ومع ذلك، في بعض الأحيان، قد ترغب في تخصيص عرضك التوضيحي عن طريق تغيير التخطيط أو ربط وظائف التنبؤ المتعددة معًا. أليس من الرائع إذا كان بإمكاننا بطريقة ما تقسيم الواجهة إلى "كتل" قابلة للتخصيص؟ لحسن الحظ، هناك! هذا هو موضوع القسم الأخير.
+هذا يلخص بحثنا العميق في فئة `Interface` من Gradio. كما رأينا، تجعل هذه الفئة من السهل إنشاء عروض توضيحية للتعلم الآلي في بضع سطور من كود بايثون. ومع ذلك، في بعض الأحيان سترغب في تخصيص عرضك التوضيحي عن طريق تغيير التخطيط أو ربط وظائف التنبؤ المتعددة معًا. أليس من الرائع إذا استطعنا بطريقة ما تقسيم واجهة المستخدم إلى "كتل" قابلة للتخصيص؟ لحسن الحظ، هناك! هذا هو موضوع القسم الأخير.
