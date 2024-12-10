@@ -237,7 +237,9 @@ end_probabilities = tf.math.softmax(end_logits, axis=-1)[0].numpy()
 
 $$\mathrm{start\_probabilities}[\mathrm{start\_index}] \times \mathrm{end\_probabilities}[\mathrm{end\_index}]$$ 
 
-لذلك، لحساب جميع الدرجات، نحتاج فقط إلى حساب جميع المنتجات \\(\mathrm{start\_probabilities}[\mathrm{start\_index}] \times \mathrm{end\_probabilities}[\mathrm{end\_index}]\\) حيث `start_index <= end_index`.
+لذلك، لحساب جميع الدرجات، نحتاج فقط إلى حساب جميع المنتجات 
+$$\mathrm{start\_probabilities}[\mathrm{start\_index}] \times \mathrm{end\_probabilities}[\mathrm{end\_index}]$$
+حيث `start_index <= end_index`.
 
 أولاً، دعنا نحسب جميع المنتجات المحتملة:
 
@@ -378,18 +380,19 @@ Why should I use transformers?
   - We provide examples for each architecture to reproduce the results published by its original authors.
   - Model internal [SEP]
 """
+```
 هذا يعني أن النموذج سيواجه صعوبة في اختيار الإجابة الصحيحة. ولحل هذه المشكلة، تسمح لنا خط أنابيب `question-answering` بتقسيم السياق إلى أجزاء أصغر، مع تحديد الطول الأقصى. وللتأكد من أننا لا نقسم السياق في المكان الخاطئ تمامًا، مما يجعل من المستحيل العثور على الإجابة، فإنه يتضمن أيضًا بعض التداخل بين الأجزاء.
 
-يمكننا أن نجعل المحلل اللغوي (سريع أو بطيء) يقوم بذلك من أجلنا عن طريق إضافة `return_overflowing_tokens=True`، ويمكننا تحديد التداخل الذي نريده باستخدام حجة `stride`. إليك مثال، باستخدام جملة أصغر:
+يمكننا أن نجعل المجزء اللغوي (سريع أو بطيء) يقوم بذلك من أجلنا عن طريق إضافة `return_overflowing_tokens=True`، ويمكننا تحديد التداخل الذي نريده باستخدام حجة `stride`. إليك مثال، باستخدام جملة أصغر:
 
 ```py
-الجملة = "هذه الجملة ليست طويلة جدًا ولكننا سنقسمها على أي حال."
-الإدخالات = المحلل اللغوي(
-    الجملة، التقطيع=صحيح، return_overflowing_tokens=صحيح، الطول_الأقصى=6، stride=2
+sentence = "This sentence is not too long but we are going to split it anyway."
+inputs = tokenizer(
+    sentence, truncation=True, return_overflowing_tokens=True, max_length=6, stride=2
 )
 
-لـ ids في الإدخالات["input_ids"]:
-    طباعة(المحلل اللغوي.decode(ids))
+for ids in inputs["input_ids"]:
+    print(tokenizer.decode(ids))
 ```
 
 ```python out
@@ -406,17 +409,17 @@ Why should I use transformers?
 دعنا نلقي نظرة فاحصة على نتيجة التحليل اللغوي:
 
 ```py
-طباعة(الإدخالات.keys())
+print(inputs.keys())
 ```
 
 ```python out
 dict_keys(['input_ids', 'attention_mask', 'overflow_to_sample_mapping'])
 ```
 
-كما هو متوقع، نحصل على معرفات الإدخال وقناع الانتباه. المفتاح الأخير، `overflow_to_sample_mapping`، هو خريطة تخبرنا بأي جملة تتوافق مع كل من النتائج - هنا لدينا 7 نتائج تأتي جميعها من الجملة (الوحيدة) التي مررناها إلى المحلل اللغوي:
+كما هو متوقع، نحصل على معرفات الإدخال وقناع الانتباه. المفتاح الأخير، `overflow_to_sample_mapping`، هو خريطة تخبرنا بأي جملة تتوافق مع كل من النتائج - هنا لدينا 7 نتائج تأتي جميعها من الجملة (الوحيدة) التي مررناها إلى المجزء اللغوي:
 
 ```py
-طباعة(الإدخالات["overflow_to_sample_mapping"])
+print(inputs["overflow_to_sample_mapping"])
 ```
 
 ```python out
@@ -426,15 +429,15 @@ dict_keys(['input_ids', 'attention_mask', 'overflow_to_sample_mapping'])
 هذا أكثر فائدة عندما نقوم بتحليل عدة جمل معًا. على سبيل المثال، هذا:
 
 ```py
-الجمل = [
-    "هذه الجملة ليست طويلة جدًا ولكننا سنقسمها على أي حال.",
-    "هذه الجملة أقصر ولكنها ستظل مقسمة.",
+sentences = [
+    "This sentence is not too long but we are going to split it anyway.",
+    "This sentence is shorter but will still get split.",
 ]
-الإدخالات = المحلل اللغوي(
-    الجمل، التقطيع=صحيح، return_overflowing_tokens=صحيح، الطول_الأقصى=6، stride=2
+inputs = tokenizer(
+    sentences, truncation=True, return_overflowing_tokens=True, max_length=6, stride=2
 )
 
-طباعة(الإدخالات["overflow_to_sample_mapping"])
+print(inputs["overflow_to_sample_mapping"])
 ```
 
 يحصل لنا على:
@@ -448,15 +451,15 @@ dict_keys(['input_ids', 'attention_mask', 'overflow_to_sample_mapping'])
 الآن دعنا نعود إلى سياقنا الطويل. بشكل افتراضي، تستخدم خط أنابيب `question-answering` طولًا أقصى يبلغ 384، كما ذكرنا سابقًا، وخطوة تبلغ 128، والتي تتوافق مع الطريقة التي تم بها ضبط النموذج الدقيق (يمكنك ضبط تلك المعلمات عن طريق تمرير حجج `max_seq_len` و `stride` عند استدعاء خط الأنابيب). وبالتالي، سنستخدم هذه المعلمات عند التحليل. سنضيف أيضًا الحشو (للحصول على عينات بنفس الطول، بحيث يمكننا بناء المصفوفات) وكذلك نطلب الإزاحات:
 
 ```py
-الإدخالات = المحلل اللغوي(
-    السؤال،
-    السياق_الطويل،
-    stride=128،
-    الطول_الأقصى=384،
-    الحشو="الأطول"،
-    التقطيع="only_second"،
-    return_overflowing_tokens=صحيح،
-    return_offsets_mapping=صحيح،
+inputs = tokenizer(
+    question,
+    long_context,
+    stride=128,
+    max_length=384,
+    padding="longest",
+    truncation="only_second",
+    return_overflowing_tokens=True,
+    return_offsets_mapping=True,
 )
 ```
 
@@ -465,25 +468,23 @@ dict_keys(['input_ids', 'attention_mask', 'overflow_to_sample_mapping'])
 {#if fw === 'pt'}
 
 ```py
-_ = الإدخالات.pop("overflow_to_sample_mapping")
-الإزاحات = الإدخالات.pop("offset_mapping")
+_ = inputs.pop("overflow_to_sample_mapping")
+offsets = inputs.pop("offset_mapping")
 
-الإدخالات = الإدخالات.convert_to_tensors("pt")
-طباعة(الإدخالات["input_ids"].shape)
+inputs = inputs.convert_to_tensors("pt")
+print(inputs["input_ids"].shape)
 ```
-
 ```python out
 torch.Size([2, 384])
 ```
-
 {:else}
 
 ```py
-_ = الإدخالات.pop("overflow_to_sample_mapping")
-الإزاحات = الإدخالات.pop("offset_mapping")
+_ = inputs.pop("overflow_to_sample_mapping")
+offsets = inputs.pop("offset_mapping")
 
-الإدخالات = الإدخالات.convert_to_tensors("tf")
-طباعة(الإدخالات["input_ids"].shape)
+inputs = inputs.convert_to_tensors("tf")
+print(inputs["input_ids"].shape)
 ```
 
 ```python out
@@ -495,11 +496,11 @@ _ = الإدخالات.pop("overflow_to_sample_mapping")
 تم تقسيم سياقنا الطويل إلى قسمين، مما يعني أنه بعد مروره عبر نموذجنا، سنحصل على مجموعتين من احتمالات البداية والنهاية:
 
 ```py
-المخرجات = النموذج(**الإدخالات)
+outputs = model(**inputs)
 
-احتمالات_البداية = المخرجات.start_logits
-احتمالات_النهاية = المخرجات.end_logits
-طباعة(احتمالات_البداية.shape، احتمالات_النهاية.shape)
+start_logits = outputs.start_logits
+end_logits = outputs.end_logits
+print(start_logits.shape, end_logits.shape)
 ```
 
 {#if fw === 'pt'}
@@ -521,31 +522,31 @@ torch.Size([2, 384]) torch.Size([2, 384])
 {#if fw === 'pt'}
 
 ```py
-sequence_ids = الإدخالات.sequence_ids()
-# قناع كل شيء باستثناء رموز السياق
-القناع = [i != 1 for i in sequence_ids]
-# إلغاء قناع الرمز [CLS]
-القناع[0] = خطأ
-# قناع جميع رموز [PAD]
-القناع = torch.logical_or(torch.tensor(القناع)[None], (الإدخالات["attention_mask"] == 0))
+sequence_ids = inputs.sequence_ids()
+# Mask everything apart from the tokens of the context
+mask = [i != 1 for i in sequence_ids]
+# Unmask the [CLS] token
+mask[0] = False
+# Mask all the [PAD] tokens
+mask = torch.logical_or(torch.tensor(mask)[None], (inputs["attention_mask"] == 0))
 
-احتمالات_البداية[القناع] = -10000
-احتمالات_النهاية[القناع] = -10000
+start_logits[mask] = -10000
+end_logits[mask] = -10000
 ```
 
 {:else}
 
 ```py
-sequence_ids = الإدخالات.sequence_ids()
-# قناع كل شيء باستثناء رموز السياق
-القناع = [i != 1 for i in sequence_ids]
-# إلغاء قناع الرمز [CLS]
-القناع[0] = خطأ
-# قناع جميع رموز [PAD]
-القناع = tf.math.logical_or(tf.constant(القناع)[None], الإدخالات["attention_mask"] == 0)
+sequence_ids = inputs.sequence_ids()
+# Mask everything apart from the tokens of the context
+mask = [i != 1 for i in sequence_ids]
+# Unmask the [CLS] token
+mask[0] = False
+# Mask all the [PAD] tokens
+mask = tf.math.logical_or(tf.constant(mask)[None], inputs["attention_mask"] == 0)
 
-احتمالات_البداية = tf.where(القناع، -10000، احتمالات_البداية)
-احتمالات_النهاية = tf.where(القناع، -10000، احتمالات_النهاية)
+start_logits = tf.where(mask, -10000, start_logits)
+end_logits = tf.where(mask, -10000, end_logits)
 ```
 
 {/if}
@@ -555,15 +556,15 @@ sequence_ids = الإدخالات.sequence_ids()
 {#if fw === 'pt'}
 
 ```py
-احتمالات_البداية = torch.nn.functional.softmax(احتمالات_البداية، dim=-1)
-احتمالات_النهاية = torch.nn.functional.softmax(احتمالات_النهاية، dim=-1)
+start_probabilities = torch.nn.functional.softmax(start_logits, dim=-1)
+end_probabilities = torch.nn.functional.softmax(end_logits, dim=-1)
 ```
 
 {:else}
 
 ```py
-احتمالات_البداية = tf.math.softmax(احتمالات_البداية، axis=-1).numpy()
-احتمالات_النهاية = tf.math.softmax(احتمالات_النهاية، axis=-1).numpy()
+start_probabilities = tf.math.softmax(start_logits, axis=-1).numpy()
+end_probabilities = tf.math.softmax(end_logits, axis=-1).numpy()
 ```
 
 {/if}
@@ -573,33 +574,33 @@ sequence_ids = الإدخالات.sequence_ids()
 {#if fw === 'pt'}
 
 ```py
-المرشحون = []
-لـ start_probs، end_probs في zip(احتمالات_البداية، احتمالات_النهاية):
-    الدرجات = start_probs[:, None] * end_probs[None, :]
-    idx = torch.triu(الدرجات).argmax().item()
+candidates = []
+for start_probs, end_probs in zip(start_probabilities, end_probabilities):
+    scores = start_probs[:, None] * end_probs[None, :]
+    idx = torch.triu(scores).argmax().item()
 
-    start_idx = idx // الدرجات.shape[1]
-    end_idx = idx % الدرجات.shape[1]
-    الدرجة = الدرجات[start_idx، end_idx].item()
-    المرشحون.append((start_idx، end_idx، الدرجة))
+    start_idx = idx // scores.shape[1]
+    end_idx = idx % scores.shape[1]
+    score = scores[start_idx, end_idx].item()
+    candidates.append((start_idx, end_idx, score))
 
-طباعة(المرشحون)
+print(candidates)
 ```
 
 {:else}
 
 ```py
-المرشحون = []
-لـ start_probs، end_probs في zip(احتمالات_البداية، احتمالات_النهاية):
-    الدرجات = start_probs[:, None] * end_probs[None, :]
-    idx = np.triu(الدرجات).argmax().item()
+candidates = []
+for start_probs, end_probs in zip(start_probabilities, end_probabilities):
+    scores = start_probs[:, None] * end_probs[None, :]
+    idx = np.triu(scores).argmax().item()
 
-    start_idx = idx // الدرجات.shape[1]
-    end_idx = idx % الدرجات.shape[1]
-    الدرجة = الدرجات[start_idx، end_idx].item()
-    المرشحون.append((start_idx، end_idx، الدرجة))
+    start_idx = idx // scores.shape[1]
+    end_idx = idx % scores.shape[1]
+    score = scores[start_idx, end_idx].item()
+    candidates.append((start_idx, end_idx, score))
 
-طباعة(المرشحون)
+print(candidates)
 ```
 
 {/if}
@@ -619,18 +620,18 @@ sequence_ids = الإدخالات.sequence_ids()
 إن `الإزاحات` التي حصلنا عليها في وقت سابق هي في الواقع قائمة من الإزاحات، مع قائمة واحدة لكل جزء من النص:
 
 ```py
-لـ المرشح، الإزاحة في zip(المرشحون، الإزاحات):
-    start_token، end_token، الدرجة = المرشح
-    start_char، _ = الإزاحة[start_token]
-    _، end_char = الإزاحة[end_token]
-    الإجابة = السياق_الطويل[start_char:end_char]
-    النتيجة = {"الإجابة": الإجابة، "البداية": start_char، "النهاية": end_char، "الدرجة": الدرجة}
-    طباعة(النتيجة)
+for candidate, offset in zip(candidates, offsets):
+    start_token, end_token, score = candidate
+    start_char, _ = offset[start_token]
+    _, end_char = offset[end_token]
+    answer = long_context[start_char:end_char]
+    result = {"answer": answer, "start": start_char, "end": end_char, "score": score}
+    print(result)
 ```
 
 ```python out
-{'الإجابة': '\n🤗 Transformers: State of the Art NLP', 'البداية': 0، 'النهاية': 37، 'الدرجة': 0.33867}
-{'الإجابة': 'Jax, PyTorch and TensorFlow', 'البداية': 1892، 'النهاية': 1919، 'الدرجة': 0.97149}
+{'answer': '\n🤗 Transformers: State of the Art NLP', 'start': 0, 'end': 37, 'score': 0.33867}
+{'answer': 'Jax, PyTorch and TensorFlow', 'start': 1892, 'end': 1919, 'score': 0.97149}
 ```
 إذا تجاهلنا النتيجة الأولى، سنحصل على نفس النتيجة التي حصلنا عليها من خط أنابيبنا لهذا السياق الطويل -- يا له من أمر رائع!
 
@@ -641,5 +642,3 @@ sequence_ids = الإدخالات.sequence_ids()
 </Tip>
 
 هذا يختتم غوصنا العميق في قدرات المعالج المقطعي. سنضع كل هذا موضع الممارسة مرة أخرى في الفصل التالي، عندما نريكم كيفية ضبط نموذج على نطاق واسع من مهام معالجة اللغات الطبيعية.
-
-```
