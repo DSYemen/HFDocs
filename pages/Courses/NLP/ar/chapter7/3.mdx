@@ -1,6 +1,6 @@
 <FrameworkSwitchCourse {fw} />
 
-# ضبط نموذج اللغة المقنع [[ضبط-نموذج-اللغة-المقنع]]
+# ضبط نموذج اللغة المقنع [[fine-tuning-a-masked-language-model]]
 
 {#if fw === 'pt'}
 
@@ -47,7 +47,7 @@
 
 </Tip>
 
-## اختيار نموذج مسبق التدريب لنموذج اللغة المقنع [[اختيار-نموذج-مسبق-التدريب-لنموذج-اللغة-المقنع]]
+## اختيار نموذج مسبق التدريب لنموذج اللغة المقنع [[picking-a-pretrained-model-for-masked-language-modeling]]
 
 لبدء العمل، دعنا نختار نموذجاً مسبق التدريب مناسباً لنموذج اللغة المقنع. كما هو موضح في لقطة الشاشة التالية، يمكنك العثور على قائمة بالمرشحين من خلال تطبيق مرشح "Fill-Mask" على [Hugging Face Hub](https://huggingface.co/models?pipeline_tag=fill-mask&sort=downloads):
 
@@ -223,13 +223,13 @@ for row in sample:
 
 ```python out
 
-'>>> Review: هذا هو فيلم Priyadarshan النموذجي - مجموعة من الشخصيات المجنونة في مهمة سخيفة. ذروة توقيعه هي اجتماع جميع شخصيات الفيلم والقتال مع بعضهم البعض في بعض الجنون حول المال المخفي. سواء كان تذكرة يانصيب رابحة في Malamaal Weekly، أو أموال سوداء في Hera Pheri، أو "kodokoo" في Phir Hera Pheri، إلخ، إلخ، أصبح المخرج متوقعًا بشكل سخيف. لا تفهموني خطأ؛ على الرغم من أن أفلامه قد تكون مبتذلة وسخيفة، إلا أنني عادة ما أستمتع بالكوميديا. ومع ذلك، في معظم أفلامه السابقة، كان هناك بعض الفكاهة الجيدة (Hungama و Hera Pheri هي أفلام جديرة بالملاحظة). الآن، تتلاشى طرافة أفلامه حيث يستخدم نفس الصيغة مرارًا وتكرارًا.<br /><br />الأغاني جيدة. تبدو Tanushree Datta رائعة. Rajpal Yadav مزعج، وTusshar ليس أفضل بكثير. Kunal Khemu جيد، وSharman Joshi هو الأفضل.'
+'>>> Review: This is your typical Priyadarshan movie--a bunch of loony characters out on some silly mission. His signature climax has the entire cast of the film coming together and fighting each other in some crazy moshpit over hidden money. Whether it is a winning lottery ticket in Malamaal Weekly, black money in Hera Pheri, "kodokoo" in Phir Hera Pheri, etc., etc., the director is becoming ridiculously predictable. Don\'t get me wrong; as clichéd and preposterous his movies may be, I usually end up enjoying the comedy. However, in most his previous movies there has actually been some good humor, (Hungama and Hera Pheri being noteworthy ones). Now, the hilarity of his films is fading as he is using the same formula over and over again.<br /><br />Songs are good. Tanushree Datta looks awesome. Rajpal Yadav is irritating, and Tusshar is not a whole lot better. Kunal Khemu is OK, and Sharman Joshi is the best.'
 '>>> Label: 0'
 
-'>>> Review: حسنًا، القصة لا معنى لها، والشخصيات تفتقر إلى أي بعد، وأفضل حوار هو ارتجالات حول جودة الفيلم السيئة، والتصوير السينمائي بائس، والتحرير فقط ينقذ بعض الفوضى، لكن سام" بيكينباه أخرج الفيلم. بطريقة ما، إخراجه ليس كافيًا. بالنسبة لأولئك الذين يقدرون بيكينباه وأعماله العظيمة، فإن هذا الفيلم مخيب للآمال. حتى وجود طاقم رائع لا يمكنه استرداد الوقت الذي يضيعه المشاهد في هذا الجهد الضئيل.<br /><br />الاستجابة الصحيحة للفيلم هي الاحتقار الذي يجلبه المخرج سان بيكينباه، وجيمس كان، وروبرت دوفال، وبيرت يونغ، وبو هوبكنز، وآرثر هيل، وحتى جيج يونغ إلى عملهم. شاهد أفلام بيكينباه العظيمة. تجنب هذه الفوضى.'
+'>>> Review: Okay, the story makes no sense, the characters lack any dimensionally, the best dialogue is ad-libs about the low quality of movie, the cinematography is dismal, and only editing saves a bit of the muddle, but Sam" Peckinpah directed the film. Somehow, his direction is not enough. For those who appreciate Peckinpah and his great work, this movie is a disappointment. Even a great cast cannot redeem the time the viewer wastes with this minimal effort.<br /><br />The proper response to the movie is the contempt that the director San Peckinpah, James Caan, Robert Duvall, Burt Young, Bo Hopkins, Arthur Hill, and even Gig Young bring to their work. Watch the great Peckinpah films. Skip this mess.'
 '>>> Label: 0'
 
-'>>> Review: شاهدت هذا الفيلم في السينما عندما كنت في السادسة أو السابعة من عمري. لقد أحببته آنذاك، والآن لدي نسخة VHS. <br /><br />أطفالي الذين تتراوح أعمارهم بين 4 و6 سنوات يحبون هذا الفيلم ويطلبون مشاهدته مرارًا وتكرارًا. <br /><br />لقد استمتعت بمشاهدته مرة أخرى أيضًا. على الرغم من أنه يجب أن أعترف أنه ليس جيدًا على شاشة التلفزيون الصغيرة.<br /><br />ليس لدي أطفال أكبر سنًا لذا لا أعرف ما الذي سيفكرون فيه. <br /><br />الأغاني لطيفة جدًا. ابنتي تستمر في غناءها مرارًا وتكرارًا.<br /><br />آمل أن يساعد ذلك.'
+'>>> Review: I saw this movie at the theaters when I was about 6 or 7 years old. I loved it then, and have recently come to own a VHS version. <br /><br />My 4 and 6 year old children love this movie and have been asking again and again to watch it. <br /><br />I have enjoyed watching it again too. Though I have to admit it is not as good on a little TV.<br /><br />I do not have older children so I do not know what they would think of it. <br /><br />The songs are very cute. My daughter keeps singing them over and over.<br /><br />Hope this helps.'
 '>>> Label: 1'
 ```
 
@@ -417,6 +417,7 @@ DatasetDict({
         num_rows: 122963
     })
 })
+```
 يمكنك أن ترى أن تجميع النصوص ثم تقسيمها قد أنتج العديد من الأمثلة أكثر من 25,000 الأصلية في مجموعات "train" و "test". وذلك لأننا الآن لدينا أمثلة تتضمن _رموز متجاورة_ تمتد عبر أمثلة متعددة من النص الأصلي. يمكنك أن ترى ذلك بوضوح من خلال البحث عن الرموز الخاصة `[SEP]` و `[CLS]` في إحدى المقاطع:
 
 ```python
@@ -868,9 +869,11 @@ train_dataloader = DataLoader(
 eval_dataloader = DataLoader(
     eval_dataset, batch_size=batch_size, collate_fn=default_data_collator
 )
+```
+
 من هنا، نتبع الخطوات القياسية مع 🤗 Accelerate. أول شيء يجب القيام به هو تحميل نسخة جديدة من النموذج المُدرب مسبقًا:
 
-```
+```py
 model = AutoModelForMaskedLM.from_pretrained(model_checkpoint)
 ```
 

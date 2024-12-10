@@ -1,6 +1,6 @@
 <FrameworkSwitchCourse {fw} />
 
-# الإجابة على الأسئلة [[الإجابة-على-الأسئلة]]
+# الإجابة على الأسئلة [[question-answering]]
 
 {#if fw === 'pt'}
 
@@ -38,11 +38,11 @@
 
 </Tip>
 
-## إعداد البيانات [[إعداد-البيانات]]
+## إعداد البيانات [[preparing-the-data]]
 
 تعد مجموعة البيانات التي يتم استخدامها أكثر من غيرها كمعيار أكاديمي للإجابة الاستخلاصية على الأسئلة هي [SQuAD](https://rajpurkar.github.io/SQuAD-explorer/)، لذا فهي التي سنستخدمها هنا. هناك أيضاً معيار أصعب [SQuAD v2](https://huggingface.co/datasets/squad_v2)، والذي يتضمن أسئلة لا تحتوي على إجابة. طالما أن مجموعة بياناتك الخاصة تحتوي على عمود للسياقات، وعمود للأسئلة، وعمود للإجابات، فيجب أن تكون قادراً على تكييف الخطوات أدناه.
 
-### مجموعة بيانات SQuAD [[مجموعة-بيانات-squad]]
+### مجموعة بيانات SQuAD [[the-squad-dataset]]
 
 كما هو معتاد، يمكننا تنزيل مجموعة البيانات وتخزينها مؤقتاً في خطوة واحدة بفضل `load_dataset()`:
 
@@ -120,8 +120,8 @@ print(raw_datasets["validation"][2]["question"])
 ```
 
 ```python out
-'كان سوبر بول 50 مباراة كرة قدم أمريكية لتحديد بطل الدوري الوطني لكرة القدم الأمريكية (NFL) لموسم 2015. هزم فريق دنفر برونكوس بطل المؤتمر الأمريكي لكرة القدم (AFC) فريق كارولينا بانثرز بطل المؤتمر الوطني لكرة القدم (NFC) بنتيجة 24-10 ليحققوا لقبهم الثالث في سوبر بول. أقيمت المباراة في 7 فبراير 2016، في ملعب ليفي في منطقة خليج سان فرانسيسكو في سانتا كلارا، كاليفورنيا. وبما أن هذه كانت الذكرى الخمسين لسوبر بول، فقد ركز الدوري على "الذكرى الذهبية" بمبادرات ذات طابع ذهبي، وكذلك تعليق مؤقت لتقليد تسمية كل مباراة سوبر بول بالأرقام الرومانية (والتي كانت ستعرف باسم "سوبر بول L")، بحيث يمكن للشعار أن يبرز الأرقام العربية 50 بشكل بارز.'
-'أين أقيم سوبر بول 50؟'
+'Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi\'s Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.'
+'Where did Super Bowl 50 take place?'
 ```
 
 يمكننا أن نرى أن الإجابة يمكن أن تكون واحدة من الاحتمالات الثلاثة التي رأيناها سابقاً.
@@ -168,8 +168,14 @@ tokenizer.decode(inputs["input_ids"])
 ```
 
 ```python out
-'[CLS] إلى من ظهرت السيدة العذراء مريم حسب الادعاء في عام 1858 في لورد، فرنسا؟ [SEP] من الناحية المعمارية، '
-'تتميز المدرسة بطابع كاثوليكي. في أعلى قبة المبنى الرئيسي يوجد تمثال ذهبي للسيدة العذراء مريم. وعلى الفور أمام المبنى الرئيسي ومواجه له، يوجد تمثال نحاسي للمسيح بذراعين مرفوعين مع الأسطورة "Venite Ad Me Omnes". بجانب المبنى الرئيسي توجد كنيسة القلب المقدس. خلف الكنيسة مباشرة توجد المغارة، وهي مكان مخصص للصلاة والتأمل مخصص للسيدة العذراء. وهي نسخة طبق الأصل من المغارة الموجودة في لورد، فرنسا، حيث ظهرت السيدة العذراء مريم حسب الادعاء للقديسة [SEP]'
+'[CLS] To whom did the Virgin Mary allegedly appear in 1858 in Lourdes France? [SEP] Architecturally, '
+'the school has a Catholic character. Atop the Main Building\'s gold dome is a golden statue of the Virgin '
+'Mary. Immediately in front of the Main Building and facing it, is a copper statue of Christ with arms '
+'upraised with the legend " Venite Ad Me Omnes ". Next to the Main Building is the Basilica of the Sacred '
+'Heart. Immediately behind the basilica is the Grotto, a Marian place of prayer and reflection. It is a '
+'replica of the grotto at Lourdes, France where the Virgin Mary reputedly appeared to Saint Bernadette '
+'Soubirous in 1858. At the end of the main drive ( and in a direct line that connects through 3 statues '
+'and the Gold Dome ), is a simple, modern stone statue of Mary. [SEP]'
 ```
 
 بعد ذلك، ستكون العلامات هي فهرس الرموز التي تبدأ وتنتهي الإجابة، وستكون مهمة النموذج هي التنبؤ بكل من بداية ونهاية الرمز لكل رمز في الإدخال، مع العلامات النظرية كما يلي:
@@ -203,10 +209,10 @@ for ids in inputs["input_ids"]:
 ```
 
 ```python out
-'[CLS] إلى من ظهرت السيدة العذراء مريم حسب الادعاء في عام 1858 في لورد، فرنسا؟ [SEP] من الناحية المعمارية، تتميز المدرسة بطابع كاثوليكي. في أعلى قبة المبنى الرئيسي يوجد تمثال ذهبي للسيدة العذراء مريم. وعلى الفور أمام المبنى الرئيسي ومواجه له، يوجد تمثال نحاسي للمسيح بذراعين مرفوعين مع الأسطورة "Venite Ad Me Omnes". بجانب المبنى الرئيسي توجد كنيسة القلب المقدس. خلف الكنيسة مباشرة توجد المغارة، وهي مكان مخصص للصلاة والتأمل مخصص للسيدة العذراء. وهي نسخة طبق الأصل من المغارة الموجودة في لورد، فرنسا، حيث ظهرت السيدة [SEP]'
-'[CLS] إلى من ظهرت السيدة العذراء مريم حسب الادعاء في عام 1858 في لورد، فرنسا؟ [SEP] المبنى الرئيسي ومواجه له، يوجد تمثال نحاسي للمسيح بذراعين مرفوعين مع الأسطورة "Venite Ad Me Omnes". بجانب المبنى الرئيسي توجد كنيسة القلب المقدس. خلف الكنيسة مباشرة توجد المغارة، وهي مكان مخصص للصلاة والتأمل مخصص للسيدة العذراء. وهي نسخة طبق الأصل من المغارة الموجودة في لورد، فرنسا، حيث ظهرت السيدة العذراء مريم حسب الادعاء للقديسة [SEP]'
-'[CLS] إلى من ظهرت السيدة العذراء مريم حسب الادعاء في عام 1858 في لورد، فرنسا؟ [SEP] بجانب المبنى الرئيسي توجد كنيسة القلب المقدس. خلف الكنيسة مباشرة توجد المغارة، وهي مكان مخصص للصلاة والتأمل مخصص للسيدة العذراء. وهي نسخة طبق الأصل من المغارة الموجودة في لورد، فرنسا، حيث ظهرت السيدة العذراء مريم حسب الادعاء للقديسة [SEP]'
-'[CLS] إلى من ظهرت السيدة العذراء مريم حسب الادعاء في عام 1858 في لورد، فرنسا؟ [SEP]. وهي نسخة طبق الأصل من المغارة الموجودة في لورد، فرنسا، حيث ظهرت السيدة العذراء مريم حسب الادعاء للقديسة [SEP]'
+'[CLS] To whom did the Virgin Mary allegedly appear in 1858 in Lourdes France? [SEP] Architecturally, the school has a Catholic character. Atop the Main Building\'s gold dome is a golden statue of the Virgin Mary. Immediately in front of the Main Building and facing it, is a copper statue of Christ with arms upraised with the legend " Venite Ad Me Omnes ". Next to the Main Building is the Basilica of the Sacred Heart. Immediately behind the basi [SEP]'
+'[CLS] To whom did the Virgin Mary allegedly appear in 1858 in Lourdes France? [SEP] the Main Building and facing it, is a copper statue of Christ with arms upraised with the legend " Venite Ad Me Omnes ". Next to the Main Building is the Basilica of the Sacred Heart. Immediately behind the basilica is the Grotto, a Marian place of prayer and reflection. It is a replica of the grotto at Lourdes, France where the Virgin [SEP]'
+'[CLS] To whom did the Virgin Mary allegedly appear in 1858 in Lourdes France? [SEP] Next to the Main Building is the Basilica of the Sacred Heart. Immediately behind the basilica is the Grotto, a Marian place of prayer and reflection. It is a replica of the grotto at Lourdes, France where the Virgin Mary reputedly appeared to Saint Bernadette Soubirous in 1858. At the end of the main drive ( and in a direct line that connects through 3 [SEP]'
+'[CLS] To whom did the Virgin Mary allegedly appear in 1858 in Lourdes France? [SEP]. It is a replica of the grotto at Lourdes, France where the Virgin Mary reputedly appeared to Saint Bernadette Soubirous in 1858. At the end of the main drive ( and in a direct line that connects through 3 statues and the Gold Dome ), is a simple, modern stone statue of Mary. [SEP]'
 ```
 
 كما نرى، تم تقسيم مثالنا إلى أربعة إدخالات، كل منها يحتوي على السؤال وبعض أجزاء السياق. لاحظ أن الإجابة على السؤال ("Bernadette Soubirous") تظهر فقط في الإدخال الثالث والأخير، لذا من خلال التعامل مع السياقات الطويلة بهذه الطريقة، سنقوم بإنشاء بعض الأمثلة التدريبية حيث لا تكون الإجابة مدرجة في السياق. بالنسبة لتلك الأمثلة، ستكون العلامات `start_position = end_position = 0` (لذلك نتوقع رمز [CLS]). سنقوم أيضاً بضبط تلك العلامات في الحالة المؤسفة حيث تم تقليص الإجابة بحيث نحصل فقط على بداية (أو نهاية) الإجابة. بالنسبة للأمثلة التي تكون فيها الإجابة كاملة في السياق، ستكون العلامات هي فهرس الرمز الذي تبدأ فيه الإجابة وفهرس الرمز الذي تنتهي فيه الإجابة.
@@ -420,7 +426,7 @@ def preprocess_training_examples(examples):
     inputs["end_positions"] = end_positions
     return inputs
 ```
-```
+
 لاحظ أننا حددنا ثابتين لتحديد الطول الأقصى المستخدم بالإضافة إلى طول نافذة الانزلاق، وأننا أضفنا بعض التنظيف قبل التجزئة: بعض الأسئلة في مجموعة بيانات SQuAD بها مسافات إضافية في البداية والنهاية لا تضيف أي شيء (وتأخذ مساحة عند التجزئة إذا كنت تستخدم نموذجًا مثل RoBERTa)، لذا قمنا بإزالة تلك المسافات الإضافية.
 
 لتطبيق هذه الدالة على مجموعة التدريب بالكامل، نستخدم طريقة `Dataset.map()` مع علم `batched=True`. هذا ضروري هنا لأننا نغير طول مجموعة البيانات (حيث يمكن أن يعطي المثال الواحد عدة ميزات تدريبية):
@@ -577,7 +583,6 @@ with torch.no_grad():
 ```python
 start_logits = outputs.start_logits.cpu().numpy()
 end_logits = outputs.end_logits.cpu().numpy()
-```
 ```
 {:else}
 
@@ -776,9 +781,6 @@ compute_metrics(start_logits, end_logits, eval_set, small_eval_set)
 ```
 
 ```python out
-{'exact_match': 83.0, 'f1': 88.25}
-```
-```
 {'exact_match': 83.0, 'f1': 88.25}
 ```
 
@@ -991,11 +993,11 @@ trainer.push_to_hub(commit_message="Training complete")
 
 في هذه المرحلة، يمكنك استخدام أداة الاستدلال على Model Hub لاختبار النموذج ومشاركته مع أصدقائك وعائلتك وحيواناتك الأليفة المفضلة. لقد قمت بتعديل نموذج بنجاح على مهمة الإجابة على الأسئلة - تهانينا!
 
-<نصيحة>
+<Tip>
 
 ✏️ **دورك!** جرب بنية نموذج أخرى لمعرفة ما إذا كان أداؤها أفضل في هذه المهمة!
 
-</نصيحة>
+</Tip>
 
 {#if fw === 'pt'}
 
@@ -1161,7 +1163,6 @@ for epoch in range(num_train_epochs):
 accelerator.wait_for_everyone()
 unwrapped_model = accelerator.unwrap_model(model)
 unwrapped_model.save_pretrained(output_dir, save_function=accelerator.save)
-```
 ```
 السطر الأول واضح بذاته: فهو يخبر جميع العمليات بالانتظار حتى يصل الجميع إلى تلك المرحلة قبل الاستمرار. هذا لضمان امتلاكنا لنفس النموذج في كل عملية قبل الحفظ. ثم نقوم بجمع `unwrapped_model`، وهو النموذج الأساسي الذي حددناه. طريقة `accelerator.prepare()` تغير النموذج للعمل في التدريب الموزع، لذا لن يكون لديه طريقة `save_pretrained()` بعد الآن؛ طريقة `accelerator.unwrap_model()` تلغي تلك الخطوة. أخيرًا، نستدعي `save_pretrained()` لكن نخبر تلك الطريقة باستخدام `accelerator.save()` بدلاً من `torch.save()`.
 

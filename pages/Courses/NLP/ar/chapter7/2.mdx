@@ -296,7 +296,7 @@ tokenized_datasets = raw_datasets.map(
     remove_columns=raw_datasets["train"].column_names,
 )
 ```
-```
+
 لقد أنجزنا الجزء الأصعب! الآن بعد أن تم معالجة البيانات مسبقًا، سيكون التدريب الفعلي مشابهًا لما قمنا به في [الفصل 3](/course/chapter3).
 
 {#if fw === 'pt'}
@@ -492,7 +492,7 @@ model.fit(
     epochs=num_epochs,
 )
 ```
-```
+
 يمكنك تحديد الاسم الكامل للمستودع الذي تريد الدفع إليه باستخدام حجة `hub_model_id` (على وجه التحديد، سيتعين عليك استخدام هذه الحجة للدفع إلى منظمة). على سبيل المثال، عندما قمنا بدفع النموذج إلى منظمة [`huggingface-course`](https://huggingface.co/huggingface-course)، أضفنا `hub_model_id="huggingface-course/bert-finetuned-ner"`. بشكل افتراضي، سيتم استخدام المستودع الموجود في مساحة عملك وسيتم تسميته وفقًا لدليل الإخراج الذي حددته، على سبيل المثال `"cool_huggingface_user/bert-finetuned-ner"`.
 
 <Tip>
@@ -666,7 +666,7 @@ model = AutoModelForTokenClassification.from_pretrained(
     label2id=label2id,
 )
 ```
-```
+
 مثلما قمنا بتعريف `AutoModelForSequenceClassification` في [الفصل 3](/course/chapter3)، فإن إنشاء النموذج يصدر تحذيرًا بأن بعض الأوزان لم تستخدم (تلك الخاصة برأس التهيئة المسبقة) وأن بعض الأوزان الأخرى تم تهيئتها عشوائيًا (تلك الخاصة برأس التصنيف الرمزي الجديد)، وأنه يجب تدريب هذا النموذج. سنقوم بذلك بعد قليل، ولكن دعونا أولاً نتأكد من أن نموذجنا لديه العدد الصحيح من التصنيفات:
 
 ```python
@@ -853,6 +853,7 @@ repo_name
 ```py
 output_dir = "bert-finetuned-ner-accelerate"
 repo = Repository(output_dir, clone_from=repo_name)
+```
 يمكننا الآن رفع أي شيء نحفظه في `output_dir` عن طريق استدعاء طريقة `repo.push_to_hub()` . هذا سيساعدنا في رفع النماذج الوسيطة في نهاية كل حقبة.
 
 ### حلقة التدريب[[training-loop]]

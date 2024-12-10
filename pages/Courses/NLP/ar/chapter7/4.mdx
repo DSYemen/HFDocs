@@ -279,7 +279,7 @@ from transformers import TFAutoModelForSeq2SeqLM
 
 model = TFAutoModelForSeq2SeqLM.from_pretrained(model_checkpoint, from_pt=True)
 ```
-```
+
 <Tip warning={false}>
 
 💡 نقطة التحقق 'Helsinki-NLP/opus-mt-en-fr' تحتوي فقط على أوزان PyTorch، لذلك ستحصل على خطأ إذا حاولت تحميل النموذج بدون استخدام الحجة 'from_pt=True' في طريقة 'from_pretrained()'. عند تحديد 'from_pt=True'، سيقوم المكتبة تلقائيًا بتنزيل وتحويل أوزان PyTorch لك. كما ترى، من السهل جدًا التبديل بين الأطر في 🤗 Transformers!
@@ -453,7 +453,6 @@ references = [
     ]
 ]
 metric.compute(predictions=predictions, references=references)
-```
 ```
 
 ```python out
@@ -658,8 +657,6 @@ print(compute_metrics())
 ```
 {'bleu': 57.334066271545865}
 ```
-{'bleu': 57.334066271545865}
-```
 
 في هذه المرحلة، يمكنك استخدام أداة الاستدلال على منصة النماذج لاختبار نموذجك ومشاركته مع أصدقائك. لقد قمت بضبط نموذج بنجاح على مهمة الترجمة - تهانينا!
 
@@ -854,8 +851,6 @@ repo_name
 ```
 
 ```python out
-'sgugger/marian-finetuned-kde4-en-to-fr-accelerate'
-```
 'sgugger/marian-finetuned-kde4-en-to-fr-accelerate'
 ```
 
