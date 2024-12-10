@@ -305,7 +305,7 @@ upload_file(
     repo_id="<namespace>/dummy-model",
 )
 ```
-```
+
 سيقوم هذا الأمر بتحميل الملف `config.json` الموجود في `<path_to_file>` إلى جذر المستودع كمستودع `config.json`، في مستودع `dummy-model`.
 
 هناك حجج أخرى قد تكون مفيدة:
@@ -533,17 +533,16 @@ Objects to be committed:
 	tokenizer_config.json (Git: f0f7783)
 
 Objects not staged for commit:
-        
-        Translated text:
+ ```       
 نستطيع أن نرى أن جميع الملفات لديها `Git` كمعالج، باستثناء *pytorch_model.bin* و *sentencepiece.bpe.model*، التي لديها `LFS`. رائع!
 
 {:else}
 ```bash
-على الفرع الرئيسي
-الأشياء التي سيتم دفعها إلى origin/main:
+On branch main
+Objects to be pushed to origin/main:
 
 
-الأشياء التي سيتم الالتزام بها:
+Objects to be committed:
 
 	config.json (Git: bc20ff2)
 	sentencepiece.bpe.model (LFS: 988bc5a)
@@ -552,7 +551,7 @@ Objects not staged for commit:
 	tokenizer.json (Git: 851ff3e)
 	tokenizer_config.json (Git: f0f7783)
 
-الأشياء التي لم يتم إعدادها للالتزام:
+Objects not staged for commit:
 
 
 ```
